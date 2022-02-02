@@ -1,0 +1,3 @@
+[submodule "lib/boost_dll"]
+	path = lib/boost_dll
+	url = https://github.com/apolukhin/Boost.DLL
