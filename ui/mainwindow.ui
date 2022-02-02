@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>774</width>
+    <height>610</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="1">
+     <widget class="QGroupBox" name="groupBox_GPU_info">
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="title">
+       <string>GPU info</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_GPU_info">
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_PCIe">
+           <property name="text">
+            <string>PCIe</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="0">
+          <widget class="QLabel" name="label_decoder_usage">
+           <property name="text">
+            <string>Decoder %</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1" colspan="2">
+          <widget class="QLineEdit" name="lineEdit_memory_info"/>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_UUID">
+           <property name="text">
+            <string>UUID</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_GPU_VBIOS">
+           <property name="text">
+            <string>VBIOS</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QLabel" name="label_GPU_usage">
+           <property name="text">
+            <string>GPU %</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="lineEdit_PCIe_info"/>
+         </item>
+         <item row="2" column="3">
+          <widget class="QLineEdit" name="lineEdit_GPU_driver_version"/>
+         </item>
+         <item row="9" column="3">
+          <widget class="QLineEdit" name="lineEdit_encoder_usage_percentage"/>
+         </item>
+         <item row="8" column="1" colspan="2">
+          <widget class="QProgressBar" name="progressBar_memory_usage_percentage">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="1" colspan="2">
+          <widget class="QProgressBar" name="progressBar_GPU_usage_percentage">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="3">
+          <widget class="QLineEdit" name="lineEdit_GPU_usage_percentage"/>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLabel" name="label_GPU_driver">
+           <property name="text">
+            <string>Driver</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="label_memory">
+           <property name="text">
+            <string>Memory</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" colspan="3">
+          <widget class="QLineEdit" name="lineEdit_GPU_name"/>
+         </item>
+         <item row="8" column="3">
+          <widget class="QLineEdit" name="lineEdit_memory_usage_percentage"/>
+         </item>
+         <item row="3" column="2">
+          <widget class="QLabel" name="label_CUDA">
+           <property name="text">
+            <string>CUDA</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="1" colspan="2">
+          <widget class="QProgressBar" name="progressBar_encoder_usage_percentage">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="lineEdit_GPU_VBIOS_version"/>
+         </item>
+         <item row="5" column="1" colspan="3">
+          <widget class="QLineEdit" name="lineEdit_GPU_UUID"/>
+         </item>
+         <item row="6" column="3">
+          <widget class="QLineEdit" name="lineEdit_memory_bus_info"/>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_GPU_name">
+           <property name="text">
+            <string>GPU name</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="0">
+          <widget class="QLabel" name="label_memory_usage">
+           <property name="text">
+            <string>Mem %</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="3">
+          <widget class="QLineEdit" name="lineEdit_decoder_usage_percentage"/>
+         </item>
+         <item row="9" column="0">
+          <widget class="QLabel" name="label_encoder_usage">
+           <property name="text">
+            <string>Encoder %</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="3">
+          <widget class="QLineEdit" name="lineEdit_CUDA_info"/>
+         </item>
+         <item row="11" column="1" colspan="2">
+          <widget class="QProgressBar" name="progressBar_decoder_usage_percentage">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QGroupBox" name="groupBox_GPU_power_ctl">
+      <property name="title">
+       <string>GPU Power control</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_GPU_power_ctl">
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="lineEdit_min_power_consumption"/>
+         </item>
+         <item row="1" column="3">
+          <widget class="QLineEdit" name="lineEdit_enforced_power_consumption"/>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="lineEdit_draw_power_consumption"/>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="label_enforced_power_consumption">
+           <property name="text">
+            <string>Enforced</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="4">
+          <widget class="QLabel" name="label_default_power_consumption">
+           <property name="text">
+            <string>Default</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_power_limit">
+           <property name="text">
+            <string>Limit</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0" colspan="5">
+          <widget class="QSlider" name="horizontalSlider_power_limit">
+           <property name="value">
+            <number>0</number>
+           </property>
+           <property name="tracking">
+            <bool>true</bool>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="tickPosition">
+            <enum>QSlider::TicksBelow</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="5">
+          <widget class="QLineEdit" name="lineEdit_default_power_consumption"/>
+         </item>
+         <item row="1" column="4">
+          <widget class="QLabel" name="label_max_power_consumption">
+           <property name="text">
+            <string>Max</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="5">
+          <widget class="QLineEdit" name="lineEdit_max_power_consumption"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_min_power_consumption">
+           <property name="text">
+            <string>Min</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_draw_power_consumtion">
+           <property name="text">
+            <string>Draw</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="5">
+          <widget class="QPushButton" name="pushButton_apply_power_settings">
+           <property name="toolTip">
+            <string>Apply power limit (requires nvidia-smi binary)</string>
+           </property>
+           <property name="text">
+            <string>Apply</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QLineEdit" name="lineEdit_power_limit"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>774</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
