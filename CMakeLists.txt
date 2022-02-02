@@ -12,7 +12,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOGEN_VERBOSE ON)
 
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -42,7 +41,7 @@ else()
     )
 endif()
 
-include_directories("${INCLUDE_DIRECTORIES} ./include")
+include_directories(${INCLUDE_DIRECTORIES} ./include)
 target_link_libraries(GWEpp PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 if(QT_VERSION_MAJOR EQUAL 6)
