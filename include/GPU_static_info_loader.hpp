@@ -13,7 +13,9 @@ enum class GPUStaticInfoType
     BUS_INFO,
     CUDA_INFO,
     GPU_UUID,
-    MEMORY_BUS_INFO
+    MEMORY_BUS_INFO,
+    GPU_SLOWDOWN_TEMPERATURE,
+    GPU_SHUTDOWN_TEMPERATURE,
 };
 
 class GPUStaticInfoLoader

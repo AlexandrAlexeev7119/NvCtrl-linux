@@ -28,15 +28,17 @@ std::unordered_map<GPUDynamicInfoLoaderType, QString> GPUDynamicInfoLoader::get_
     nvmlUtilization_t utilization_info{};
     unsigned encoder_utilization_percentage{};
     unsigned decoder_utilization_percentage{};
-    unsigned sampling_period_us{};
+    unsigned sampling_period{};
     unsigned power_usage_milliwatts{};
+    unsigned gpu_temperature{};
 
     nvmlDeviceGetUtilizationRates(nvml_device_, &utilization_info);
-    nvmlDeviceGetEncoderUtilization(nvml_device_, &encoder_utilization_percentage, &sampling_period_us);
-    nvmlDeviceGetDecoderUtilization(nvml_device_, &decoder_utilization_percentage, &sampling_period_us);
-
+    nvmlDeviceGetEncoderUtilization(nvml_device_, &encoder_utilization_percentage, &sampling_period);
+    nvmlDeviceGetDecoderUtilization(nvml_device_, &decoder_utilization_percentage, &sampling_period);
     nvmlDeviceGetPowerUsage(nvml_device_, &power_usage_milliwatts);
-    double power_usage_watts{power_usage_milliwatts / 1000.0};
+    nvmlDeviceGetTemperature(nvml_device_, NVML_TEMPERATURE_GPU, &gpu_temperature);
+
+    const double power_usage_watts{power_usage_milliwatts / 1000.0};
 
     return {
         {GPUDynamicInfoLoaderType::GPU_UTILIZATION_PERCENTAGE,      QString::number(utilization_info.gpu)},
@@ -44,5 +46,6 @@ std::unordered_map<GPUDynamicInfoLoaderType, QString> GPUDynamicInfoLoader::get_
         {GPUDynamicInfoLoaderType::ENCODER_USAGE_PERCENTAGE,        QString::number(encoder_utilization_percentage)},
         {GPUDynamicInfoLoaderType::DECODER_USAGE_PERCENTAGE,        QString::number(decoder_utilization_percentage)},
         {GPUDynamicInfoLoaderType::POWER_USAGE_WATTS,               QString::number(power_usage_watts)},
+        {GPUDynamicInfoLoaderType::GPU_CURRENT_TEMPERATURE,         QString::number(gpu_temperature)},
     };
 }

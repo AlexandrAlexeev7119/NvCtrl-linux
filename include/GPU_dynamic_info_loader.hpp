@@ -13,6 +13,7 @@ enum class GPUDynamicInfoLoaderType
     ENCODER_USAGE_PERCENTAGE,
     DECODER_USAGE_PERCENTAGE,
     POWER_USAGE_WATTS,
+    GPU_CURRENT_TEMPERATURE,
 };
 
 class GPUDynamicInfoLoader : public QObject
