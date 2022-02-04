@@ -17,6 +17,9 @@ MainWindow::MainWindow(QWidget* parent)
     ui->lineEdit_GPU_driver_version->setText(static_info.at(GPUStaticInfoType::DRIVER_VER));
     ui->lineEdit_PCIe_info->setText(static_info.at(GPUStaticInfoType::BUS_INFO));
     ui->lineEdit_GPU_UUID->setText(static_info.at(GPUStaticInfoType::GPU_UUID));
+
+    ui->lineEdit_slowdown_temperature->setText(static_info.at(GPUStaticInfoType::GPU_SLOWDOWN_TEMPERATURE) + " °C");
+    ui->lineEdit_shutdown_temperature->setText(static_info.at(GPUStaticInfoType::GPU_SHUTDOWN_TEMPERATURE) + " °C");
 }
 
 void MainWindow::update_dynamic_info(const std::unordered_map<GPUDynamicInfoLoaderType, QString>& dynamic_info)
@@ -25,11 +28,7 @@ void MainWindow::update_dynamic_info(const std::unordered_map<GPUDynamicInfoLoad
     const QString memory_utilization_percentage{dynamic_info.at(GPUDynamicInfoLoaderType::MEMORY_UTILIZATION_PERCENTAGE)};
     const QString encoder_utilization_percentage{dynamic_info.at(GPUDynamicInfoLoaderType::ENCODER_USAGE_PERCENTAGE)};
     const QString decoder_utilization_percentage{dynamic_info.at(GPUDynamicInfoLoaderType::DECODER_USAGE_PERCENTAGE)};
-
-    ui->lineEdit_GPU_usage_percentage->setText(gpu_utilization_percengate + "%");
-    ui->lineEdit_memory_usage_percentage->setText(memory_utilization_percentage + "%");
-    ui->lineEdit_encoder_usage_percentage->setText(encoder_utilization_percentage + "%");
-    ui->lineEdit_decoder_usage_percentage->setText(decoder_utilization_percentage + "%");
+    const QString current_gpu_temperature{dynamic_info.at(GPUDynamicInfoLoaderType::GPU_CURRENT_TEMPERATURE)};
 
     ui->progressBar_GPU_usage_percentage->setValue(gpu_utilization_percengate.toUInt());
     ui->progressBar_memory_usage_percentage->setValue(memory_utilization_percentage.toUInt());
@@ -37,8 +36,8 @@ void MainWindow::update_dynamic_info(const std::unordered_map<GPUDynamicInfoLoad
     ui->progressBar_decoder_usage_percentage->setValue(decoder_utilization_percentage.toUInt());
 
     ui->lineEdit_draw_power_consumption->setText(dynamic_info.at(GPUDynamicInfoLoaderType::POWER_USAGE_WATTS) + " W");
+    ui->lineEdit_current_temperature->setText(current_gpu_temperature + " °C");
 }
-
 
 MainWindow::~MainWindow()
 {
