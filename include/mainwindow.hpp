@@ -2,6 +2,8 @@
 
 #include <QMainWindow>
 
+#include "GPU_static_info_loader.hpp"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -15,4 +17,5 @@ public:
 
 private:
     Ui::MainWindow* ui;
+    GPUStaticInfoLoader gpu_info_loader_;
 };

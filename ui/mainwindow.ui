@@ -53,7 +53,11 @@
           </widget>
          </item>
          <item row="6" column="1" colspan="2">
-          <widget class="QLineEdit" name="lineEdit_memory_info"/>
+          <widget class="QLineEdit" name="lineEdit_memory_info">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="5" column="0">
           <widget class="QLabel" name="label_UUID">
@@ -86,13 +90,25 @@
           </widget>
          </item>
          <item row="3" column="1">
-          <widget class="QLineEdit" name="lineEdit_PCIe_info"/>
+          <widget class="QLineEdit" name="lineEdit_PCIe_info">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="2" column="3">
-          <widget class="QLineEdit" name="lineEdit_GPU_driver_version"/>
+          <widget class="QLineEdit" name="lineEdit_GPU_driver_version">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="9" column="3">
-          <widget class="QLineEdit" name="lineEdit_encoder_usage_percentage"/>
+          <widget class="QLineEdit" name="lineEdit_encoder_usage_percentage">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="8" column="1" colspan="2">
           <widget class="QProgressBar" name="progressBar_memory_usage_percentage">
@@ -109,7 +125,11 @@
           </widget>
          </item>
          <item row="7" column="3">
-          <widget class="QLineEdit" name="lineEdit_GPU_usage_percentage"/>
+          <widget class="QLineEdit" name="lineEdit_GPU_usage_percentage">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="2" column="2">
           <widget class="QLabel" name="label_GPU_driver">
@@ -132,10 +152,18 @@
           </widget>
          </item>
          <item row="0" column="1" colspan="3">
-          <widget class="QLineEdit" name="lineEdit_GPU_name"/>
+          <widget class="QLineEdit" name="lineEdit_GPU_name">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="8" column="3">
-          <widget class="QLineEdit" name="lineEdit_memory_usage_percentage"/>
+          <widget class="QLineEdit" name="lineEdit_memory_usage_percentage">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="3" column="2">
           <widget class="QLabel" name="label_CUDA">
@@ -155,13 +183,25 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QLineEdit" name="lineEdit_GPU_VBIOS_version"/>
+          <widget class="QLineEdit" name="lineEdit_GPU_VBIOS_version">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="5" column="1" colspan="3">
-          <widget class="QLineEdit" name="lineEdit_GPU_UUID"/>
+          <widget class="QLineEdit" name="lineEdit_GPU_UUID">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="6" column="3">
-          <widget class="QLineEdit" name="lineEdit_memory_bus_info"/>
+          <widget class="QLineEdit" name="lineEdit_memory_bus_info">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="0" column="0">
           <widget class="QLabel" name="label_GPU_name">
@@ -184,7 +224,11 @@
           </widget>
          </item>
          <item row="11" column="3">
-          <widget class="QLineEdit" name="lineEdit_decoder_usage_percentage"/>
+          <widget class="QLineEdit" name="lineEdit_decoder_usage_percentage">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="9" column="0">
           <widget class="QLabel" name="label_encoder_usage">
@@ -197,7 +241,11 @@
           </widget>
          </item>
          <item row="3" column="3">
-          <widget class="QLineEdit" name="lineEdit_CUDA_info"/>
+          <widget class="QLineEdit" name="lineEdit_CUDA_info">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="11" column="1" colspan="2">
           <widget class="QProgressBar" name="progressBar_decoder_usage_percentage">
@@ -223,13 +271,25 @@
        <item row="0" column="0">
         <layout class="QGridLayout" name="gridLayout_GPU_power_ctl">
          <item row="1" column="1">
-          <widget class="QLineEdit" name="lineEdit_min_power_consumption"/>
+          <widget class="QLineEdit" name="lineEdit_min_power_consumption">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="1" column="3">
-          <widget class="QLineEdit" name="lineEdit_enforced_power_consumption"/>
+          <widget class="QLineEdit" name="lineEdit_enforced_power_consumption">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QLineEdit" name="lineEdit_draw_power_consumption"/>
+          <widget class="QLineEdit" name="lineEdit_draw_power_consumption">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="1" column="2">
           <widget class="QLabel" name="label_enforced_power_consumption">
@@ -278,7 +338,11 @@
           </widget>
          </item>
          <item row="0" column="5">
-          <widget class="QLineEdit" name="lineEdit_default_power_consumption"/>
+          <widget class="QLineEdit" name="lineEdit_default_power_consumption">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="1" column="4">
           <widget class="QLabel" name="label_max_power_consumption">
@@ -291,7 +355,11 @@
           </widget>
          </item>
          <item row="1" column="5">
-          <widget class="QLineEdit" name="lineEdit_max_power_consumption"/>
+          <widget class="QLineEdit" name="lineEdit_max_power_consumption">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_min_power_consumption">
@@ -324,7 +392,11 @@
           </widget>
          </item>
          <item row="0" column="3">
-          <widget class="QLineEdit" name="lineEdit_power_limit"/>
+          <widget class="QLineEdit" name="lineEdit_power_limit">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
