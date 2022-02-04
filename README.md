@@ -4,6 +4,6 @@ no other shit such as python
 
 no other shit such as python
 
-## Pre-look UI
-![Pre-look](img/pre-look.png)
+## UI look
+![UI look picture here](img/new-ui.png)
 
