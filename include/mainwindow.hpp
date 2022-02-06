@@ -19,8 +19,15 @@ public:
 public slots:
     void update_dynamic_info(const std::unordered_map<GPUDynamicInfoLoaderType, QString>& dynamic_info);
 
+private slots:
+    void on_pushButton_apply_power_settings_clicked();
+
+    void on_action_Exit_triggered();
+
 private:
     Ui::MainWindow* ui;
     GPUStaticInfoLoader gpu_static_info_loader_;
     GPUDynamicInfoLoader gpu_dynamic_info_loader_;
+
+    void set_static_info();
 };

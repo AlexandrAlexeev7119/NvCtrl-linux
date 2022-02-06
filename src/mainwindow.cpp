@@ -1,3 +1,5 @@
+#include <unistd.h>
+
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 
@@ -8,18 +10,9 @@ MainWindow::MainWindow(QWidget* parent)
     , gpu_dynamic_info_loader_{}
 {
     ui->setupUi(this);
+    setMinimumSize(size());
     connect(&gpu_dynamic_info_loader_, &GPUDynamicInfoLoader::update_info, this, &MainWindow::update_dynamic_info);
-
-    const auto static_info{gpu_static_info_loader_.get_static_GPU_info()};
-
-    ui->lineEdit_GPU_name->setText(static_info.at(GPUStaticInfoType::GPU_NAME));
-    ui->lineEdit_GPU_VBIOS_version->setText(static_info.at(GPUStaticInfoType::VBIOS_VER));
-    ui->lineEdit_GPU_driver_version->setText(static_info.at(GPUStaticInfoType::DRIVER_VER));
-    ui->lineEdit_PCIe_info->setText(static_info.at(GPUStaticInfoType::BUS_INFO));
-    ui->lineEdit_GPU_UUID->setText(static_info.at(GPUStaticInfoType::GPU_UUID));
-
-    ui->lineEdit_slowdown_temperature->setText(static_info.at(GPUStaticInfoType::GPU_SLOWDOWN_TEMPERATURE) + " °C");
-    ui->lineEdit_shutdown_temperature->setText(static_info.at(GPUStaticInfoType::GPU_SHUTDOWN_TEMPERATURE) + " °C");
+    set_static_info();
 }
 
 void MainWindow::update_dynamic_info(const std::unordered_map<GPUDynamicInfoLoaderType, QString>& dynamic_info)
@@ -39,7 +32,49 @@ void MainWindow::update_dynamic_info(const std::unordered_map<GPUDynamicInfoLoad
     ui->lineEdit_current_temperature->setText(current_gpu_temperature + " °C");
 }
 
+void MainWindow::set_static_info()
+{
+    const auto static_info{gpu_static_info_loader_.get_static_GPU_info()};
+
+    const QString gpu_max_power_usage{static_info.at(GPUStaticInfoType::GPU_MAX_POWER_USAGE)};
+    const QString gpu_min_power_usage{static_info.at(GPUStaticInfoType::GPU_MIN_POWER_USAGE)};
+    const QString gpu_default_power_limit{static_info.at(GPUStaticInfoType::GPU_DEFAULT_POWER_LIMIT)};
+    const QString gpu_current_power_limit{static_info.at(GPUStaticInfoType::GPU_CURRENT_POWER_LIMIT)};
+
+    ui->lineEdit_GPU_name->setText(static_info.at(GPUStaticInfoType::GPU_NAME));
+    ui->lineEdit_GPU_VBIOS_version->setText(static_info.at(GPUStaticInfoType::VBIOS_VER));
+    ui->lineEdit_GPU_driver_version->setText(static_info.at(GPUStaticInfoType::DRIVER_VER));
+    ui->lineEdit_PCIe_info->setText(static_info.at(GPUStaticInfoType::BUS_INFO));
+    ui->lineEdit_GPU_UUID->setText(static_info.at(GPUStaticInfoType::GPU_UUID));
+    ui->lineEdit_memory_info->setText(static_info.at(GPUStaticInfoType::GPU_TOTAL_MEMORY) + " MiB");
+
+    ui->lineEdit_slowdown_temperature->setText(static_info.at(GPUStaticInfoType::GPU_SLOWDOWN_TEMPERATURE) + " °C");
+    ui->lineEdit_shutdown_temperature->setText(static_info.at(GPUStaticInfoType::GPU_SHUTDOWN_TEMPERATURE) + " °C");
+
+    ui->lineEdit_max_power_consumption->setText(gpu_max_power_usage + " W");
+    ui->lineEdit_min_power_consumption->setText(gpu_min_power_usage + " W");
+    ui->lineEdit_default_power_consumption->setText(gpu_default_power_limit + " W");
+    ui->lineEdit_current_power_limit->setText(gpu_current_power_limit + " W");
+
+    ui->horizontalSlider_power_limit->setMaximum(gpu_max_power_usage.toInt());
+    ui->horizontalSlider_power_limit->setMinimum(gpu_min_power_usage.toUInt());
+    ui->horizontalSlider_power_limit->setValue(gpu_current_power_limit.toInt());
+
+    ui->label_min_power_limit->setText(gpu_min_power_usage);
+    ui->label_max_power_limit->setText(gpu_max_power_usage);
+}
+
+void MainWindow::on_pushButton_apply_power_settings_clicked()
+{
+}
+
+void MainWindow::on_action_Exit_triggered()
+{
+    close();
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
