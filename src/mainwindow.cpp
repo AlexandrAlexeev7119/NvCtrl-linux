@@ -11,7 +11,13 @@ MainWindow::MainWindow(QWidget* parent)
 {
     ui->setupUi(this);
     setMinimumSize(size());
+    setMaximumSize(size());
+
     connect(&gpu_dynamic_info_loader_, &GPUDynamicInfoLoader::update_info, this, &MainWindow::update_dynamic_info);
+    connect(ui->horizontalSlider_power_limit, &QSlider::valueChanged, this, [this](int value) {
+        ui->label_min_power_limit->setText(QString::number(value));
+    });
+
     set_static_info();
 }
 
@@ -60,7 +66,7 @@ void MainWindow::set_static_info()
     ui->horizontalSlider_power_limit->setMinimum(gpu_min_power_usage.toUInt());
     ui->horizontalSlider_power_limit->setValue(gpu_current_power_limit.toInt());
 
-    ui->label_min_power_limit->setText(gpu_min_power_usage);
+    ui->label_min_power_limit->setText(gpu_current_power_limit);
     ui->label_max_power_limit->setText(gpu_max_power_usage);
 }
 
