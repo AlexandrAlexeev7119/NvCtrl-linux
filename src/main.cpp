@@ -1,5 +1,6 @@
 #include <iostream>
 #include <QApplication>
+#include <QSystemTrayIcon>
 
 #include "mainwindow.hpp"
 
@@ -30,8 +31,8 @@ static void qt_msg_handler(QtMsgType msg_type, const QMessageLogContext& context
 int main(int argc, char** argv)
 {
     QApplication a{argc, argv};
-    qInstallMessageHandler(qt_msg_handler);
     MainWindow main_window{};
     main_window.show();
+    qInstallMessageHandler(qt_msg_handler);
     return a.exec();
 }
