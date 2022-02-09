@@ -1,20 +1,9 @@
 #pragma once
 
-#include <unordered_map>
 #include <QObject>
 #include <QTimer>
 
-#include "lib/nvml/nvml.h"
-
-enum class GPUDynamicInfoLoaderType
-{
-    GPU_UTILIZATION_PERCENTAGE,
-    MEMORY_UTILIZATION_PERCENTAGE,
-    ENCODER_USAGE_PERCENTAGE,
-    DECODER_USAGE_PERCENTAGE,
-    POWER_USAGE_WATTS,
-    GPU_CURRENT_TEMPERATURE,
-};
+#include "NVML.hpp"
 
 class GPUDynamicInfoLoader : public QObject
 {
@@ -22,17 +11,12 @@ class GPUDynamicInfoLoader : public QObject
 
 public:
     GPUDynamicInfoLoader();
-    ~GPUDynamicInfoLoader();
-
-signals:
-    void update_info(const std::unordered_map<GPUDynamicInfoLoaderType, QString>&);
+    ~GPUDynamicInfoLoader() = default;
 
 private slots:
     void timer_tick();
 
 private:
-    nvmlDevice_t nvml_device_;
     QTimer timer_;
-
-    std::unordered_map<GPUDynamicInfoLoaderType, QString> get_dynamic_GPU_info();
+    NVMLDevice nvml_device_;
 };
