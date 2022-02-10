@@ -5,7 +5,7 @@ MainWindow::MainWindow(QWidget* parent)
     : QMainWindow{parent}
     , ui{new Ui::MainWindow}
     , dynamic_info_update_timer_{this}
-    , tray_icon_{QIcon{"/home/alexcr4ckpentest/Pictures/Screenshots/ico.png"}}
+    , tray_icon_{}
     , tray_menu_{this}
     , nvml_device_{}
     , settings_window_{this}
