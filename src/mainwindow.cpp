@@ -8,9 +8,11 @@ MainWindow::MainWindow(QWidget* parent)
     , tray_icon_{QIcon{"/home/alexcr4ckpentest/Pictures/Screenshots/ico.png"}}
     , tray_menu_{this}
     , nvml_device_{}
+    , settings_window_{this}
 {
     ui->setupUi(this);
     setMinimumSize(size());
+    setMaximumSize(size() * 1.35);
 
     tray_menu_.addAction("Show/hide app window", this, &MainWindow::toggle_tray);
     tray_icon_.setContextMenu(&tray_menu_);
@@ -60,6 +62,15 @@ void MainWindow::update_dynamic_info()
 
 void MainWindow::toggle_tray()
 {
+    if (isHidden())
+    {
+        showNormal();
+    }
+    else
+    {
+        hide();
+        tray_icon_.show();
+    }
 }
 
 void MainWindow::closeEvent(QCloseEvent* event_)
@@ -89,3 +100,16 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::on_actionShow_hide_app_window_triggered()
+{
+    hide();
+    tray_icon_.show();
+}
+
+
+void MainWindow::on_actionSettings_triggered()
+{
+    settings_window_.show();
+}
+
