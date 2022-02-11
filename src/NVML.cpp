@@ -177,11 +177,6 @@ unsigned NVML::get_device_current_fan_speed(const nvmlDevice_t& device) const no
     return current_fan_speed;
 }
 
-void NVML::set_device_current_power_limit(nvmlDevice_t& device, unsigned limit_milliwatts) noexcept
-{
-    nvmlDeviceSetPowerManagementLimit(device, limit_milliwatts);
-}
-
 
 
 NVMLDevice::NVMLDevice()
@@ -249,9 +244,4 @@ unsigned NVMLDevice::get_default_power_usage() const noexcept
 const NVMLDevice::DynamicInfo& NVMLDevice::get_dynamic_info() const noexcept
 {
     return dynamic_info_;
-}
-
-void NVMLDevice::set_power_limit(unsigned limit_milliwatts) noexcept
-{
-    nvml_api_->set_device_current_power_limit(device_handle_, limit_milliwatts);
 }

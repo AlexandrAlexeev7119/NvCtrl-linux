@@ -36,8 +36,6 @@ public:
     unsigned get_device_current_power_limit(const nvmlDevice_t& device) const noexcept;
     unsigned get_device_current_gpu_temperature(const nvmlDevice_t& device) const noexcept;
     unsigned get_device_current_fan_speed(const nvmlDevice_t& device) const noexcept;
-
-    void set_device_current_power_limit(nvmlDevice_t& device, unsigned limit_milliwatts) noexcept;
 };
 
 class NVMLDevice
@@ -62,8 +60,6 @@ public:
 
     void update_dynamic_info();
     const DynamicInfo& get_dynamic_info() const noexcept;
-
-    void set_power_limit(unsigned limit_milliwatts) noexcept;
 
 private:
     nvmlDevice_t device_handle_;
