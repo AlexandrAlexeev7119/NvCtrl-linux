@@ -114,6 +114,20 @@ unsigned NVML::get_device_default_power_usage(const nvmlDevice_t& device) const 
     return default_power_usage;
 }
 
+unsigned NVML::get_device_shutdown_temperature(const nvmlDevice_t& device) const noexcept
+{
+    unsigned gpu_shutdown_temperature{0};
+    nvmlDeviceGetTemperatureThreshold(device, NVML_TEMPERATURE_THRESHOLD_SHUTDOWN, &gpu_shutdown_temperature);
+    return gpu_shutdown_temperature;
+}
+
+unsigned NVML::get_device_slowdown_temperature(const nvmlDevice_t& device) const noexcept
+{
+    unsigned gpu_slowdown_temperature{0};
+    nvmlDeviceGetTemperatureThreshold(device, NVML_TEMPERATURE_THRESHOLD_SLOWDOWN, &gpu_slowdown_temperature);
+    return gpu_slowdown_temperature;
+}
+
 unsigned NVML::get_device_gpu_usage_percantage(const nvmlDevice_t& device) const noexcept
 {
     nvmlUtilization_t utilization_rates{};
@@ -239,6 +253,16 @@ unsigned NVMLDevice::get_min_power_usage() const noexcept
 unsigned NVMLDevice::get_default_power_usage() const noexcept
 {
     return nvml_api_->get_device_default_power_usage(device_handle_);
+}
+
+unsigned NVMLDevice::get_shutdown_temperature() const noexcept
+{
+    return nvml_api_->get_device_shutdown_temperature(device_handle_);
+}
+
+unsigned NVMLDevice::get_slowdown_temperature() const noexcept
+{
+    return nvml_api_->get_device_slowdown_temperature(device_handle_);
 }
 
 const NVMLDevice::DynamicInfo& NVMLDevice::get_dynamic_info() const noexcept

@@ -26,6 +26,8 @@ public:
     unsigned get_device_max_power_usage(const nvmlDevice_t& device) const noexcept;
     unsigned get_device_min_power_usage(const nvmlDevice_t& device) const noexcept;
     unsigned get_device_default_power_usage(const nvmlDevice_t& device) const noexcept;
+    unsigned get_device_shutdown_temperature(const nvmlDevice_t& device) const noexcept;
+    unsigned get_device_slowdown_temperature(const nvmlDevice_t& device) const noexcept;
 
     unsigned get_device_gpu_usage_percantage(const nvmlDevice_t& device) const noexcept;
     unsigned get_device_memory_usage_percantage(const nvmlDevice_t& device) const noexcept;
@@ -57,6 +59,8 @@ public:
     unsigned get_max_power_usage() const noexcept;
     unsigned get_min_power_usage() const noexcept;
     unsigned get_default_power_usage() const noexcept;
+    unsigned get_shutdown_temperature() const noexcept;
+    unsigned get_slowdown_temperature() const noexcept;
 
     void update_dynamic_info();
     const DynamicInfo& get_dynamic_info() const noexcept;
