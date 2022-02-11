@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget* parent)
 {
     ui->setupUi(this);
     setMinimumSize(size());
-    setMaximumSize(size() * 1.35);
+    setMaximumSize(size() * 1.25);
 
     const QString config_file{"./gwepp.json"};
     settings_manager_.set_file_name(config_file);
@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     tray_menu_.addAction("Show/hide app window", this, &MainWindow::toggle_tray);
     tray_menu_.addAction("App settings", &settings_window_, &QMainWindow::showNormal);
+    tray_menu_.addAction("Quit", this, &MainWindow::on_actionQuit_triggered);
     tray_icon_.setContextMenu(&tray_menu_);
 
     connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
@@ -49,6 +50,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     set_static_info();
     update_dynamic_info();
+
     dynamic_info_update_timer_.setInterval(1250);
     dynamic_info_update_timer_.start();
 }
@@ -71,6 +73,15 @@ void MainWindow::on_actionShow_hide_app_window_triggered()
 void MainWindow::on_actionSettings_triggered()
 {
     settings_window_.show();
+}
+
+void MainWindow::on_actionQuit_triggered()
+{
+    if (minimize_to_tray_on_close_)
+    {
+        tray_icon_.hide();
+    }
+    close();
 }
 
 void MainWindow::on_pushButton_apply_power_settings_clicked()
@@ -128,6 +139,11 @@ void MainWindow::closeEvent(QCloseEvent* event_)
         hide();
         tray_icon_.show();
     }
+    else
+    {
+        tray_icon_.hide();
+        event_->accept();
+    }
 }
 
 void MainWindow::set_static_info()
@@ -147,4 +163,7 @@ void MainWindow::set_static_info()
 
     ui->label_current_power_limit_slider->setText(QString::number(nvml_device_.get_dynamic_info().current_power_limit / 1000));
     ui->label_max_power_limit_slider->setText(QString::number(nvml_device_.get_max_power_usage() / 1000));
+
+    ui->lineEdit_shutdown_temperature->setText(QString::number(nvml_device_.get_shutdown_temperature()) + " °C");
+    ui->lineEdit_slowdown_temperature->setText(QString::number(nvml_device_.get_slowdown_temperature()) + " °C");
 }

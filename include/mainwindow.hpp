@@ -12,8 +12,6 @@
 #include "settings_manager.hpp"
 #include "settingswindow.hpp"
 
-
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -30,10 +28,12 @@ public:
 private slots:
     void on_actionShow_hide_app_window_triggered();
     void on_actionSettings_triggered();
+    void on_actionQuit_triggered();
     void on_pushButton_apply_power_settings_clicked();
     void toggle_tray();
     void update_dynamic_info();
     void apply_settings(const QJsonObject& settings);
+
 
 private:
     Ui::MainWindow* ui;
