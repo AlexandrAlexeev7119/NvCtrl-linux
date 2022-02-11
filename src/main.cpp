@@ -45,7 +45,7 @@ int main(int argc, char** argv)
     catch (const std::exception& ex)
     {
         qCritical().noquote() << ex.what();
-        ::exit(1);
+        std::exit(1);
     }
 
     const bool minimize_to_tray_on_startup{settings_manager.load_settings()["minimize_to_tray_on_startup"].toBool()};
