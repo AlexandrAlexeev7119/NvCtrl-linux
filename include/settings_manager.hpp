@@ -3,15 +3,20 @@
 #include <QObject>
 #include <QFile>
 #include <QJsonObject>
-#include <QJsonValue>
 
-class SettingsManager : QObject
+class SettingsManager
 {
-    Q_OBJECT
 public:
     SettingsManager();
-    ~SettingsManager();
+    ~SettingsManager() = default;
+
+    void set_file_name(const QString& filename);
+    void open_file(QIODevice::OpenMode open_mode);
+    void close_file();
+
+    void save_settings(const QJsonObject& settings);
+    QJsonObject load_settings();
 
 private:
-    QFile file_;
+    QFile config_file_;
 };
