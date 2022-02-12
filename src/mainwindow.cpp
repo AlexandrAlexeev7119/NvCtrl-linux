@@ -16,7 +16,6 @@ MainWindow::MainWindow(QWidget* parent)
 {
     ui->setupUi(this);
     setMinimumSize(size());
-    setMaximumSize(size() * 1.25);
 
     const QString config_file{"./gwepp.json"};
     settings_manager_.set_file_name(config_file);
@@ -39,6 +38,7 @@ MainWindow::MainWindow(QWidget* parent)
     tray_menu_.addAction("Show/hide app window", this, &MainWindow::toggle_tray);
     tray_menu_.addAction("App settings", &settings_window_, &QMainWindow::showNormal);
     tray_menu_.addAction("Quit", this, &MainWindow::on_actionQuit_triggered);
+
     tray_icon_.setContextMenu(&tray_menu_);
 
     connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
@@ -46,6 +46,10 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui->horizontalSlider_power_limit, &QAbstractSlider::valueChanged, this, [this](int value)
     {
         ui->label_current_power_limit_slider->setText(QString::number(value));
+    });
+    connect(&tray_icon_, &QSystemTrayIcon::activated, this, [this]([[maybe_unused]] QSystemTrayIcon::ActivationReason act_reason)
+    {
+        toggle_tray();
     });
 
     set_static_info();
@@ -118,6 +122,7 @@ void MainWindow::update_dynamic_info()
 
     ui->progressBar_GPU_usage_percentage->setValue(dynamic_info.gpu_usage_percentage);
     ui->progressBar_memory_usage_percentage->setValue(dynamic_info.memory_usage_percentage);
+    ui->lineEdit_memory_usage_mib->setText(QString::number(dynamic_info.memory_usage_bytes / 1024 / 1024) + " MiB");
     ui->progressBar_encoder_usage_percentage->setValue(dynamic_info.encoder_usage_percentage);
     ui->progressBar_decoder_usage_percentage->setValue(dynamic_info.decoder_usage_percentage);
 
@@ -152,6 +157,7 @@ void MainWindow::set_static_info()
     ui->lineEdit_GPU_driver_version->setText(QString::fromStdString(nvml_device_.get_system_driver_version()));
     ui->lineEdit_GPU_VBIOS_version->setText(QString::fromStdString(nvml_device_.get_vbios_version()));
     ui->lineEdit_GPU_UUID->setText(QString::fromStdString(nvml_device_.get_uuid()));
+    ui->lineEdit_total_memory_mib->setText(QString::number(nvml_device_.get_memory_total_bytes() / 1024 / 1024) + " MiB");
 
     ui->lineEdit_max_power_usage->setText(QString::number(nvml_device_.get_max_power_usage() / 1000) + " W");
     ui->lineEdit_min_power_usage->setText(QString::number(nvml_device_.get_min_power_usage() / 1000) + " W");

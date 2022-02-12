@@ -34,7 +34,6 @@ private slots:
     void update_dynamic_info();
     void apply_settings(const QJsonObject& settings);
 
-
 private:
     Ui::MainWindow* ui;
     QTimer dynamic_info_update_timer_;
