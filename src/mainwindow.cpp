@@ -81,10 +81,7 @@ void MainWindow::on_actionSettings_triggered()
 
 void MainWindow::on_actionQuit_triggered()
 {
-    if (minimize_to_tray_on_close_)
-    {
-        tray_icon_.hide();
-    }
+    minimize_to_tray_on_close_= false;
     close();
 }
 
