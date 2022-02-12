@@ -84,7 +84,7 @@ std::string NVML::get_device_pci_info(const nvmlDevice_t& device) const
     return pci_info.busId;
 }
 
-unsigned NVML::get_device_memory_total_bytes(const nvmlDevice_t& device) const noexcept
+unsigned long long NVML::get_device_memory_total_bytes(const nvmlDevice_t& device) const noexcept
 {
     nvmlMemory_t memory_info{};
     nvmlDeviceGetMemoryInfo(device, &memory_info);
@@ -156,7 +156,7 @@ unsigned NVML::get_device_decoder_usage_percentage(const nvmlDevice_t& device) c
     return decoder_usage_percentage;
 }
 
-unsigned NVML::get_device_memory_usage_bytes(const nvmlDevice_t& device) const noexcept
+unsigned long long NVML::get_device_memory_usage_bytes(const nvmlDevice_t& device) const noexcept
 {
     nvmlMemory_t memory_info{};
     nvmlDeviceGetMemoryInfo(device, &memory_info);
@@ -184,7 +184,7 @@ unsigned NVML::get_device_current_gpu_temperature(const nvmlDevice_t& device) co
     return current_gpu_temperature;
 }
 
-unsigned NVML::get_device_current_fan_speed(const nvmlDevice_t& device) const noexcept
+unsigned NVML::get_device_current_fan_speed_percentage(const nvmlDevice_t& device) const noexcept
 {
     unsigned current_fan_speed{0};
     nvmlDeviceGetFanSpeed(device, &current_fan_speed);
@@ -204,15 +204,15 @@ NVMLDevice::NVMLDevice()
 
 void NVMLDevice::update_dynamic_info()
 {
-    dynamic_info_.gpu_usage_percentage      = nvml_api_->get_device_gpu_usage_percantage(device_handle_);
-    dynamic_info_.memory_usage_percentage   = nvml_api_->get_device_memory_usage_percantage(device_handle_);
-    dynamic_info_.encoder_usage_percentage  = nvml_api_->get_device_encoder_usage_percentage(device_handle_);
-    dynamic_info_.decoder_usage_percentage  = nvml_api_->get_device_decoder_usage_percentage(   device_handle_);
-    dynamic_info_.memory_usage_bytes        = nvml_api_->get_device_memory_usage_bytes(device_handle_);
-    dynamic_info_.current_power_usage       = nvml_api_->get_device_current_power_usage(device_handle_);
-    dynamic_info_.current_power_limit       = nvml_api_->get_device_current_power_limit(device_handle_);
-    dynamic_info_.current_gpu_temperature   = nvml_api_->get_device_current_gpu_temperature(device_handle_);
-    dynamic_info_.current_fan_speed         = nvml_api_->get_device_current_fan_speed(device_handle_);
+    dynamic_info_.gpu_usage_percentage          = nvml_api_->get_device_gpu_usage_percantage(device_handle_);
+    dynamic_info_.memory_usage_percentage       = nvml_api_->get_device_memory_usage_percantage(device_handle_);
+    dynamic_info_.encoder_usage_percentage      = nvml_api_->get_device_encoder_usage_percentage(device_handle_);
+    dynamic_info_.decoder_usage_percentage      = nvml_api_->get_device_decoder_usage_percentage(   device_handle_);
+    dynamic_info_.memory_usage_bytes            = nvml_api_->get_device_memory_usage_bytes(device_handle_);
+    dynamic_info_.current_power_usage           = nvml_api_->get_device_current_power_usage(device_handle_);
+    dynamic_info_.current_power_limit           = nvml_api_->get_device_current_power_limit(device_handle_);
+    dynamic_info_.current_gpu_temperature       = nvml_api_->get_device_current_gpu_temperature(device_handle_);
+    dynamic_info_.current_fan_speed_percentage  = nvml_api_->get_device_current_fan_speed_percentage(device_handle_);
 }
 
 std::string NVMLDevice::get_system_driver_version() const
@@ -235,7 +235,7 @@ std::string NVMLDevice::get_vbios_version() const
     return nvml_api_->get_device_vbios_version(device_handle_);
 }
 
-unsigned NVMLDevice::get_memory_total_bytes() const noexcept
+unsigned long long NVMLDevice::get_memory_total_bytes() const noexcept
 {
     return nvml_api_->get_device_memory_total_bytes(device_handle_);
 }
