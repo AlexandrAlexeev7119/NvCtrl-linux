@@ -1,4 +1,5 @@
 #include <QMessageBox>
+#include <QProcess>
 
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
@@ -13,6 +14,7 @@ MainWindow::MainWindow(QWidget* parent)
     , settings_manager_{}
     , settings_window_{this}
     , minimize_to_tray_on_close_{false}
+    , new_file_profile_dialog_{this}
 {
     ui->setupUi(this);
     setMinimumSize(size());
@@ -126,6 +128,8 @@ void MainWindow::update_dynamic_info()
     ui->lineEdit_current_power_limit->setText(QString::number(dynamic_info.current_power_limit / 1000) + " W");
     ui->lineEdit_current_power_usage->setText(QString::number(dynamic_info.current_power_usage / 1000.f) + " W");
     ui->lineEdit_current_temperature->setText(QString::number(dynamic_info.current_gpu_temperature) + " °C");
+
+    ui->label_fan_speed_percentage->setText(QString::number(dynamic_info.current_fan_speed_percentage) + "%");
 }
 
 void MainWindow::apply_settings(const QJsonObject& settings)
@@ -169,4 +173,12 @@ void MainWindow::set_static_info()
 
     ui->lineEdit_shutdown_temperature->setText(QString::number(nvml_device_.get_shutdown_temperature()) + " °C");
     ui->lineEdit_slowdown_temperature->setText(QString::number(nvml_device_.get_slowdown_temperature()) + " °C");
+}
+
+void MainWindow::on_comboBox_fan_profile_activated(int index)
+{
+    if (index == (ui->comboBox_fan_profile->count() - 1))
+    {
+        new_file_profile_dialog_.show();
+    }
 }
