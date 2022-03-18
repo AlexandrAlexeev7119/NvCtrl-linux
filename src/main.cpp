@@ -30,7 +30,7 @@ static void qt_msg_handler(QtMsgType msg_type, const QMessageLogContext& context
 
 int main(int argc, char** argv)
 {
-    qInstallMessageHandler(qt_msg_handler);
+//    qInstallMessageHandler(qt_msg_handler);
 
     QApplication app{argc, argv};
     MainWindow main_window{};
@@ -44,8 +44,8 @@ int main(int argc, char** argv)
     }
     catch (const std::exception& ex)
     {
-        qCritical().noquote() << ex.what();
-        std::exit(1);
+        std::cerr << ex.what();
+        return 1;
     }
 
     const bool minimize_to_tray_on_startup{settings_manager.load_settings()["minimize_to_tray_on_startup"].toBool()};

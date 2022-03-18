@@ -42,6 +42,34 @@ void NVML::get_handle_by_index(unsigned index, nvmlDevice_t& device) noexcept
     nvmlDeviceGetHandleByIndex(index, &device);
 }
 
+std::vector<nvmlUnit_t> NVML::get_units_list()
+{
+    unsigned units_count{0};
+    nvmlReturn_t err_code{nvmlUnitGetCount(&units_count)};
+
+    if (err_code != NVML_SUCCESS)
+    {
+        throw std::runtime_error{std::string{nvmlErrorString(err_code)}};
+    }
+
+    std::vector<nvmlUnit_t> units{};
+    units.reserve(units_count);
+
+    for (unsigned i{0}; i < units_count; i++)
+    {
+        NVML::get_unit_handle_by_index(i, units[i]);
+    }
+    return units;
+}
+
+void NVML::get_unit_handle_by_index(unsigned index, nvmlUnit_t& unit)
+{
+    // Fucking NVIDIA!
+    // HOW TO INITIALIZE THIS FUCKING UNIT?
+    // ALWAYS NVML_ERROR_INVALID_ARGUMENT
+    nvmlReturn_t error{nvmlUnitGetHandleByIndex(index, &unit)};
+}
+
 std::string NVML::get_system_driver_version() const
 {
     char driver_ver[NVML_SYSTEM_DRIVER_VERSION_BUFFER_SIZE]{0};
@@ -191,6 +219,13 @@ unsigned NVML::get_device_current_fan_speed_percentage(const nvmlDevice_t& devic
     return current_fan_speed;
 }
 
+nvmlUnitInfo_t NVML::get_unit_info(const nvmlUnit_t& unit) const noexcept
+{
+    nvmlUnitInfo_t unit_info{};
+    nvmlUnitGetUnitInfo(unit, &unit_info);
+    return unit_info;
+}
+
 
 
 NVMLDevice::NVMLDevice()
@@ -207,7 +242,7 @@ void NVMLDevice::update_dynamic_info()
     dynamic_info_.gpu_usage_percentage          = nvml_api_->get_device_gpu_usage_percantage(device_handle_);
     dynamic_info_.memory_usage_percentage       = nvml_api_->get_device_memory_usage_percantage(device_handle_);
     dynamic_info_.encoder_usage_percentage      = nvml_api_->get_device_encoder_usage_percentage(device_handle_);
-    dynamic_info_.decoder_usage_percentage      = nvml_api_->get_device_decoder_usage_percentage(   device_handle_);
+    dynamic_info_.decoder_usage_percentage      = nvml_api_->get_device_decoder_usage_percentage(device_handle_);
     dynamic_info_.memory_usage_bytes            = nvml_api_->get_device_memory_usage_bytes(device_handle_);
     dynamic_info_.current_power_usage           = nvml_api_->get_device_current_power_usage(device_handle_);
     dynamic_info_.current_power_limit           = nvml_api_->get_device_current_power_limit(device_handle_);
@@ -268,4 +303,18 @@ unsigned NVMLDevice::get_slowdown_temperature() const noexcept
 const NVMLDevice::DynamicInfo& NVMLDevice::get_dynamic_info() const noexcept
 {
     return dynamic_info_;
+}
+
+
+
+NVMLUnit::NVMLUnit()
+    : nvml_api_{new NVML}
+    , unit_handle_{}
+{
+    nvml_api_->get_unit_handle_by_index(0, unit_handle_);
+}
+
+nvmlUnitInfo_t NVMLUnit::get_info() const noexcept
+{
+    return nvml_api_->get_unit_info(unit_handle_);
 }

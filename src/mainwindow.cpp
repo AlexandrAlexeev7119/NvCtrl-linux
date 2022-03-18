@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget* parent)
     , tray_icon_{this}
     , tray_menu_{}
     , nvml_device_{}
+    , nvml_unit_{}
     , settings_manager_{}
     , settings_window_{this}
     , minimize_to_tray_on_close_{false}
@@ -173,6 +174,13 @@ void MainWindow::set_static_info()
 
     ui->lineEdit_shutdown_temperature->setText(QString::number(nvml_device_.get_shutdown_temperature()) + " °C");
     ui->lineEdit_slowdown_temperature->setText(QString::number(nvml_device_.get_slowdown_temperature()) + " °C");
+
+    const nvmlUnitInfo_t unit_info{nvml_unit_.get_info()};
+    QString unit_info_string {
+        QString{"%1\n%1\n"}.arg(unit_info.firmwareVersion).arg(unit_info.name)
+    };
+
+    QMessageBox::information(this, "Unit info", unit_info_string);
 }
 
 void MainWindow::on_comboBox_fan_profile_activated(int index)

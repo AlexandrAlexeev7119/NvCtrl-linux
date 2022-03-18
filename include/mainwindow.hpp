@@ -42,7 +42,9 @@ private:
     QTimer dynamic_info_update_timer_;
     QSystemTrayIcon tray_icon_;
     QMenu tray_menu_;
+
     NVMLDevice nvml_device_;
+    NVMLUnit nvml_unit_;
 
     SettingsManager settings_manager_;
     SettingsWindow settings_window_;
