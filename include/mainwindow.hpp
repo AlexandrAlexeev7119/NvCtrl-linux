@@ -4,13 +4,13 @@
 #include <QCloseEvent>
 #include <QSystemTrayIcon>
 #include <QTimer>
-#include <QProcess>
 #include <QMenu>
 #include <QJsonObject>
 
 #include "NVML.hpp"
 #include "settings_manager.hpp"
 #include "settingswindow.hpp"
+#include "newfanprofiledialog.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -30,9 +30,12 @@ private slots:
     void on_actionSettings_triggered();
     void on_actionQuit_triggered();
     void on_pushButton_apply_power_settings_clicked();
+    void on_comboBox_fan_profile_activated(int index);
+
     void toggle_tray();
     void update_dynamic_info();
     void apply_settings(const QJsonObject& settings);
+
 
 private:
     Ui::MainWindow* ui;
@@ -43,6 +46,7 @@ private:
 
     SettingsManager settings_manager_;
     SettingsWindow settings_window_;
+    NewFanProfileDialog new_file_profile_dialog_;
 
     bool minimize_to_tray_on_close_;
 
