@@ -1,4 +1,5 @@
-#include <unistd.h>
+#include <QMessageBox>
+#include <QProcess>
 
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
@@ -6,77 +7,58 @@
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow{parent}
     , ui{new Ui::MainWindow}
-    , gpu_static_info_loader_{}
-    , gpu_dynamic_info_loader_{}
+    , dynamic_info_update_timer_{}
+    , tray_icon_{this}
+    , tray_menu_{}
+    , nvml_device_{}
+    , settings_manager_{}
+    , settings_window_{this}
+    , minimize_to_tray_on_close_{false}
+    , new_file_profile_dialog_{this}
 {
     ui->setupUi(this);
     setMinimumSize(size());
-    setMaximumSize(size());
 
-    connect(&gpu_dynamic_info_loader_, &GPUDynamicInfoLoader::update_info, this, &MainWindow::update_dynamic_info);
-    connect(ui->horizontalSlider_power_limit, &QSlider::valueChanged, this, [this](int value) {
-        ui->label_min_power_limit->setText(QString::number(value));
+    const QString config_file{"./gwepp.json"};
+    settings_manager_.set_file_name(config_file);
+
+    try
+    {
+        settings_manager_.open_file(QIODevice::ReadOnly);
+    }
+    catch (const std::exception& ex)
+    {
+        QMessageBox::critical(this, "Error", ex.what());
+        close();
+    }
+
+    const QJsonObject settings{settings_manager_.load_settings()};
+    settings_manager_.close_file();
+
+    minimize_to_tray_on_close_ = settings["minimize_to_tray_on_close"].toBool();
+
+    tray_menu_.addAction("Show/hide app window", this, &MainWindow::toggle_tray);
+    tray_menu_.addAction("App settings", &settings_window_, &QMainWindow::showNormal);
+    tray_menu_.addAction("Quit", this, &MainWindow::on_actionQuit_triggered);
+
+    tray_icon_.setContextMenu(&tray_menu_);
+
+    connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
+    connect(&settings_window_, &SettingsWindow::settings_applied, this, &MainWindow::apply_settings);
+    connect(ui->horizontalSlider_power_limit, &QAbstractSlider::valueChanged, this, [this](int value)
+    {
+        ui->label_current_power_limit_slider->setText(QString::number(value));
+    });
+    connect(&tray_icon_, &QSystemTrayIcon::activated, this, [this]([[maybe_unused]] QSystemTrayIcon::ActivationReason act_reason)
+    {
+        toggle_tray();
     });
 
     set_static_info();
-}
+    update_dynamic_info();
 
-void MainWindow::update_dynamic_info(const std::unordered_map<GPUDynamicInfoLoaderType, QString>& dynamic_info)
-{
-    const QString gpu_utilization_percengate{dynamic_info.at(GPUDynamicInfoLoaderType::GPU_UTILIZATION_PERCENTAGE)};
-    const QString memory_utilization_percentage{dynamic_info.at(GPUDynamicInfoLoaderType::MEMORY_UTILIZATION_PERCENTAGE)};
-    const QString encoder_utilization_percentage{dynamic_info.at(GPUDynamicInfoLoaderType::ENCODER_USAGE_PERCENTAGE)};
-    const QString decoder_utilization_percentage{dynamic_info.at(GPUDynamicInfoLoaderType::DECODER_USAGE_PERCENTAGE)};
-    const QString current_gpu_temperature{dynamic_info.at(GPUDynamicInfoLoaderType::GPU_CURRENT_TEMPERATURE)};
-
-    ui->progressBar_GPU_usage_percentage->setValue(gpu_utilization_percengate.toUInt());
-    ui->progressBar_memory_usage_percentage->setValue(memory_utilization_percentage.toUInt());
-    ui->progressBar_encoder_usage_percentage->setValue(encoder_utilization_percentage.toUInt());
-    ui->progressBar_decoder_usage_percentage->setValue(decoder_utilization_percentage.toUInt());
-
-    ui->lineEdit_draw_power_consumption->setText(dynamic_info.at(GPUDynamicInfoLoaderType::POWER_USAGE_WATTS) + " W");
-    ui->lineEdit_current_temperature->setText(current_gpu_temperature + " °C");
-}
-
-void MainWindow::set_static_info()
-{
-    const auto static_info{gpu_static_info_loader_.get_static_GPU_info()};
-
-    const QString gpu_max_power_usage{static_info.at(GPUStaticInfoType::GPU_MAX_POWER_USAGE)};
-    const QString gpu_min_power_usage{static_info.at(GPUStaticInfoType::GPU_MIN_POWER_USAGE)};
-    const QString gpu_default_power_limit{static_info.at(GPUStaticInfoType::GPU_DEFAULT_POWER_LIMIT)};
-    const QString gpu_current_power_limit{static_info.at(GPUStaticInfoType::GPU_CURRENT_POWER_LIMIT)};
-
-    ui->lineEdit_GPU_name->setText(static_info.at(GPUStaticInfoType::GPU_NAME));
-    ui->lineEdit_GPU_VBIOS_version->setText(static_info.at(GPUStaticInfoType::VBIOS_VER));
-    ui->lineEdit_GPU_driver_version->setText(static_info.at(GPUStaticInfoType::DRIVER_VER));
-    ui->lineEdit_PCIe_info->setText(static_info.at(GPUStaticInfoType::BUS_INFO));
-    ui->lineEdit_GPU_UUID->setText(static_info.at(GPUStaticInfoType::GPU_UUID));
-    ui->lineEdit_memory_info->setText(static_info.at(GPUStaticInfoType::GPU_TOTAL_MEMORY) + " MiB");
-
-    ui->lineEdit_slowdown_temperature->setText(static_info.at(GPUStaticInfoType::GPU_SLOWDOWN_TEMPERATURE) + " °C");
-    ui->lineEdit_shutdown_temperature->setText(static_info.at(GPUStaticInfoType::GPU_SHUTDOWN_TEMPERATURE) + " °C");
-
-    ui->lineEdit_max_power_consumption->setText(gpu_max_power_usage + " W");
-    ui->lineEdit_min_power_consumption->setText(gpu_min_power_usage + " W");
-    ui->lineEdit_default_power_consumption->setText(gpu_default_power_limit + " W");
-    ui->lineEdit_current_power_limit->setText(gpu_current_power_limit + " W");
-
-    ui->horizontalSlider_power_limit->setMaximum(gpu_max_power_usage.toInt());
-    ui->horizontalSlider_power_limit->setMinimum(gpu_min_power_usage.toUInt());
-    ui->horizontalSlider_power_limit->setValue(gpu_current_power_limit.toInt());
-
-    ui->label_min_power_limit->setText(gpu_current_power_limit);
-    ui->label_max_power_limit->setText(gpu_max_power_usage);
-}
-
-void MainWindow::on_pushButton_apply_power_settings_clicked()
-{
-}
-
-void MainWindow::on_action_Exit_triggered()
-{
-    close();
+    dynamic_info_update_timer_.setInterval(1250);
+    dynamic_info_update_timer_.start();
 }
 
 MainWindow::~MainWindow()
@@ -84,3 +66,134 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+QSystemTrayIcon& MainWindow::get_tray_icon()
+{
+    return tray_icon_;
+}
+
+void MainWindow::on_actionShow_hide_app_window_triggered()
+{
+    toggle_tray();
+}
+
+void MainWindow::on_actionSettings_triggered()
+{
+    settings_window_.show();
+}
+
+void MainWindow::on_actionQuit_triggered()
+{
+    minimize_to_tray_on_close_= false;
+    close();
+}
+
+void MainWindow::on_pushButton_apply_power_settings_clicked()
+{
+    const auto ret_code{QProcess::execute("/usr/bin/pkexec", {"/usr/bin/nvidia-smi", "-pl", QString::number(ui->horizontalSlider_power_limit->value())})};
+    if (ret_code == 0)
+    {
+        ui->statusbar->showMessage(QString{"Set new power limit: %1"}.arg(ui->horizontalSlider_power_limit->value()));
+    }
+    else
+    {
+        ui->statusbar->showMessage("Failed to set power limit");
+    }
+}
+
+void MainWindow::toggle_tray()
+{
+    if (isHidden())
+    {
+        showNormal();
+    }
+    else
+    {
+        hide();
+        tray_icon_.show();
+    }
+}
+
+
+void MainWindow::update_dynamic_info()
+{
+    nvml_device_.update_dynamic_info();
+    const auto& dynamic_info{nvml_device_.get_dynamic_info()};
+
+    ui->progressBar_GPU_usage_percentage->setValue(dynamic_info.gpu_usage_percentage);
+    ui->progressBar_memory_usage_percentage->setValue(dynamic_info.memory_usage_percentage);
+    ui->lineEdit_memory_usage_mib->setText(QString::number(dynamic_info.memory_usage_bytes / 1024 / 1024) + " MiB");
+    ui->progressBar_encoder_usage_percentage->setValue(dynamic_info.encoder_usage_percentage);
+    ui->progressBar_decoder_usage_percentage->setValue(dynamic_info.decoder_usage_percentage);
+
+    ui->lineEdit_current_power_limit->setText(QString::number(dynamic_info.current_power_limit / 1000) + " W");
+    ui->lineEdit_enforced_power_usage->setText(ui->lineEdit_current_power_limit->text());
+    ui->lineEdit_current_power_usage->setText(QString::number(dynamic_info.current_power_usage / 1000.f) + " W");
+    ui->lineEdit_current_temperature->setText(QString::number(dynamic_info.current_gpu_temperature) + " °C");
+
+    ui->label_fan_speed_percentage->setText(QString::number(dynamic_info.current_fan_speed_percentage) + "%");
+}
+
+void MainWindow::apply_settings(const QJsonObject& settings)
+{
+    minimize_to_tray_on_close_ = settings["minimize_to_tray_on_close"].toBool();
+}
+
+void MainWindow::on_fan_profile_created(const QJsonObject& profile)
+{
+    /// TODO:
+    /// implement fan profiles
+}
+
+void MainWindow::closeEvent(QCloseEvent* event_)
+{
+    if (minimize_to_tray_on_close_)
+    {
+        event_->ignore();
+        hide();
+        tray_icon_.show();
+    }
+    else
+    {
+        tray_icon_.hide();
+        event_->accept();
+    }
+}
+
+void MainWindow::set_static_info()
+{
+    ui->lineEdit_GPU_name->setText(QString::fromStdString(nvml_device_.get_name()));
+    ui->lineEdit_GPU_driver_version->setText(QString::fromStdString(nvml_device_.get_system_driver_version()));
+    ui->lineEdit_GPU_VBIOS_version->setText(QString::fromStdString(nvml_device_.get_vbios_version()));
+    ui->lineEdit_GPU_UUID->setText(QString::fromStdString(nvml_device_.get_uuid()));
+    ui->lineEdit_total_memory_mib->setText(QString::number(nvml_device_.get_memory_total_bytes() / 1024 / 1024) + " MiB");
+
+    ui->lineEdit_max_power_usage->setText(QString::number(nvml_device_.get_max_power_usage() / 1000) + " W");
+    ui->lineEdit_min_power_usage->setText(QString::number(nvml_device_.get_min_power_usage() / 1000) + " W");
+    ui->lineEdit_default_power_usage->setText(QString::number(nvml_device_.get_default_power_usage() / 1000.f) + " W");
+
+    ui->horizontalSlider_power_limit->setMaximum(nvml_device_.get_max_power_usage() / 1000);
+    ui->horizontalSlider_power_limit->setMinimum(nvml_device_.get_min_power_usage() / 1000);
+    ui->horizontalSlider_power_limit->setValue(nvml_device_.get_dynamic_info().current_power_limit / 1000);
+
+    ui->label_current_power_limit_slider->setText(QString::number(nvml_device_.get_dynamic_info().current_power_limit / 1000));
+    ui->label_max_power_limit_slider->setText(QString::number(nvml_device_.get_max_power_usage() / 1000));
+
+    ui->lineEdit_shutdown_temperature->setText(QString::number(nvml_device_.get_shutdown_temperature()) + " °C");
+    ui->lineEdit_slowdown_temperature->setText(QString::number(nvml_device_.get_slowdown_temperature()) + " °C");
+}
+
+void MainWindow::on_comboBox_fan_profile_activated(int index)
+{
+    auto get_profile_name{[](const QJsonObject& fan_profile) {
+        return fan_profile["profile_name"].toString();
+    }};
+
+    if (index == (ui->comboBox_fan_profile->count() - 1))
+    {
+        const auto user_choise{new_file_profile_dialog_.exec()};
+        if (user_choise == QDialog::DialogCode::Accepted)
+        {
+            reinterpret_cast<QComboBox*>(sender())->addItem("Add new profile...");
+        }
+    }
+}
