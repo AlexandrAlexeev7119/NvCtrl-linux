@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>521</width>
+    <width>466</width>
     <height>510</height>
    </rect>
   </property>
@@ -886,6 +886,12 @@
                <property name="toolTip">
                 <string>Set power limit</string>
                </property>
+               <property name="singleStep">
+                <number>1</number>
+               </property>
+               <property name="pageStep">
+                <number>5</number>
+               </property>
                <property name="value">
                 <number>0</number>
                </property>
@@ -927,23 +933,9 @@
            <set>Qt::AlignCenter</set>
           </property>
           <layout class="QGridLayout" name="gridLayout_9">
-           <item row="1" column="0">
+           <item row="0" column="0">
             <layout class="QGridLayout" name="gridLayout_8">
-             <item row="0" column="1">
-              <widget class="QLabel" name="label_fan_speed_rpm">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_fan_speed_percentage">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0" colspan="2">
+             <item row="1" column="0">
               <widget class="QComboBox" name="comboBox_fan_profile">
                <property name="sizeAdjustPolicy">
                 <enum>QComboBox::AdjustToContents</enum>
@@ -958,6 +950,30 @@
                  <string>Add new profile...</string>
                 </property>
                </item>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QPushButton" name="pushButton_edit_curr_fan_profile">
+               <property name="text">
+                <string>Edit current profile</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0" colspan="2">
+              <widget class="QPushButton" name="pushButton_apply_fan_profile_settings">
+               <property name="text">
+                <string>Apply</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" colspan="2">
+              <widget class="QLabel" name="label_fan_speed_percentage">
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
               </widget>
              </item>
             </layout>
@@ -981,7 +997,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>521</width>
+     <width>466</width>
      <height>22</height>
     </rect>
    </property>

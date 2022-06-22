@@ -6,7 +6,7 @@
 NVML::NVML()
 {
     nvmlReturn_t err_code{nvmlInit()};
-    if(err_code != NVML_SUCCESS)
+    if (err_code != NVML_SUCCESS)
     {
         throw std::runtime_error{std::string{nvmlErrorString(err_code)}};
     }
@@ -40,34 +40,6 @@ std::vector<nvmlDevice_t> NVML::get_devices_list()
 void NVML::get_handle_by_index(unsigned index, nvmlDevice_t& device) noexcept
 {
     nvmlDeviceGetHandleByIndex(index, &device);
-}
-
-std::vector<nvmlUnit_t> NVML::get_units_list()
-{
-    unsigned units_count{0};
-    nvmlReturn_t err_code{nvmlUnitGetCount(&units_count)};
-
-    if (err_code != NVML_SUCCESS)
-    {
-        throw std::runtime_error{std::string{nvmlErrorString(err_code)}};
-    }
-
-    std::vector<nvmlUnit_t> units{};
-    units.reserve(units_count);
-
-    for (unsigned i{0}; i < units_count; i++)
-    {
-        NVML::get_unit_handle_by_index(i, units[i]);
-    }
-    return units;
-}
-
-void NVML::get_unit_handle_by_index(unsigned index, nvmlUnit_t& unit)
-{
-    // Fucking NVIDIA!
-    // HOW TO INITIALIZE THIS FUCKING UNIT?
-    // ALWAYS NVML_ERROR_INVALID_ARGUMENT
-    nvmlReturn_t error{nvmlUnitGetHandleByIndex(index, &unit)};
 }
 
 std::string NVML::get_system_driver_version() const
@@ -303,18 +275,4 @@ unsigned NVMLDevice::get_slowdown_temperature() const noexcept
 const NVMLDevice::DynamicInfo& NVMLDevice::get_dynamic_info() const noexcept
 {
     return dynamic_info_;
-}
-
-
-
-NVMLUnit::NVMLUnit()
-    : nvml_api_{new NVML}
-    , unit_handle_{}
-{
-    nvml_api_->get_unit_handle_by_index(0, unit_handle_);
-}
-
-nvmlUnitInfo_t NVMLUnit::get_info() const noexcept
-{
-    return nvml_api_->get_unit_info(unit_handle_);
 }

@@ -15,9 +15,6 @@ public:
     std::vector<nvmlDevice_t> get_devices_list();
     void get_handle_by_index(unsigned index, nvmlDevice_t& device) noexcept;
 
-    std::vector<nvmlUnit_t> get_units_list();
-    void get_unit_handle_by_index(unsigned index, nvmlUnit_t& unit);
-
     std::string get_system_driver_version() const;
     std::string get_system_nvml_version() const;
     std::string get_device_name(const nvmlDevice_t& device) const;
@@ -86,15 +83,3 @@ private:
     } dynamic_info_;
 };
 
-class NVMLUnit
-{
-public:
-    NVMLUnit();
-    ~NVMLUnit() = default;
-
-    nvmlUnitInfo_t get_info() const noexcept;
-
-private:
-    nvmlUnit_t unit_handle_;
-    const std::unique_ptr<NVML> nvml_api_;
-};

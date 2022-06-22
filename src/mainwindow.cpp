@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget* parent)
     , tray_icon_{this}
     , tray_menu_{}
     , nvml_device_{}
-    , nvml_unit_{}
     , settings_manager_{}
     , settings_window_{this}
     , minimize_to_tray_on_close_{false}
@@ -127,6 +126,7 @@ void MainWindow::update_dynamic_info()
     ui->progressBar_decoder_usage_percentage->setValue(dynamic_info.decoder_usage_percentage);
 
     ui->lineEdit_current_power_limit->setText(QString::number(dynamic_info.current_power_limit / 1000) + " W");
+    ui->lineEdit_enforced_power_usage->setText(ui->lineEdit_current_power_limit->text());
     ui->lineEdit_current_power_usage->setText(QString::number(dynamic_info.current_power_usage / 1000.f) + " W");
     ui->lineEdit_current_temperature->setText(QString::number(dynamic_info.current_gpu_temperature) + " °C");
 
@@ -136,6 +136,12 @@ void MainWindow::update_dynamic_info()
 void MainWindow::apply_settings(const QJsonObject& settings)
 {
     minimize_to_tray_on_close_ = settings["minimize_to_tray_on_close"].toBool();
+}
+
+void MainWindow::on_fan_profile_created(const QJsonObject& profile)
+{
+    /// TODO:
+    /// implement fan profiles
 }
 
 void MainWindow::closeEvent(QCloseEvent* event_)
@@ -174,19 +180,20 @@ void MainWindow::set_static_info()
 
     ui->lineEdit_shutdown_temperature->setText(QString::number(nvml_device_.get_shutdown_temperature()) + " °C");
     ui->lineEdit_slowdown_temperature->setText(QString::number(nvml_device_.get_slowdown_temperature()) + " °C");
-
-    const nvmlUnitInfo_t unit_info{nvml_unit_.get_info()};
-    QString unit_info_string {
-        QString{"%1\n%1\n"}.arg(unit_info.firmwareVersion).arg(unit_info.name)
-    };
-
-    QMessageBox::information(this, "Unit info", unit_info_string);
 }
 
 void MainWindow::on_comboBox_fan_profile_activated(int index)
 {
+    auto get_profile_name{[](const QJsonObject& fan_profile) {
+        return fan_profile["profile_name"].toString();
+    }};
+
     if (index == (ui->comboBox_fan_profile->count() - 1))
     {
-        new_file_profile_dialog_.show();
+        const auto user_choise{new_file_profile_dialog_.exec()};
+        if (user_choise == QDialog::DialogCode::Accepted)
+        {
+            reinterpret_cast<QComboBox*>(sender())->addItem("Add new profile...");
+        }
     }
 }

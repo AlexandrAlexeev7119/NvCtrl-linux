@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QDialog>
+#include <QJsonObject>
 
 namespace Ui { class NewFanProfileDialog; }
 
@@ -12,7 +13,10 @@ public:
     ~NewFanProfileDialog();
 
 signals:
-    void fan_profile_created();
+    void fan_profile_created(const QJsonObject&);
+
+private slots:
+    void on_buttonBox_accepted();
 
 private:
     Ui::NewFanProfileDialog* ui;

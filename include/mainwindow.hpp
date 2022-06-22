@@ -36,6 +36,7 @@ private slots:
     void update_dynamic_info();
     void apply_settings(const QJsonObject& settings);
 
+    void on_fan_profile_created(const QJsonObject& profile);
 
 private:
     Ui::MainWindow* ui;
@@ -44,7 +45,6 @@ private:
     QMenu tray_menu_;
 
     NVMLDevice nvml_device_;
-    NVMLUnit nvml_unit_;
 
     SettingsManager settings_manager_;
     SettingsWindow settings_window_;
