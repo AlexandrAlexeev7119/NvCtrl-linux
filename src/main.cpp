@@ -1,5 +1,7 @@
 #include <iostream>
+
 #include <QApplication>
+#include <QMessageBox>
 
 #include "mainwindow.hpp"
 #include "settings_manager.hpp"
@@ -34,22 +36,17 @@ int main(int argc, char** argv)
 
     QApplication app{argc, argv};
     MainWindow main_window{};
-    SettingsManager settings_manager{};
+    SettingsManager& settings_manager_instance{SettingsManager::get_instance()};
 
-    settings_manager.set_file_name("./gwepp.json");
+    QObject::connect(&settings_manager_instance, &SettingsManager::error, [](const QString& err_msg) {
+        QMessageBox::critical(nullptr, "Error", err_msg);
+        exit(1);
+    });
 
-    try
-    {
-        settings_manager.open_file(QIODevice::ReadOnly);
-    }
-    catch (const std::exception& ex)
-    {
-        std::cerr << ex.what();
-        return 1;
-    }
-
-    const bool minimize_to_tray_on_startup{settings_manager.load_settings()["minimize_to_tray_on_startup"].toBool()};
-    settings_manager.close_file();
+    settings_manager_instance.open_file(QIODevice::ReadOnly);
+    const auto app_settings{settings_manager_instance.load_settings()};
+    settings_manager_instance.close_file();
+    const bool minimize_to_tray_on_startup{app_settings["minimize_to_tray_on_startup"].toBool()};
 
     if (minimize_to_tray_on_startup)
     {

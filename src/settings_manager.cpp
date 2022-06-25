@@ -16,7 +16,7 @@ void SettingsManager::open_file(QIODevice::OpenMode open_mode)
 {
     if (!config_file_.open(open_mode))
     {
-        throw std::runtime_error{config_file_.errorString().toStdString()};
+        emit error(config_file_.errorString());
     }
 }
 
@@ -40,4 +40,11 @@ QJsonObject SettingsManager::load_settings()
     const QByteArray raw_data{config_file_.readAll()};
     const QJsonObject json_obj{QJsonDocument::fromJson(raw_data).object()};
     return json_obj;
+}
+
+SettingsManager& SettingsManager::get_instance()
+{
+    static SettingsManager settings_manager{};
+    settings_manager.set_file_name(settings_manager_details::filename);
+    return settings_manager;
 }

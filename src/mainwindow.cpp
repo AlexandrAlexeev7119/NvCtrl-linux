@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget* parent)
     , tray_icon_{this}
     , tray_menu_{}
     , nvml_device_{}
-    , settings_manager_{}
+    , settings_manager_instance_{SettingsManager::get_instance()}
     , settings_window_{this}
     , minimize_to_tray_on_close_{false}
     , new_file_profile_dialog_{this}
@@ -19,28 +19,14 @@ MainWindow::MainWindow(QWidget* parent)
     ui->setupUi(this);
     setMinimumSize(size());
 
-    const QString config_file{"./gwepp.json"};
-    settings_manager_.set_file_name(config_file);
+    settings_manager_instance_.open_file(QIODevice::ReadOnly);
+    const auto app_settings{settings_manager_instance_.load_settings()};
+    settings_manager_instance_.close_file();
 
-    try
-    {
-        settings_manager_.open_file(QIODevice::ReadOnly);
-    }
-    catch (const std::exception& ex)
-    {
-        QMessageBox::critical(this, "Error", ex.what());
-        close();
-    }
-
-    const QJsonObject settings{settings_manager_.load_settings()};
-    settings_manager_.close_file();
-
-    minimize_to_tray_on_close_ = settings["minimize_to_tray_on_close"].toBool();
-
+    minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
     tray_menu_.addAction("Show/hide app window", this, &MainWindow::toggle_tray);
     tray_menu_.addAction("App settings", &settings_window_, &QMainWindow::showNormal);
     tray_menu_.addAction("Quit", this, &MainWindow::on_actionQuit_triggered);
-
     tray_icon_.setContextMenu(&tray_menu_);
 
     connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
@@ -49,7 +35,7 @@ MainWindow::MainWindow(QWidget* parent)
     {
         ui->label_current_power_limit_slider->setText(QString::number(value));
     });
-    connect(&tray_icon_, &QSystemTrayIcon::activated, this, [this]([[maybe_unused]] QSystemTrayIcon::ActivationReason act_reason)
+    connect(&tray_icon_, &QSystemTrayIcon::activated, this, [this](QSystemTrayIcon::ActivationReason)
     {
         toggle_tray();
     });
