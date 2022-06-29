@@ -8,9 +8,12 @@
 
 class NVML
 {
-public:
+private:
     NVML();
     ~NVML();
+
+public:
+    static NVML& get_NVML_instance();
 
     std::vector<nvmlDevice_t> get_devices_list();
     void get_handle_by_index(unsigned index, nvmlDevice_t& device) noexcept;
@@ -68,7 +71,7 @@ public:
 
 private:
     nvmlDevice_t device_handle_;
-    const std::unique_ptr<NVML> nvml_api_;
+    NVML& nvml_api_;
     struct DynamicInfo
     {
         unsigned gpu_usage_percentage;
