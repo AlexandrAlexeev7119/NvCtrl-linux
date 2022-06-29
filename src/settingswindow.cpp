@@ -16,8 +16,6 @@ SettingsWindow::SettingsWindow(QWidget* parent)
             [this](const QString& err_msg)
     {
         qCritical().nospace().noquote() << err_msg;
-        QMessageBox::critical(this, "Error", err_msg);
-        close();
     });
 
     settings_manager_.open_file(QIODevice::ReadOnly);
@@ -35,14 +33,7 @@ SettingsWindow::~SettingsWindow()
 
 void SettingsWindow::on_pushButton_close_window_clicked()
 {
-    if (isHidden())
-    {
-        showNormal();
-    }
-    else
-    {
-        hide();
-    }
+    hide();
 }
 
 void SettingsWindow::on_pushButton_apply_settings_clicked()
