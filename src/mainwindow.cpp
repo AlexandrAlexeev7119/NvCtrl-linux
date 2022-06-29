@@ -85,14 +85,16 @@ void MainWindow::on_actionQuit_triggered()
 
 void MainWindow::on_pushButton_apply_power_settings_clicked()
 {
-    const auto ret_code{QProcess::execute("/usr/bin/pkexec", {"/usr/bin/nvidia-smi", "-pl", QString::number(ui->horizontalSlider_power_limit->value())})};
+    const int ret_code{QProcess::execute("/usr/bin/pkexec", {"/usr/bin/nvidia-smi", "-pl", QString::number(ui->horizontalSlider_power_limit->value())})};
     if (ret_code == 0)
     {
         ui->statusbar->showMessage(QString{"Set new power limit: %1"}.arg(ui->horizontalSlider_power_limit->value()));
+        qInfo().nospace().noquote() << "Set new power limit: " << ui->lineEdit_current_power_limit->text();
     }
     else
     {
         ui->statusbar->showMessage("Failed to set power limit");
+        qCritical().nospace().noquote() << "Failed to set power limit, code: " << ret_code;
     }
 }
 
@@ -131,8 +133,8 @@ void MainWindow::update_dynamic_info()
 
 void MainWindow::apply_settings(const QJsonObject& settings)
 {
-    qInfo().nospace().noquote() << "new settings applied: " << settings;
     minimize_to_tray_on_close_ = settings["minimize_to_tray_on_close"].toBool();
+    qInfo().nospace().noquote() << "new settings applied: " << settings;
 }
 
 void MainWindow::on_fan_profile_created(const QJsonObject& profile)
