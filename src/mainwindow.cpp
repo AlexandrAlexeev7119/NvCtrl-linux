@@ -11,34 +11,44 @@ MainWindow::MainWindow(QWidget* parent)
     , tray_icon_{this}
     , tray_menu_{}
     , nvml_device_{}
-    , settings_manager_instance_{SettingsManager::get_instance()}
+    , settings_manager_{SettingsManager::get_instance()}
     , settings_window_{this}
     , minimize_to_tray_on_close_{false}
     , new_file_profile_dialog_{this}
 {
     ui->setupUi(this);
     setMinimumSize(size());
+    setMaximumSize(size() * 1.5);
 
-    settings_manager_instance_.open_file(QIODevice::ReadOnly);
-    const auto app_settings{settings_manager_instance_.load_settings()};
-    settings_manager_instance_.close_file();
+    connect(&settings_manager_, &SettingsManager::error, this,
+            [this](const QString& err_msg)
+    {
+        qCritical().nospace().noquote() << err_msg;
+        QMessageBox::critical(nullptr, "Error", err_msg);
+        close();
+    });
+    connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
+    connect(&settings_window_, &SettingsWindow::settings_applied, this, &MainWindow::apply_settings);
+    connect(ui->horizontalSlider_power_limit, &QAbstractSlider::valueChanged, this,
+            [this](int value)
+    {
+        ui->label_current_power_limit_slider->setText(QString::number(value));
+    });
+    connect(&tray_icon_, &QSystemTrayIcon::activated, this,
+            [this](QSystemTrayIcon::ActivationReason)
+    {
+        toggle_tray();
+    });
 
-    minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
     tray_menu_.addAction("Show/hide app window", this, &MainWindow::toggle_tray);
     tray_menu_.addAction("App settings", &settings_window_, &QMainWindow::showNormal);
     tray_menu_.addAction("Quit", this, &MainWindow::on_actionQuit_triggered);
     tray_icon_.setContextMenu(&tray_menu_);
 
-    connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
-    connect(&settings_window_, &SettingsWindow::settings_applied, this, &MainWindow::apply_settings);
-    connect(ui->horizontalSlider_power_limit, &QAbstractSlider::valueChanged, this, [this](int value)
-    {
-        ui->label_current_power_limit_slider->setText(QString::number(value));
-    });
-    connect(&tray_icon_, &QSystemTrayIcon::activated, this, [this](QSystemTrayIcon::ActivationReason)
-    {
-        toggle_tray();
-    });
+    settings_manager_.open_file(QIODevice::ReadOnly);
+    const auto app_settings{settings_manager_.load_settings()};
+    settings_manager_.close_file();
+    minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
 
     set_static_info();
     update_dynamic_info();
@@ -121,6 +131,7 @@ void MainWindow::update_dynamic_info()
 
 void MainWindow::apply_settings(const QJsonObject& settings)
 {
+    qInfo().nospace().noquote() << "new settings applied: " << settings;
     minimize_to_tray_on_close_ = settings["minimize_to_tray_on_close"].toBool();
 }
 
@@ -170,10 +181,6 @@ void MainWindow::set_static_info()
 
 void MainWindow::on_comboBox_fan_profile_activated(int index)
 {
-    auto get_profile_name{[](const QJsonObject& fan_profile) {
-        return fan_profile["profile_name"].toString();
-    }};
-
     if (index == (ui->comboBox_fan_profile->count() - 1))
     {
         const auto user_choise{new_file_profile_dialog_.exec()};

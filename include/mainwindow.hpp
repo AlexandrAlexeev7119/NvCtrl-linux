@@ -46,7 +46,7 @@ private:
 
     NVMLDevice nvml_device_;
 
-    SettingsManager& settings_manager_instance_;
+    SettingsManager& settings_manager_;
     SettingsWindow settings_window_;
     NewFanProfileDialog new_file_profile_dialog_;
 

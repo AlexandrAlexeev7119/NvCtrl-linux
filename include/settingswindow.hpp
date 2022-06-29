@@ -24,6 +24,6 @@ private slots:
 
 private:
     Ui::SettingsWindow* ui;
-    SettingsManager& settings_manager_instance_;
+    SettingsManager& settings_manager_;
 };
 

@@ -4,19 +4,17 @@
 #include <QFile>
 #include <QJsonObject>
 
-namespace settings_manager_details
-{
-    static const QString filename{"./gwepp.json"};
-}
-
 class SettingsManager : public QObject
 {
     Q_OBJECT
-public:
+private:
     SettingsManager();
+    SettingsManager(const QString& filename);
     ~SettingsManager() = default;
 
+public:
     void set_file_name(const QString& filename);
+    QString get_file_name() const;
     void open_file(QIODevice::OpenMode open_mode);
     void close_file();
 
@@ -29,7 +27,7 @@ signals:
     void error(const QString&);
 
 private:
-    QFile config_file_;
+    QFile settings_file_;
 };
 
 SettingsManager& settings_manager_get_instance();
