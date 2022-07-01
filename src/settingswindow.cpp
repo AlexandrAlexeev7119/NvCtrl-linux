@@ -24,6 +24,7 @@ SettingsWindow::SettingsWindow(QWidget* parent)
 
     ui->checkBox_minimize_to_tray_on_close->setChecked(app_settings["minimize_to_tray_on_close"].toBool());
     ui->checkBox_minimize_to_tray_on_startup->setChecked(app_settings["minimize_to_tray_on_startup"].toBool());
+    ui->spinBox_update_freq_ms->setValue(app_settings["update_freq_ms"].toInt());
 }
 
 SettingsWindow::~SettingsWindow()
@@ -43,6 +44,7 @@ void SettingsWindow::on_pushButton_apply_settings_clicked()
     const QJsonObject new_app_settings{
         {"minimize_to_tray_on_close",   ui->checkBox_minimize_to_tray_on_close->isChecked()},
         {"minimize_to_tray_on_startup", ui->checkBox_minimize_to_tray_on_startup->isChecked()},
+        {"update_freq_ms", ui->spinBox_update_freq_ms->value()}
     };
     settings_manager_.save_settings(new_app_settings);
     settings_manager_.close_file();

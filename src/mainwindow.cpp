@@ -4,6 +4,8 @@
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 
+constexpr int STATUSBAR_MESSAGE_TIMEOUT_MS{1500};
+
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow{parent}
     , ui{new Ui::MainWindow}
@@ -14,11 +16,11 @@ MainWindow::MainWindow(QWidget* parent)
     , settings_manager_{SettingsManager::get_instance()}
     , settings_window_{this}
     , minimize_to_tray_on_close_{false}
+    , update_freq_ms_{}
     , new_file_profile_dialog_{this}
 {
     ui->setupUi(this);
     setMinimumSize(size());
-    setMaximumSize(size() * 1.5);
 
     connect(&settings_manager_, &SettingsManager::error, this,
             [this](const QString& err_msg)
@@ -49,11 +51,12 @@ MainWindow::MainWindow(QWidget* parent)
     const auto app_settings{settings_manager_.load_settings()};
     settings_manager_.close_file();
     minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
+    update_freq_ms_ = app_settings["update_freq_ms"].toInt();
 
     set_static_info();
     update_dynamic_info();
 
-    dynamic_info_update_timer_.setInterval(1250);
+    dynamic_info_update_timer_.setInterval(update_freq_ms_);
     dynamic_info_update_timer_.start();
 }
 
@@ -88,12 +91,12 @@ void MainWindow::on_pushButton_apply_power_settings_clicked()
     const int ret_code{QProcess::execute("/usr/bin/pkexec", {"/usr/bin/nvidia-smi", "-pl", QString::number(ui->horizontalSlider_power_limit->value())})};
     if (ret_code == 0)
     {
-        ui->statusbar->showMessage(QString{"Set new power limit: %1"}.arg(ui->horizontalSlider_power_limit->value()));
+        ui->statusbar->showMessage(QString{"Set new power limit: %1"}.arg(ui->horizontalSlider_power_limit->value()), STATUSBAR_MESSAGE_TIMEOUT_MS);
         qInfo().nospace().noquote() << "Set new power limit: " << ui->lineEdit_current_power_limit->text();
     }
     else
     {
-        ui->statusbar->showMessage("Failed to set power limit");
+        ui->statusbar->showMessage("Failed to set power limit", STATUSBAR_MESSAGE_TIMEOUT_MS);
         qCritical().nospace().noquote() << "Failed to set power limit, code: " << ret_code;
     }
 }
@@ -134,6 +137,14 @@ void MainWindow::update_dynamic_info()
 void MainWindow::apply_settings(const QJsonObject& settings)
 {
     minimize_to_tray_on_close_ = settings["minimize_to_tray_on_close"].toBool();
+    update_freq_ms_ = settings["update_freq_ms"].toInt();
+
+    if (dynamic_info_update_timer_.interval() != update_freq_ms_)
+    {
+        dynamic_info_update_timer_.setInterval(update_freq_ms_);
+    }
+
+    ui->statusbar->showMessage("New settings applied", STATUSBAR_MESSAGE_TIMEOUT_MS);
     qInfo().nospace().noquote() << "new settings applied: " << settings;
 }
 
@@ -183,12 +194,20 @@ void MainWindow::set_static_info()
 
 void MainWindow::on_comboBox_fan_profile_activated(int index)
 {
-    if (index == (ui->comboBox_fan_profile->count() - 1))
+    if (index == 0)
     {
-        const auto user_choise{new_file_profile_dialog_.exec()};
-        if (user_choise == QDialog::DialogCode::Accepted)
+        ui->pushButton_edit_curr_fan_profile->setEnabled(false);
+    }
+    else
+    {
+        if (!ui->pushButton_edit_curr_fan_profile->isEnabled())
         {
-            reinterpret_cast<QComboBox*>(sender())->addItem("Add new profile...");
+            ui->pushButton_edit_curr_fan_profile->setEnabled(true);
         }
     }
+}
+
+void MainWindow::on_pushButton_edit_curr_fan_profile_clicked()
+{
+
 }

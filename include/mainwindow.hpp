@@ -37,6 +37,7 @@ private slots:
     void apply_settings(const QJsonObject& settings);
 
     void on_fan_profile_created(const QJsonObject& profile);
+    void on_pushButton_edit_curr_fan_profile_clicked();
 
 private:
     Ui::MainWindow* ui;
@@ -51,6 +52,7 @@ private:
     NewFanProfileDialog new_file_profile_dialog_;
 
     bool minimize_to_tray_on_close_;
+    int update_freq_ms_;
 
     void set_static_info();
     void closeEvent(QCloseEvent* event_);

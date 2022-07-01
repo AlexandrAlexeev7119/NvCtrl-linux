@@ -70,8 +70,8 @@ public:
     const DynamicInfo& get_dynamic_info() const noexcept;
 
 private:
-    nvmlDevice_t device_handle_;
     NVML& nvml_api_;
+    nvmlDevice_t device_handle_;
     struct DynamicInfo
     {
         unsigned gpu_usage_percentage;

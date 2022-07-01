@@ -59,12 +59,12 @@ int main(int argc, char** argv)
     if (minimize_to_tray_on_startup)
     {
         main_window.get_tray_icon().show();
-        qInfo().nospace().noquote() << "start minimized to tray";
+        qInfo().nospace().noquote() << "Start minimized to tray";
     }
     else
     {
         main_window.show();
-        qInfo().nospace().noquote() << "start normal window";
+        qInfo().nospace().noquote() << "Start normal window";
     }
 
     return app.exec();
