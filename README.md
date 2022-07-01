@@ -5,5 +5,5 @@ no other shit such as python
 no other shit such as python
 
 ## UI look
-![UI look picture here](img/new-ui.png)
+![UI look picture here](img/ui-look.png)
 
