@@ -1,20 +1,21 @@
 #include <stdexcept>
-#include <QDebug>
 
 #include "NVML.hpp"
 
 NVML::NVML()
 {
-    nvmlReturn_t err_code{nvmlInit()};
-    if (err_code != NVML_SUCCESS)
-    {
-        throw std::runtime_error{std::string{nvmlErrorString(err_code)}};
-    }
+    nvmlInit();
 }
 
 NVML::~NVML()
 {
     nvmlShutdown();
+}
+
+NVML& NVML::get_NVML_instance()
+{
+    static NVML nvml_instance{};
+    return nvml_instance;
 }
 
 std::vector<nvmlDevice_t> NVML::get_devices_list()
@@ -24,7 +25,7 @@ std::vector<nvmlDevice_t> NVML::get_devices_list()
 
     if (err_code != NVML_SUCCESS)
     {
-        throw std::runtime_error{std::string{nvmlErrorString(err_code)}};
+        throw std::runtime_error{nvmlErrorString(err_code)};
     }
 
     std::vector<nvmlDevice_t> devices_list{};
@@ -201,75 +202,75 @@ nvmlUnitInfo_t NVML::get_unit_info(const nvmlUnit_t& unit) const noexcept
 
 
 NVMLDevice::NVMLDevice()
-    : nvml_api_{new NVML}
+    : nvml_api_{NVML::get_NVML_instance()}
     , device_handle_{}
     , dynamic_info_{}
 {
-    nvml_api_->get_handle_by_index(0, device_handle_);
+    nvml_api_.get_handle_by_index(0, device_handle_);
     update_dynamic_info();
 }
 
 void NVMLDevice::update_dynamic_info()
 {
-    dynamic_info_.gpu_usage_percentage          = nvml_api_->get_device_gpu_usage_percantage(device_handle_);
-    dynamic_info_.memory_usage_percentage       = nvml_api_->get_device_memory_usage_percantage(device_handle_);
-    dynamic_info_.encoder_usage_percentage      = nvml_api_->get_device_encoder_usage_percentage(device_handle_);
-    dynamic_info_.decoder_usage_percentage      = nvml_api_->get_device_decoder_usage_percentage(device_handle_);
-    dynamic_info_.memory_usage_bytes            = nvml_api_->get_device_memory_usage_bytes(device_handle_);
-    dynamic_info_.current_power_usage           = nvml_api_->get_device_current_power_usage(device_handle_);
-    dynamic_info_.current_power_limit           = nvml_api_->get_device_current_power_limit(device_handle_);
-    dynamic_info_.current_gpu_temperature       = nvml_api_->get_device_current_gpu_temperature(device_handle_);
-    dynamic_info_.current_fan_speed_percentage  = nvml_api_->get_device_current_fan_speed_percentage(device_handle_);
+    dynamic_info_.gpu_usage_percentage          = nvml_api_.get_device_gpu_usage_percantage(device_handle_);
+    dynamic_info_.memory_usage_percentage       = nvml_api_.get_device_memory_usage_percantage(device_handle_);
+    dynamic_info_.encoder_usage_percentage      = nvml_api_.get_device_encoder_usage_percentage(device_handle_);
+    dynamic_info_.decoder_usage_percentage      = nvml_api_.get_device_decoder_usage_percentage(device_handle_);
+    dynamic_info_.memory_usage_bytes            = nvml_api_.get_device_memory_usage_bytes(device_handle_);
+    dynamic_info_.current_power_usage           = nvml_api_.get_device_current_power_usage(device_handle_);
+    dynamic_info_.current_power_limit           = nvml_api_.get_device_current_power_limit(device_handle_);
+    dynamic_info_.current_gpu_temperature       = nvml_api_.get_device_current_gpu_temperature(device_handle_);
+    dynamic_info_.current_fan_speed_percentage  = nvml_api_.get_device_current_fan_speed_percentage(device_handle_);
 }
 
 std::string NVMLDevice::get_system_driver_version() const
 {
-    return nvml_api_->get_system_driver_version();
+    return nvml_api_.get_system_driver_version();
 }
 
 std::string NVMLDevice::get_name() const
 {
-    return nvml_api_->get_device_name(device_handle_);
+    return nvml_api_.get_device_name(device_handle_);
 }
 
 std::string NVMLDevice::get_uuid() const
 {
-    return nvml_api_->get_device_uuid(device_handle_);
+    return nvml_api_.get_device_uuid(device_handle_);
 }
 
 std::string NVMLDevice::get_vbios_version() const
 {
-    return nvml_api_->get_device_vbios_version(device_handle_);
+    return nvml_api_.get_device_vbios_version(device_handle_);
 }
 
 unsigned long long NVMLDevice::get_memory_total_bytes() const noexcept
 {
-    return nvml_api_->get_device_memory_total_bytes(device_handle_);
+    return nvml_api_.get_device_memory_total_bytes(device_handle_);
 }
 
 unsigned NVMLDevice::get_max_power_usage() const noexcept
 {
-    return nvml_api_->get_device_max_power_usage(device_handle_);
+    return nvml_api_.get_device_max_power_usage(device_handle_);
 }
 
 unsigned NVMLDevice::get_min_power_usage() const noexcept
 {
-    return nvml_api_->get_device_min_power_usage(device_handle_);
+    return nvml_api_.get_device_min_power_usage(device_handle_);
 }
 
 unsigned NVMLDevice::get_default_power_usage() const noexcept
 {
-    return nvml_api_->get_device_default_power_usage(device_handle_);
+    return nvml_api_.get_device_default_power_usage(device_handle_);
 }
 
 unsigned NVMLDevice::get_shutdown_temperature() const noexcept
 {
-    return nvml_api_->get_device_shutdown_temperature(device_handle_);
+    return nvml_api_.get_device_shutdown_temperature(device_handle_);
 }
 
 unsigned NVMLDevice::get_slowdown_temperature() const noexcept
 {
-    return nvml_api_->get_device_slowdown_temperature(device_handle_);
+    return nvml_api_.get_device_slowdown_temperature(device_handle_);
 }
 
 const NVMLDevice::DynamicInfo& NVMLDevice::get_dynamic_info() const noexcept
