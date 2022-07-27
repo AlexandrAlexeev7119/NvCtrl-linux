@@ -57,6 +57,10 @@ private:
     bool minimize_to_tray_on_close_;
     int update_freq_ms_;
 
+    void connect_slots();
+    void setup_tray_menu();
+    void load_app_settings();
     void set_static_info();
+
     void closeEvent(QCloseEvent* event_);
 };

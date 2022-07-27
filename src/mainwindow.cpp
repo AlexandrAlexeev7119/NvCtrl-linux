@@ -22,44 +22,11 @@ MainWindow::MainWindow(QWidget* parent)
 {
     ui->setupUi(this);
     setMinimumSize(size());
-
-    connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
-    connect(&settings_window_, &SettingsWindow::settings_applied, this, &MainWindow::apply_settings);
-
-    connect(&settings_manager_, &SettingsManager::error, this,
-            [this](const QString& err_msg)
-    {
-        qCritical().nospace().noquote() << err_msg;
-        QMessageBox::critical(nullptr, "Error", err_msg);
-        close();
-    });
-    connect(ui->horizontalSlider_power_limit, &QAbstractSlider::valueChanged, this,
-            [this](int value)
-    {
-        ui->label_current_power_limit_slider->setText(QString::number(value));
-    });
-    connect(&tray_icon_, &QSystemTrayIcon::activated, this,
-            [this](QSystemTrayIcon::ActivationReason)
-    {
-        toggle_tray();
-    });
-
-    tray_menu_.addAction("Show/hide app window", this, &MainWindow::toggle_tray);
-    tray_menu_.addAction("App settings", &settings_window_, &QMainWindow::showNormal);
-    tray_menu_.addAction("Quit", this, &MainWindow::on_actionQuit_triggered);
-    tray_icon_.setContextMenu(&tray_menu_);
-
-    settings_manager_.open_file(QIODevice::ReadOnly);
-    const auto app_settings{settings_manager_.load_settings()};
-    settings_manager_.close_file();
-
-    minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
-    update_freq_ms_ = app_settings["update_freq_ms"].toInt();
-
+    connect_slots();
+    setup_tray_menu();
+    load_app_settings();
     set_static_info();
     update_dynamic_info();
-
-    dynamic_info_update_timer_.setInterval(update_freq_ms_);
     dynamic_info_update_timer_.start();
 }
 
@@ -117,7 +84,6 @@ void MainWindow::toggle_tray()
         tray_icon_.show();
     }
 }
-
 
 void MainWindow::update_dynamic_info()
 {
@@ -217,4 +183,48 @@ void MainWindow::on_comboBox_fan_profile_activated(int index)
 void MainWindow::on_pushButton_edit_curr_fan_profile_clicked()
 {
 
+}
+
+
+
+void MainWindow::connect_slots()
+{
+    connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
+    connect(&settings_window_, &SettingsWindow::settings_applied, this, &MainWindow::apply_settings);
+
+    connect(&settings_manager_, &SettingsManager::error, this,
+            [this](const QString& err_msg)
+    {
+        qCritical().nospace().noquote() << err_msg;
+        QMessageBox::critical(nullptr, "Error", err_msg);
+        close();
+    });
+    connect(ui->horizontalSlider_power_limit, &QAbstractSlider::valueChanged, this,
+            [this](int value)
+    {
+        ui->label_current_power_limit_slider->setText(QString::number(value));
+    });
+    connect(&tray_icon_, &QSystemTrayIcon::activated, this,
+            [this](QSystemTrayIcon::ActivationReason)
+    {
+        toggle_tray();
+    });
+}
+
+void MainWindow::setup_tray_menu()
+{
+    tray_menu_.addAction("Show/hide app window", this, &MainWindow::toggle_tray);
+    tray_menu_.addAction("App settings", &settings_window_, &QMainWindow::showNormal);
+    tray_menu_.addAction("Quit", this, &MainWindow::on_actionQuit_triggered);
+    tray_icon_.setContextMenu(&tray_menu_);
+}
+
+void MainWindow::load_app_settings()
+{
+    settings_manager_.open_file(QIODevice::ReadOnly);
+    const auto app_settings{settings_manager_.load_settings()};
+    settings_manager_.close_file();
+    minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
+    update_freq_ms_ = app_settings["update_freq_ms"].toInt();
+    dynamic_info_update_timer_.setInterval(update_freq_ms_);
 }
