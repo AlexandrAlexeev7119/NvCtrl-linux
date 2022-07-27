@@ -37,7 +37,6 @@ static void qt_msg_handler(QtMsgType msg_type, const QMessageLogContext& context
 int main(int argc, char** argv)
 {
     qInstallMessageHandler(qt_msg_handler);
-
     QApplication app{argc, argv};
 
     SettingsManager& settings_manager_instance{SettingsManager::get_instance()};

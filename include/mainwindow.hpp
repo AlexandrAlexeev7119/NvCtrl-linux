@@ -7,7 +7,9 @@
 #include <QMenu>
 #include <QJsonObject>
 
-#include "NVML.hpp"
+#include "nvmlpp/nvmlpp_session.hpp"
+#include "nvmlpp/nvmlpp_device.hpp"
+
 #include "settings_manager.hpp"
 #include "settingswindow.hpp"
 #include "newfanprofiledialog.hpp"
@@ -45,7 +47,8 @@ private:
     QSystemTrayIcon tray_icon_;
     QMenu tray_menu_;
 
-    NVMLDevice nvml_device_;
+    NVMLpp::Session& nvmlpp_session_instance_;
+    NVMLpp::NVML_device nvml_device_;
 
     SettingsManager& settings_manager_;
     SettingsWindow settings_window_;

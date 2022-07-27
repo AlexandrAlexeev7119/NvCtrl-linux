@@ -12,7 +12,8 @@ MainWindow::MainWindow(QWidget* parent)
     , dynamic_info_update_timer_{}
     , tray_icon_{this}
     , tray_menu_{}
-    , nvml_device_{}
+    , nvmlpp_session_instance_{NVMLpp::Session::instance()}
+    , nvml_device_{NVMLpp::NVML_device::from_index(0)}
     , settings_manager_{SettingsManager::get_instance()}
     , settings_window_{this}
     , minimize_to_tray_on_close_{false}
@@ -117,21 +118,18 @@ void MainWindow::toggle_tray()
 
 void MainWindow::update_dynamic_info()
 {
-    nvml_device_.update_dynamic_info();
-    const auto& dynamic_info{nvml_device_.get_dynamic_info()};
+    ui->progressBar_GPU_usage_percentage->setValue(nvml_device_.get_gpu_utilization());
+    ui->progressBar_memory_usage_percentage->setValue(nvml_device_.get_memory_utilization());
+    ui->lineEdit_memory_usage_mib->setText(QString::number(nvml_device_.get_used_memory()) + " MiB");
+    ui->progressBar_encoder_usage_percentage->setValue(nvml_device_.get_encoder_utilization());
+    ui->progressBar_decoder_usage_percentage->setValue(nvml_device_.get_decoder_utilization());
 
-    ui->progressBar_GPU_usage_percentage->setValue(dynamic_info.gpu_usage_percentage);
-    ui->progressBar_memory_usage_percentage->setValue(dynamic_info.memory_usage_percentage);
-    ui->lineEdit_memory_usage_mib->setText(QString::number(dynamic_info.memory_usage_bytes / 1024 / 1024) + " MiB");
-    ui->progressBar_encoder_usage_percentage->setValue(dynamic_info.encoder_usage_percentage);
-    ui->progressBar_decoder_usage_percentage->setValue(dynamic_info.decoder_usage_percentage);
-
-    ui->lineEdit_current_power_limit->setText(QString::number(dynamic_info.current_power_limit / 1000) + " W");
+    ui->lineEdit_current_power_limit->setText(QString::number(nvml_device_.get_current_power_limit()) + " W");
     ui->lineEdit_enforced_power_usage->setText(ui->lineEdit_current_power_limit->text());
-    ui->lineEdit_current_power_usage->setText(QString::number(dynamic_info.current_power_usage / 1000.f) + " W");
-    ui->lineEdit_current_temperature->setText(QString::number(dynamic_info.current_gpu_temperature) + " °C");
+    ui->lineEdit_current_power_usage->setText(QString::number(nvml_device_.get_current_power_usage()) + " W");
+    ui->lineEdit_current_temperature->setText(QString::number(nvml_device_.get_current_temperature()) + " °C");
 
-    ui->label_fan_speed_percentage->setText(QString::number(dynamic_info.current_fan_speed_percentage) + "%");
+    ui->label_fan_speed_percentage->setText(QString::number(nvml_device_.get_current_fan_speed_level()) + "%");
 }
 
 void MainWindow::apply_settings(const QJsonObject& settings)
@@ -171,25 +169,30 @@ void MainWindow::closeEvent(QCloseEvent* event_)
 
 void MainWindow::set_static_info()
 {
+    const unsigned max_power_limit {nvml_device_.get_max_power_limit()};
+    const unsigned min_power_limit {nvml_device_.get_min_power_limit()};
+    const unsigned default_power_limit {nvml_device_.get_default_power_limit()};
+    const unsigned current_power_limit {nvml_device_.get_current_power_limit()};
+
     ui->lineEdit_GPU_name->setText(QString::fromStdString(nvml_device_.get_name()));
-    ui->lineEdit_GPU_driver_version->setText(QString::fromStdString(nvml_device_.get_system_driver_version()));
+    ui->lineEdit_GPU_driver_version->setText(QString::fromStdString(nvmlpp_session_instance_.get_system_driver_version()));
     ui->lineEdit_GPU_VBIOS_version->setText(QString::fromStdString(nvml_device_.get_vbios_version()));
     ui->lineEdit_GPU_UUID->setText(QString::fromStdString(nvml_device_.get_uuid()));
-    ui->lineEdit_total_memory_mib->setText(QString::number(nvml_device_.get_memory_total_bytes() / 1024 / 1024) + " MiB");
+    ui->lineEdit_total_memory_mib->setText(QString::number(nvml_device_.get_total_memory()) + " MiB");
 
-    ui->lineEdit_max_power_usage->setText(QString::number(nvml_device_.get_max_power_usage() / 1000) + " W");
-    ui->lineEdit_min_power_usage->setText(QString::number(nvml_device_.get_min_power_usage() / 1000) + " W");
-    ui->lineEdit_default_power_usage->setText(QString::number(nvml_device_.get_default_power_usage() / 1000.f) + " W");
+    ui->lineEdit_max_power_usage->setText(QString::number(max_power_limit) + " W");
+    ui->lineEdit_min_power_usage->setText(QString::number(min_power_limit) + " W");
+    ui->lineEdit_default_power_usage->setText(QString::number(default_power_limit) + " W");
 
-    ui->horizontalSlider_power_limit->setMaximum(nvml_device_.get_max_power_usage() / 1000);
-    ui->horizontalSlider_power_limit->setMinimum(nvml_device_.get_min_power_usage() / 1000);
-    ui->horizontalSlider_power_limit->setValue(nvml_device_.get_dynamic_info().current_power_limit / 1000);
+    ui->horizontalSlider_power_limit->setMaximum(max_power_limit);
+    ui->horizontalSlider_power_limit->setMinimum(min_power_limit);
+    ui->horizontalSlider_power_limit->setValue(current_power_limit);
 
-    ui->label_current_power_limit_slider->setText(QString::number(nvml_device_.get_dynamic_info().current_power_limit / 1000));
-    ui->label_max_power_limit_slider->setText(QString::number(nvml_device_.get_max_power_usage() / 1000));
+    ui->label_current_power_limit_slider->setText(QString::number(current_power_limit));
+    ui->label_max_power_limit_slider->setText(QString::number(max_power_limit));
 
-    ui->lineEdit_shutdown_temperature->setText(QString::number(nvml_device_.get_shutdown_temperature()) + " °C");
-    ui->lineEdit_slowdown_temperature->setText(QString::number(nvml_device_.get_slowdown_temperature()) + " °C");
+    ui->lineEdit_shutdown_temperature->setText(QString::number(nvml_device_.get_temperature_threshold(NVMLpp::NVML_device::temperature_threshold::shutdown)) + " °C");
+    ui->lineEdit_slowdown_temperature->setText(QString::number(nvml_device_.get_temperature_threshold(NVMLpp::NVML_device::temperature_threshold::slowdown)) + " °C");
 }
 
 void MainWindow::on_comboBox_fan_profile_activated(int index)
