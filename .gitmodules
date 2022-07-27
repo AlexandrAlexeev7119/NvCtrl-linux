@@ -1,0 +1,4 @@
+[submodule "lib/NVMLpp"]
+	path = lib/NVMLpp
+	url = https://codeberg.org/AlexCr4ckPentest/NVMLpp
+	branch = dev
