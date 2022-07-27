@@ -23,6 +23,9 @@ MainWindow::MainWindow(QWidget* parent)
     ui->setupUi(this);
     setMinimumSize(size());
 
+    connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
+    connect(&settings_window_, &SettingsWindow::settings_applied, this, &MainWindow::apply_settings);
+
     connect(&settings_manager_, &SettingsManager::error, this,
             [this](const QString& err_msg)
     {
@@ -30,8 +33,6 @@ MainWindow::MainWindow(QWidget* parent)
         QMessageBox::critical(nullptr, "Error", err_msg);
         close();
     });
-    connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
-    connect(&settings_window_, &SettingsWindow::settings_applied, this, &MainWindow::apply_settings);
     connect(ui->horizontalSlider_power_limit, &QAbstractSlider::valueChanged, this,
             [this](int value)
     {
@@ -51,6 +52,7 @@ MainWindow::MainWindow(QWidget* parent)
     settings_manager_.open_file(QIODevice::ReadOnly);
     const auto app_settings{settings_manager_.load_settings()};
     settings_manager_.close_file();
+
     minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
     update_freq_ms_ = app_settings["update_freq_ms"].toInt();
 
@@ -89,7 +91,8 @@ void MainWindow::on_actionQuit_triggered()
 
 void MainWindow::on_pushButton_apply_power_settings_clicked()
 {
-    const int ret_code{QProcess::execute("/usr/bin/pkexec", {"/usr/bin/nvidia-smi", "-pl", QString::number(ui->horizontalSlider_power_limit->value())})};
+    const int ret_code{QProcess::execute("/usr/bin/pkexec", {"/usr/bin/nvidia-smi", "-pl",
+                                                             QString::number(ui->horizontalSlider_power_limit->value())})};
     if (ret_code == 0)
     {
         ui->statusbar->showMessage(QString{"Set new power limit: %1"}.arg(ui->horizontalSlider_power_limit->value()), STATUSBAR_MESSAGE_TIMEOUT_MS);
@@ -175,6 +178,7 @@ void MainWindow::set_static_info()
     const unsigned current_power_limit {nvml_device_.get_current_power_limit()};
 
     ui->lineEdit_GPU_name->setText(QString::fromStdString(nvml_device_.get_name()));
+    ui->lineEdit_GPU_arch->setText(QString::fromStdString(nvml_device_.get_arch()));
     ui->lineEdit_GPU_driver_version->setText(QString::fromStdString(nvmlpp_session_instance_.get_system_driver_version()));
     ui->lineEdit_GPU_VBIOS_version->setText(QString::fromStdString(nvml_device_.get_vbios_version()));
     ui->lineEdit_GPU_UUID->setText(QString::fromStdString(nvml_device_.get_uuid()));
