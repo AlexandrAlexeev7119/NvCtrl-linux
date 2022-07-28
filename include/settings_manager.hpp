@@ -29,5 +29,3 @@ signals:
 private:
     QFile settings_file_;
 };
-
-SettingsManager& settings_manager_get_instance();

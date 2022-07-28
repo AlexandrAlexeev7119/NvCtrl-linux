@@ -5,14 +5,11 @@
 #include <QSystemTrayIcon>
 #include <QTimer>
 #include <QMenu>
-#include <QJsonObject>
 
 #include "nvmlpp/nvmlpp_session.hpp"
 #include "nvmlpp/nvmlpp_device.hpp"
 
 #include "settings_manager.hpp"
-#include "settingswindow.hpp"
-#include "newfanprofiledialog.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,42 +22,31 @@ public:
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
 
-    QSystemTrayIcon& get_tray_icon();
+    inline QSystemTrayIcon& get_tray_icon() noexcept { return tray_icon_; }
 
 private slots:
-    void on_actionShow_hide_app_window_triggered();
-    void on_actionSettings_triggered();
-    void on_actionQuit_triggered();
-    void on_pushButton_apply_power_settings_clicked();
-    void on_comboBox_fan_profile_activated(int index);
-
     void toggle_tray();
-    void update_dynamic_info();
     void apply_settings(const QJsonObject& settings);
+    void update_dynamic_info();
 
-    void on_fan_profile_created(const QJsonObject& profile);
-    void on_pushButton_edit_curr_fan_profile_clicked();
+    void on_comboBox_select_GPU_activated(int index);
 
 private:
     Ui::MainWindow* ui;
-    QTimer dynamic_info_update_timer_;
     QSystemTrayIcon tray_icon_;
-    QMenu tray_menu_;
-
-    NVMLpp::Session& nvmlpp_session_instance_;
-    NVMLpp::NVML_device nvml_device_;
-
     SettingsManager& settings_manager_;
-    SettingsWindow settings_window_;
-    NewFanProfileDialog new_file_profile_dialog_;
 
+    QTimer dynamic_info_update_timer_;
     bool minimize_to_tray_on_close_;
     int update_freq_ms_;
 
+    std::vector<NVMLpp::NVML_device> nvml_devices_list_;
+
+protected:
     void connect_slots();
     void setup_tray_menu();
     void load_app_settings();
     void set_static_info();
-
-    void closeEvent(QCloseEvent* event_);
+    void load_GPUs();
+    void closeEvent(QCloseEvent* event);
 };
