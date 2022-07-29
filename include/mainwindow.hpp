@@ -6,7 +6,6 @@
 #include <QTimer>
 #include <QMenu>
 
-#include "nvmlpp/nvmlpp_session.hpp"
 #include "nvmlpp/nvmlpp_device.hpp"
 
 #include "settings_manager.hpp"
@@ -47,6 +46,8 @@ protected:
     void setup_tray_menu();
     void load_app_settings();
     void set_static_info();
-    void load_GPUs();
+    void load_GPUs();    
+    NVMLpp::NVML_device& get_current_gpu();
+
     void closeEvent(QCloseEvent* event);
 };

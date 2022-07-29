@@ -4,11 +4,13 @@
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 
+#include "nvmlpp/nvmlpp_session.hpp"
+
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow {parent}
     , ui {new Ui::MainWindow}
     , tray_icon_ {this}
-    , settings_manager_ {SettingsManager::get_instance()}
+    , settings_manager_ {SettingsManager::instance()}
     , dynamic_info_update_timer_ {}
     , minimize_to_tray_on_close_ {false}
     , update_freq_ms_ {}
@@ -21,6 +23,9 @@ MainWindow::MainWindow(QWidget* parent)
     setup_tray_menu();
     load_app_settings();
     load_GPUs();
+
+    set_static_info();
+    update_dynamic_info();
 
     dynamic_info_update_timer_.start();
 }
@@ -71,7 +76,7 @@ void MainWindow::setup_tray_menu()
 
 void MainWindow::load_app_settings()
 {
-    auto& settings_manager {SettingsManager::get_instance()};
+    auto& settings_manager {SettingsManager::instance()};
     settings_manager.open_file(QIODevice::ReadOnly);
 
     const auto app_settings{settings_manager.load_settings()};
@@ -82,25 +87,35 @@ void MainWindow::load_app_settings()
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
 }
 
+void MainWindow::set_static_info()
+{
+    const auto& current_gpu {get_current_gpu()};
+    ui->lineEdit_GPU_name->setText(QString::fromStdString(current_gpu.get_name()));
+    ui->lineEdit_GPU_arch->setText(QString::fromStdString(current_gpu.get_arch()));
+    ui->lineEdit_GPU_uuid->setText(QString::fromStdString(current_gpu.get_uuid()));
+    ui->lineEdit_GPU_VBIOS_ver->setText(QString::fromStdString(current_gpu.get_vbios_version()));
+    ui->lineEdit_GPU_driver_ver->setText(QString::fromStdString(NVMLpp::Session::instance().get_system_driver_version()));
+    ui->lineEdit_GPU_total_mem->setText(QString::number(current_gpu.get_total_memory()) + " MiB");
+}
+
 void MainWindow::update_dynamic_info()
 {
-    const int current_device_index {ui->comboBox_select_GPU->currentIndex()};
-    NVMLpp::NVML_device& current_device {nvml_devices_list_[current_device_index]};
-
-    qInfo().noquote() << "GPU: " << QString::fromStdString(current_device.get_name());
-    qInfo() << "Power limit: " << current_device.get_current_power_limit() << " W";
-    qInfo() << "Temperature: " << current_device.get_current_temperature() << " C";
-    qInfo() << "Power usage: " << current_device.get_current_power_usage() << " W";
+    qDebug().noquote() << "Update dynamic info for: " << QString::fromStdString(get_current_gpu().get_name());
 }
 
 void MainWindow::load_GPUs()
 {
     nvml_devices_list_ = NVMLpp::Session::instance().get_devices();
-    for (size_t i {0}; i < nvml_devices_list_.size(); i++)
+    for (const auto& gpu : nvml_devices_list_)
     {
-        ui->comboBox_select_GPU->addItem(QString::fromStdString(nvml_devices_list_[i].get_name()));
+        ui->comboBox_select_GPU->addItem(QString::fromStdString(gpu.get_name()));
     }
-    for (const auto& gpu : )
+}
+
+NVMLpp::NVML_device& MainWindow::get_current_gpu()
+{
+    const int current_device_index {ui->comboBox_select_GPU->currentIndex()};
+    return nvml_devices_list_[current_device_index];
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)

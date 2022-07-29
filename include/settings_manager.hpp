@@ -21,7 +21,7 @@ public:
     void save_settings(const QJsonObject& settings);
     QJsonObject load_settings();
 
-    static SettingsManager& get_instance();
+    static SettingsManager& instance();
 
 signals:
     void error(const QString&);

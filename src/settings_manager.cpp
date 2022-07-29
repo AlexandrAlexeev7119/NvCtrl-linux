@@ -53,7 +53,7 @@ QJsonObject SettingsManager::load_settings()
     return json_obj;
 }
 
-SettingsManager& SettingsManager::get_instance()
+SettingsManager& SettingsManager::instance()
 {
     static SettingsManager settings_manager{DEFAULT_FILENAME};
     return settings_manager;

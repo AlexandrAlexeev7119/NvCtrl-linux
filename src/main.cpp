@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 
     QApplication app {argc, argv};
     MainWindow main_window {};
-    SettingsManager& settings_manager {SettingsManager::get_instance()};
+    SettingsManager& settings_manager {SettingsManager::instance()};
 
     QObject::connect(&settings_manager, &SettingsManager::error,
                      [](const QString& err_msg)
