@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>578</width>
-    <height>487</height>
+    <width>574</width>
+    <height>467</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,10 +40,20 @@
        <layout class="QGridLayout" name="gridLayout_4">
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_GPU_VBIOS_ver">
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_GPU_mem_usage">
             <property name="text">
-             <string>VBIOS</string>
+             <string>Memory usage</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_GPU_pci">
+            <property name="text">
+             <string>PCI</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -60,6 +70,53 @@
             </property>
            </widget>
           </item>
+          <item row="3" column="2">
+           <widget class="QLabel" name="label_GPU_total_mem">
+            <property name="text">
+             <string>Memory</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_GPU_name">
+            <property name="text">
+             <string>Name</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QLineEdit" name="lineEdit_GPU_driver_ver">
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_GPU_VBIOS_ver">
+            <property name="text">
+             <string>VBIOS</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1" colspan="3">
+           <widget class="QProgressBar" name="progressBar_GPU_usage">
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_GPU_uuid">
             <property name="text">
@@ -67,6 +124,33 @@
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_GPU_usage">
+            <property name="text">
+             <string>GPU usage</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1" colspan="2">
+           <widget class="QProgressBar" name="progressBar_GPU_mem_usage">
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="3">
+           <widget class="QLineEdit" name="lineEdit_GPU_total_mem">
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -90,8 +174,8 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit_GPU_name">
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="lineEdit_GPU_pci">
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
@@ -100,18 +184,18 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_GPU_name">
-            <property name="text">
-             <string>Name</string>
-            </property>
+          <item row="5" column="3">
+           <widget class="QLineEdit" name="lineEdit_GPU_mem_usage">
             <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
-          <item row="2" column="3">
-           <widget class="QLineEdit" name="lineEdit_GPU_driver_ver">
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineEdit_GPU_name">
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
@@ -140,43 +224,37 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_GPU_pci">
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_GPU_decoder_usage">
             <property name="text">
-             <string>PCI</string>
+             <string>Decoder usage</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="lineEdit_GPU_pci">
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="3">
-           <widget class="QLineEdit" name="lineEdit_GPU_total_mem">
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2">
-           <widget class="QLabel" name="label_GPU_total_mem">
+          <item row="6" column="2">
+           <widget class="QLabel" name="label_GPU_encoder_usage">
             <property name="text">
-             <string>Memory</string>
+             <string>Encoder usage</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QProgressBar" name="progressBar_GPU_decoder_usage">
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="3">
+           <widget class="QProgressBar" name="progressBar_GPU_encoder_usage">
+            <property name="value">
+             <number>0</number>
             </property>
            </widget>
           </item>

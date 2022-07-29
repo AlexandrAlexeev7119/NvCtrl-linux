@@ -100,7 +100,14 @@ void MainWindow::set_static_info()
 
 void MainWindow::update_dynamic_info()
 {
-    qDebug().noquote() << "Update dynamic info for: " << QString::fromStdString(get_current_gpu().get_name());
+    const auto& current_gpu {get_current_gpu()};
+    ui->progressBar_GPU_usage->setValue(current_gpu.get_gpu_utilization());
+    ui->progressBar_GPU_mem_usage->setValue(current_gpu.get_memory_utilization());
+    ui->lineEdit_GPU_mem_usage->setText(QString::number(current_gpu.get_used_memory()) + " MiB");
+    ui->progressBar_GPU_decoder_usage->setValue(current_gpu.get_decoder_utilization());
+    ui->progressBar_GPU_encoder_usage->setValue(current_gpu.get_encoder_utilization());
+
+    qDebug().noquote() << "Update dynamic info for: " << QString::fromStdString(current_gpu.get_name());
 }
 
 void MainWindow::load_GPUs()
