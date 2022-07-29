@@ -101,6 +101,7 @@ void MainWindow::set_static_info()
 void MainWindow::update_dynamic_info()
 {
     const auto& current_gpu {get_current_gpu()};
+
     ui->progressBar_GPU_usage->setValue(current_gpu.get_gpu_utilization());
     ui->progressBar_GPU_mem_usage->setValue(current_gpu.get_memory_utilization());
     ui->lineEdit_GPU_mem_usage->setText(QString::number(current_gpu.get_used_memory()) + " MiB");
