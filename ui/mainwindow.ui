@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>574</width>
-    <height>467</height>
+    <height>481</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@
     <item row="1" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_info">
        <attribute name="title">
@@ -267,8 +267,25 @@
         <string>Power and fan control</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_7">
-        <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_6"/>
+        <item row="1" column="0">
+         <widget class="QGroupBox" name="groupBox_power_control">
+          <property name="title">
+           <string>Power control</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QGroupBox" name="groupBox_fan_control">
+          <property name="title">
+           <string>Fan control</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
