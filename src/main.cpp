@@ -39,7 +39,6 @@ int main(int argc, char** argv)
     qInstallMessageHandler(qt_msg_handler);
 
     QApplication app {argc, argv};
-    MainWindow main_window {};
     SettingsManager& settings_manager {SettingsManager::instance()};
 
     QObject::connect(&settings_manager, &SettingsManager::error,
@@ -55,6 +54,7 @@ int main(int argc, char** argv)
     settings_manager.close_file();
     const bool minimize_to_tray_on_startup{app_settings["minimize_to_tray_on_startup"].toBool()};
 
+    MainWindow main_window {};
 
     if (minimize_to_tray_on_startup)
     {

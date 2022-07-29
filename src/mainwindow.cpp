@@ -52,10 +52,13 @@ void MainWindow::apply_settings(const QJsonObject& settings)
 {
     minimize_to_tray_on_close_ = settings["minimize_to_tray_on_close"].toBool();
     update_freq_ms_ = settings["update_freq_ms"].toInt();
+
+    qDebug().noquote().nospace() << "new settings applied: " << settings;
 }
 
 void MainWindow::connect_slots()
 {
+    connect(&tray_icon_, &QSystemTrayIcon::activated, this, &MainWindow::toggle_tray);
     connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
     connect(&settings_manager_, &SettingsManager::error, this,
             [this](const QString& err_msg)
@@ -70,7 +73,12 @@ void MainWindow::setup_tray_menu()
 {
     QMenu* tray_menu {new QMenu {this}};
     tray_menu->addAction("Show/Hide app window", this, &MainWindow::toggle_tray);
-    tray_menu->addAction("Quit", this, &MainWindow::close);
+    tray_menu->addAction("Quit", this, [this]
+    {
+        minimize_to_tray_on_close_ = false;
+        close();
+    });
+
     tray_icon_.setContextMenu(tray_menu);
 }
 
@@ -85,6 +93,8 @@ void MainWindow::load_app_settings()
     minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
     update_freq_ms_ = app_settings["update_freq_ms"].toInt();
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
+
+    qDebug().noquote().nospace() << "Settings has been loaded: " << app_settings;
 }
 
 void MainWindow::set_static_info()
@@ -96,6 +106,8 @@ void MainWindow::set_static_info()
     ui->lineEdit_GPU_VBIOS_ver->setText(QString::fromStdString(current_gpu.get_vbios_version()));
     ui->lineEdit_GPU_driver_ver->setText(QString::fromStdString(NVMLpp::Session::instance().get_system_driver_version()));
     ui->lineEdit_GPU_total_mem->setText(QString::number(current_gpu.get_total_memory()) + " MiB");
+
+    qDebug().noquote().nospace() << "Static info has been set";
 }
 
 void MainWindow::update_dynamic_info()
@@ -107,8 +119,6 @@ void MainWindow::update_dynamic_info()
     ui->lineEdit_GPU_mem_usage->setText(QString::number(current_gpu.get_used_memory()) + " MiB");
     ui->progressBar_GPU_decoder_usage->setValue(current_gpu.get_decoder_utilization());
     ui->progressBar_GPU_encoder_usage->setValue(current_gpu.get_encoder_utilization());
-
-    qDebug().noquote() << "Update dynamic info for: " << QString::fromStdString(current_gpu.get_name());
 }
 
 void MainWindow::load_GPUs()
@@ -118,6 +128,8 @@ void MainWindow::load_GPUs()
     {
         ui->comboBox_select_GPU->addItem(QString::fromStdString(gpu.get_name()));
     }
+
+    qDebug().noquote().nospace() << "Total GPUs found and loaded: " << nvml_devices_list_.size();
 }
 
 NVMLpp::NVML_device& MainWindow::get_current_gpu()
@@ -128,20 +140,24 @@ NVMLpp::NVML_device& MainWindow::get_current_gpu()
 
 void MainWindow::closeEvent(QCloseEvent* event)
 {
+    qDebug().noquote().nospace() << "minimize_to_tray_on_close_=" << minimize_to_tray_on_close_;
+
     if (minimize_to_tray_on_close_)
     {
         event->ignore();
         hide();
         tray_icon_.show();
+        qDebug().noquote().nospace() << "Event ignored, minimized to tray";
     }
     else
     {
         tray_icon_.hide();
         event->accept();
+        qDebug().noquote().nospace() << "Event accepted, MainWindow closed";
     }
 }
 
 void MainWindow::on_comboBox_select_GPU_activated(int index)
 {
-
+    qDebug().noquote().nospace() << "GPU selected: " << ui->comboBox_select_GPU->currentText();
 }
