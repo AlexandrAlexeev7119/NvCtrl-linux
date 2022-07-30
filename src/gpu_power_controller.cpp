@@ -1,6 +1,7 @@
 #include <QProcess>
 
 #include "gpu_power_controller.hpp"
+#include "nvmlpp/util/nvmlpp_errors.hpp"
 
 static constexpr const char* PKEXEC_BIN {"/usr/bin/pkexec"};
 static constexpr const char* NVIDIA_SMI_BIN {"/usr/bin/nvidia-smi"};
@@ -23,7 +24,11 @@ void GpuPowerController::update_info()
 {
     if (current_gpu_)
     {
-        emit power_usage(current_gpu_->get_current_power_usage());
-        emit power_limit(current_gpu_->get_current_power_limit());
+        try
+        {
+            emit power_usage(current_gpu_->get_current_power_usage());
+            emit power_limit(current_gpu_->get_current_power_limit());
+        }
+        catch (const NVMLpp::errors::error_not_supported&) {}
     }
 }
