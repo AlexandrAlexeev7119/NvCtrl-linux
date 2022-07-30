@@ -143,7 +143,6 @@ void MainWindow::load_app_settings()
 void MainWindow::set_static_info()
 {
     const auto& current_gpu {get_current_gpu()};
-
     ui->lineEdit_GPU_name->setText(QString::fromStdString(current_gpu->get_name()));
     ui->lineEdit_GPU_arch->setText(QString::fromStdString(current_gpu->get_arch()));
     ui->lineEdit_GPU_uuid->setText(QString::fromStdString(current_gpu->get_uuid()));
@@ -153,14 +152,15 @@ void MainWindow::set_static_info()
 
     try
     {
-        unsigned min_power_limit {current_gpu->get_min_power_limit()};
-        unsigned max_power_limit {current_gpu->get_max_power_limit()};
-        unsigned current_power_limit {current_gpu->get_enforced_power_limit()};
+        const unsigned min_power_limit {current_gpu->get_min_power_limit()};
+        const unsigned max_power_limit {current_gpu->get_max_power_limit()};
+        const unsigned current_power_limit {current_gpu->get_current_power_limit()};
+
         ui->lineEdit_default_power_limit->setText(QString::number(current_gpu->get_default_power_limit()) + " W");
-        ui->lineEdit_min_power_limit->setText(QString::number(min_power_limit) + " W");
-        ui->lineEdit_max_power_limit->setText(QString::number(max_power_limit) + " W");
         ui->lineEdit_enforced_power_limit->setText(QString::number(current_gpu->get_enforced_power_limit()) + " W");
         ui->label_power_limit_slider_indicator->setText(QString::number(current_power_limit));
+        ui->lineEdit_min_power_limit->setText(QString::number(min_power_limit) + " W");
+        ui->lineEdit_max_power_limit->setText(QString::number(max_power_limit) + " W");
         ui->horizontalSlider_change_power_limit->setMinimum(min_power_limit);
         ui->horizontalSlider_change_power_limit->setMaximum(max_power_limit);
         ui->horizontalSlider_change_power_limit->setValue(current_power_limit);
@@ -219,6 +219,7 @@ void MainWindow::on_comboBox_select_GPU_activated(int index)
     const auto& current_gpu {get_current_gpu()};
     gpu_utilizations_controller_.set_device(current_gpu);
     gpu_power_controller_.set_device(current_gpu);
+    set_static_info(); // for current gpu
     qDebug().noquote().nospace() << "GPU selected: " << ui->comboBox_select_GPU->currentText();
 }
 
