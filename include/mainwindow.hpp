@@ -36,8 +36,11 @@ private slots:
     void on_GpuPowerController_power_limit(unsigned power_limit);
 
     void on_comboBox_select_GPU_activated(int index);
-
     void on_pushButton_apply_power_limit_clicked();
+
+    void on_actionUpdate_GPUs_list_triggered();
+
+    void on_actionExit_triggered();
 
 private:
     Ui::MainWindow* ui;

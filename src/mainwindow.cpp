@@ -35,7 +35,9 @@ MainWindow::MainWindow(QWidget* parent)
 }
 
 MainWindow::~MainWindow()
-{ delete ui; }
+{
+    delete ui;
+}
 
 
 
@@ -57,7 +59,7 @@ void MainWindow::apply_settings(const QJsonObject& settings)
     minimize_to_tray_on_close_ = settings["minimize_to_tray_on_close"].toBool();
     update_freq_ms_ = settings["update_freq_ms"].toInt();
 
-    qDebug().noquote().nospace() << "new settings applied: " << settings;
+    qDebug().noquote().nospace() << "New settings applied: " << settings;
 }
 
 void MainWindow::on_GpuUtilizationsController_gpu_utilization(unsigned gpu_utilization)
@@ -106,7 +108,7 @@ void MainWindow::connect_slots_and_signals()
     {
         qCritical().nospace().noquote() << err_msg;
         QMessageBox::critical(this, "Error", err_msg);
-        close();
+        on_actionExit_triggered();
     });
 
     connect(ui->horizontalSlider_change_power_limit, &QSlider::valueChanged, this, [this](int value)
@@ -119,12 +121,7 @@ void MainWindow::setup_tray_menu()
 {
     QMenu* tray_menu {new QMenu {this}};
     tray_menu->addAction("Show/Hide app window", this, &MainWindow::toggle_tray);
-    tray_menu->addAction("Quit", this, [this]()
-    {
-        minimize_to_tray_on_close_ = false;
-        close();
-    });
-
+    tray_menu->addAction("Exit", this, &MainWindow::on_actionExit_triggered);
     tray_icon_.setContextMenu(tray_menu);
 }
 
@@ -159,7 +156,6 @@ void MainWindow::set_static_info()
         unsigned min_power_limit {current_gpu->get_min_power_limit()};
         unsigned max_power_limit {current_gpu->get_max_power_limit()};
         unsigned current_power_limit {current_gpu->get_enforced_power_limit()};
-
         ui->lineEdit_default_power_limit->setText(QString::number(current_gpu->get_default_power_limit()) + " W");
         ui->lineEdit_min_power_limit->setText(QString::number(min_power_limit) + " W");
         ui->lineEdit_max_power_limit->setText(QString::number(max_power_limit) + " W");
@@ -190,7 +186,7 @@ void MainWindow::load_GPUs()
     gpu_utilizations_controller_.set_device(current_gpu);
     gpu_power_controller_.set_device(current_gpu);
 
-    qDebug().noquote().nospace() << "Total GPUs found and loaded: " << nvml_devices_list_.size();
+    qInfo().noquote().nospace() << "Total GPUs found: " << nvml_devices_list_.size();
 }
 
 NVMLpp::NVML_device* MainWindow::get_current_gpu()
@@ -229,4 +225,18 @@ void MainWindow::on_comboBox_select_GPU_activated(int index)
 void MainWindow::on_pushButton_apply_power_limit_clicked()
 {
     gpu_power_controller_.set_power_limit(ui->horizontalSlider_change_power_limit->value());
+}
+
+void MainWindow::on_actionUpdate_GPUs_list_triggered()
+{
+    qDebug() << "Updating list of GPUs...";
+    nvml_devices_list_.clear();
+    ui->comboBox_select_GPU->clear();
+    load_GPUs();
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+    minimize_to_tray_on_close_ = false;
+    close();
 }
