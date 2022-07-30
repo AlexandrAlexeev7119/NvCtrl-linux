@@ -22,7 +22,6 @@ add_subdirectory(lib/NVMLpp/)
 file(GLOB_RECURSE SRC src/*.cpp)
 file(GLOB_RECURSE HDR include/*.hpp)
 file(GLOB_RECURSE UI ui/*.ui)
-#file(GLOB_RECURSE EXT_LIBS lib/*.h lib/*.hpp)
 
 set(PROJECT_SOURCES
     ${SRC}
