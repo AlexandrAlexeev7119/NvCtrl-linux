@@ -2,6 +2,7 @@
 #include <QProcess>
 
 #include "mainwindow.hpp"
+#include "nvmlpp/util/nvmlpp_errors.hpp"
 #include "ui_mainwindow.h"
 
 #include "nvmlpp/nvmlpp_session.hpp"
@@ -67,7 +68,7 @@ void MainWindow::on_GpuUtilizationsController_gpu_utilization(unsigned gpu_utili
 void MainWindow::on_GpuUtilizationsController_memory_utilization(unsigned memory_utilization, unsigned used_memory)
 {
     ui->progressBar_GPU_mem_usage->setValue(memory_utilization);
-    ui->lineEdit_GPU_mem_usage->setText(QString::number(used_memory) + " Mib");
+    ui->lineEdit_GPU_mem_usage->setText(QString::number(used_memory) + " of " + ui->lineEdit_GPU_total_mem->text());
 }
 
 void MainWindow::on_GpuUtilizationsController_encoder_decoder_utilization(unsigned encoder_utilization, unsigned decoder_utilization)
@@ -78,10 +79,12 @@ void MainWindow::on_GpuUtilizationsController_encoder_decoder_utilization(unsign
 
 void MainWindow::on_GpuPowerController_power_usage(unsigned power_usage)
 {
+    ui->lineEdit_current_power_usage->setText(QString::number(power_usage) + " W");
 }
 
 void MainWindow::on_GpuPowerController_power_limit(unsigned power_limit)
 {
+    ui->lineEdit_current_power_limit->setText(QString::number(power_limit) + " W");
 }
 
 void MainWindow::connect_slots_and_signals()
@@ -104,6 +107,11 @@ void MainWindow::connect_slots_and_signals()
         qCritical().nospace().noquote() << err_msg;
         QMessageBox::critical(this, "Error", err_msg);
         close();
+    });
+
+    connect(ui->horizontalSlider_change_power_limit, &QSlider::valueChanged, this, [this](int value)
+    {
+        ui->label_power_limit_slider_indicator->setText(QString::number(value));
     });
 }
 
@@ -138,12 +146,34 @@ void MainWindow::load_app_settings()
 void MainWindow::set_static_info()
 {
     const auto& current_gpu {get_current_gpu()};
+
     ui->lineEdit_GPU_name->setText(QString::fromStdString(current_gpu->get_name()));
     ui->lineEdit_GPU_arch->setText(QString::fromStdString(current_gpu->get_arch()));
     ui->lineEdit_GPU_uuid->setText(QString::fromStdString(current_gpu->get_uuid()));
     ui->lineEdit_GPU_VBIOS_ver->setText(QString::fromStdString(current_gpu->get_vbios_version()));
     ui->lineEdit_GPU_driver_ver->setText(QString::fromStdString(NVMLpp::Session::instance().get_system_driver_version()));
     ui->lineEdit_GPU_total_mem->setText(QString::number(current_gpu->get_total_memory()) + " MiB");
+
+    try
+    {
+        unsigned min_power_limit {current_gpu->get_min_power_limit()};
+        unsigned max_power_limit {current_gpu->get_max_power_limit()};
+        unsigned current_power_limit {current_gpu->get_enforced_power_limit()};
+
+        ui->lineEdit_default_power_limit->setText(QString::number(current_gpu->get_default_power_limit()) + " W");
+        ui->lineEdit_min_power_limit->setText(QString::number(min_power_limit) + " W");
+        ui->lineEdit_max_power_limit->setText(QString::number(max_power_limit) + " W");
+        ui->lineEdit_enforced_power_limit->setText(QString::number(current_gpu->get_enforced_power_limit()) + " W");
+        ui->label_power_limit_slider_indicator->setText(QString::number(current_power_limit));
+        ui->horizontalSlider_change_power_limit->setMinimum(min_power_limit);
+        ui->horizontalSlider_change_power_limit->setMaximum(max_power_limit);
+        ui->horizontalSlider_change_power_limit->setValue(current_power_limit);
+    }
+    catch (const NVMLpp::errors::error_not_supported&)
+    {
+        ui->groupBox_power_control->setEnabled(false);
+        qWarning().noquote().nospace() << "Power control not supported, form disabled";
+    }
 
     qDebug().noquote().nospace() << "Static info has been set";
 }
@@ -194,4 +224,9 @@ void MainWindow::on_comboBox_select_GPU_activated(int index)
     gpu_utilizations_controller_.set_device(current_gpu);
     gpu_power_controller_.set_device(current_gpu);
     qDebug().noquote().nospace() << "GPU selected: " << ui->comboBox_select_GPU->currentText();
+}
+
+void MainWindow::on_pushButton_apply_power_limit_clicked()
+{
+    gpu_power_controller_.set_power_limit(ui->horizontalSlider_change_power_limit->value());
 }

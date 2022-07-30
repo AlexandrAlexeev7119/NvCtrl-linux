@@ -37,6 +37,8 @@ private slots:
 
     void on_comboBox_select_GPU_activated(int index);
 
+    void on_pushButton_apply_power_limit_clicked();
+
 private:
     Ui::MainWindow* ui;
     QSystemTrayIcon tray_icon_;
