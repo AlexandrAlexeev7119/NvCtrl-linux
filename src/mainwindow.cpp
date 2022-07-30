@@ -93,7 +93,7 @@ void MainWindow::connect_slots_and_signals()
 {
     connect(&tray_icon_, &QSystemTrayIcon::activated, this, &MainWindow::toggle_tray);
 
-    connect(&gpu_utilizations_controller_, &GpuUtilizationsContoller::gpu_utilization, this, &MainWindow::on_GpuUtilizationsController_gpu_utilization);
+    connect(&gpu_utilizations_controller_, &GpuUtilizationsContoller::gpu_utilization, this,&MainWindow::on_GpuUtilizationsController_gpu_utilization);
     connect(&gpu_utilizations_controller_, &GpuUtilizationsContoller::memory_utilization, this, &MainWindow::on_GpuUtilizationsController_memory_utilization);
     connect(&gpu_utilizations_controller_, &GpuUtilizationsContoller::encoder_decoder_utilization, this, &MainWindow::on_GpuUtilizationsController_encoder_decoder_utilization);
     connect(&gpu_power_controller_, &GpuPowerController::power_usage, this, &MainWindow::on_GpuPowerController_power_usage);
@@ -148,6 +148,7 @@ void MainWindow::set_static_info()
     ui->lineEdit_GPU_uuid->setText(QString::fromStdString(current_gpu->get_uuid()));
     ui->lineEdit_GPU_VBIOS_ver->setText(QString::fromStdString(current_gpu->get_vbios_version()));
     ui->lineEdit_GPU_driver_ver->setText(QString::fromStdString(NVMLpp::Session::instance().get_system_driver_version()));
+    ui->lineEdit_GPU_pci->setText(QString::fromStdString(current_gpu->get_bus_type()) + " " + QString::fromStdString(current_gpu->get_pci_bus_id()));
     ui->lineEdit_GPU_total_mem->setText(QString::number(current_gpu->get_total_memory()) + " MiB");
 
     try

@@ -39,7 +39,6 @@ private slots:
     void on_pushButton_apply_power_limit_clicked();
 
     void on_actionUpdate_GPUs_list_triggered();
-
     void on_actionExit_triggered();
 
 private:
