@@ -2,12 +2,12 @@
 
 #include "gpu_utilizations_controller.hpp"
 
-GpuUtilizationsContoller::GpuUtilizationsContoller(const NVMLpp::NVML_device* nvml_device, QObject* parrent)
+GpuUtilizationsController::GpuUtilizationsController(const NVMLpp::NVML_device* nvml_device, QObject* parrent)
     : QObject {parrent}
     , current_gpu_ {nvml_device}
 { }
 
-void GpuUtilizationsContoller::update_info()
+void GpuUtilizationsController::update_info()
 {
     if (current_gpu_)
     {
@@ -17,6 +17,7 @@ void GpuUtilizationsContoller::update_info()
         {
             emit encoder_decoder_utilization(current_gpu_->get_encoder_utilization(),
                                              current_gpu_->get_decoder_utilization());
+            emit pstate_level(static_cast<unsigned>(current_gpu_->get_performance_state()));
         }
         catch (const NVMLpp::errors::error_not_supported&) {}
     }
