@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget* parent)
     , settings_manager_ {SettingsManager::instance()}
     , gpu_utilizations_controller_ {}
     , gpu_power_controller_ {}
+    , gpu_clock_controller_ {}
     , dynamic_info_update_timer_ {}
     , minimize_to_tray_on_close_ {false}
     , update_freq_ms_ {}
@@ -30,6 +31,7 @@ MainWindow::MainWindow(QWidget* parent)
     set_static_info();
     gpu_utilizations_controller_.update_info();
     gpu_power_controller_.update_info();
+    gpu_clock_controller_.update_info();
 
     dynamic_info_update_timer_.start();
 }
@@ -79,6 +81,11 @@ void MainWindow::on_GpuUtilizationsController_encoder_decoder_utilization(unsign
     ui->progressBar_GPU_decoder_usage->setValue(decoder_utilization);
 }
 
+void MainWindow::on_GpuUtilizationsController_pstate_level(unsigned pstate_level)
+{
+    ui->lineEdit_current_pstate->setText("Pstate: " + QString::number(pstate_level));
+}
+
 void MainWindow::on_GpuPowerController_power_usage(unsigned power_usage)
 {
     ui->lineEdit_current_power_usage->setText(QString::number(power_usage) + " W");
@@ -89,21 +96,47 @@ void MainWindow::on_GpuPowerController_power_limit(unsigned power_limit)
     ui->lineEdit_current_power_limit->setText(QString::number(power_limit) + " W");
 }
 
+void MainWindow::on_GpuClockController_graphics_clock(unsigned graphics_clock)
+{
+    ui->lineEdit_graphics_clock_current->setText(QString::number(graphics_clock) + " MHz");
+}
+
+void MainWindow::on_GpuClockController_video_clock(unsigned video_clock)
+{
+    ui->lineEdit_video_clock_current->setText(QString::number(video_clock) + " MHz");
+}
+
+void MainWindow::on_GpuClockController_sm_clock(unsigned sm_clock)
+{
+    ui->lineEdit_sm_clock_current->setText(QString::number(sm_clock) + " MHz");
+}
+
+void MainWindow::on_GpuClockController_memory_clock(unsigned memory_clock)
+{
+    ui->lineEdit_memory_clock_current->setText(QString::number(memory_clock) + " MHz");
+}
+
 void MainWindow::connect_slots_and_signals()
 {
     connect(&tray_icon_, &QSystemTrayIcon::activated, this, &MainWindow::toggle_tray);
 
-    connect(&gpu_utilizations_controller_, &GpuUtilizationsContoller::gpu_utilization, this,&MainWindow::on_GpuUtilizationsController_gpu_utilization);
-    connect(&gpu_utilizations_controller_, &GpuUtilizationsContoller::memory_utilization, this, &MainWindow::on_GpuUtilizationsController_memory_utilization);
-    connect(&gpu_utilizations_controller_, &GpuUtilizationsContoller::encoder_decoder_utilization, this, &MainWindow::on_GpuUtilizationsController_encoder_decoder_utilization);
+    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::gpu_utilization, this,&MainWindow::on_GpuUtilizationsController_gpu_utilization);
+    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::memory_utilization, this, &MainWindow::on_GpuUtilizationsController_memory_utilization);
+    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::encoder_decoder_utilization, this, &MainWindow::on_GpuUtilizationsController_encoder_decoder_utilization);
+    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::pstate_level, this, &MainWindow::on_GpuUtilizationsController_pstate_level);
+
     connect(&gpu_power_controller_, &GpuPowerController::power_usage, this, &MainWindow::on_GpuPowerController_power_usage);
     connect(&gpu_power_controller_, &GpuPowerController::power_limit, this, &MainWindow::on_GpuPowerController_power_limit);
 
-    connect(&dynamic_info_update_timer_, &QTimer::timeout, this, [this]()
-    {
-        gpu_utilizations_controller_.update_info();
-        gpu_power_controller_.update_info();
-    });
+    connect(&gpu_clock_controller_, &GpuClockController::graphics_clock, this, &MainWindow::on_GpuClockController_graphics_clock);
+    connect(&gpu_clock_controller_, &GpuClockController::video_clock, this, &MainWindow::on_GpuClockController_video_clock);
+    connect(&gpu_clock_controller_, &GpuClockController::sm_clock, this, &MainWindow::on_GpuClockController_sm_clock);
+    connect(&gpu_clock_controller_, &GpuClockController::memory_clock, this, &MainWindow::on_GpuClockController_memory_clock);
+
+    connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_utilizations_controller_, &GpuUtilizationsController::update_info);
+    connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_power_controller_, &GpuPowerController::update_info);
+    connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_clock_controller_, &GpuClockController::update_info);
+
     connect(&settings_manager_, &SettingsManager::error, this, [this](const QString& err_msg)
     {
         qCritical().nospace().noquote() << err_msg;
@@ -148,7 +181,7 @@ void MainWindow::set_static_info()
     ui->lineEdit_GPU_uuid->setText(QString::fromStdString(current_gpu->get_uuid()));
     ui->lineEdit_GPU_VBIOS_ver->setText(QString::fromStdString(current_gpu->get_vbios_version()));
     ui->lineEdit_GPU_driver_ver->setText(QString::fromStdString(NVMLpp::Session::instance().get_system_driver_version()));
-    ui->lineEdit_GPU_pci->setText(QString::fromStdString(current_gpu->get_bus_type()) + " " + QString::fromStdString(current_gpu->get_pci_bus_id()));
+    ui->lineEdit_GPU_bus_type->setText(QString::fromStdString(current_gpu->get_bus_type()) + " " + QString::fromStdString(current_gpu->get_pci_bus_id()));
     ui->lineEdit_GPU_total_mem->setText(QString::number(current_gpu->get_total_memory()) + " MiB");
 
     try
@@ -183,9 +216,7 @@ void MainWindow::load_GPUs()
         ui->comboBox_select_GPU->addItem(QString::fromStdString(gpu.get_name()));
     }
 
-    const auto& current_gpu {get_current_gpu()};
-    gpu_utilizations_controller_.set_device(current_gpu);
-    gpu_power_controller_.set_device(current_gpu);
+    set_current_gpu_for_controllers();
 
     qInfo().noquote().nospace() << "Total GPUs found: " << nvml_devices_list_.size();
 }
@@ -194,6 +225,14 @@ NVMLpp::NVML_device* MainWindow::get_current_gpu()
 {
     const int current_device_index {ui->comboBox_select_GPU->currentIndex()};
     return &nvml_devices_list_[current_device_index];
+}
+
+void MainWindow::set_current_gpu_for_controllers() noexcept
+{
+    const auto& current_gpu {get_current_gpu()};
+    gpu_utilizations_controller_.set_device(current_gpu);
+    gpu_power_controller_.set_device(current_gpu);
+    gpu_clock_controller_.set_device(current_gpu);
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
@@ -217,10 +256,8 @@ void MainWindow::closeEvent(QCloseEvent* event)
 
 void MainWindow::on_comboBox_select_GPU_activated(int index)
 {
-    const auto& current_gpu {get_current_gpu()};
-    gpu_utilizations_controller_.set_device(current_gpu);
-    gpu_power_controller_.set_device(current_gpu);
-    set_static_info(); // for current gpu
+    set_current_gpu_for_controllers();
+    set_static_info();
     qDebug().noquote().nospace() << "GPU selected: " << ui->comboBox_select_GPU->currentText();
 }
 
