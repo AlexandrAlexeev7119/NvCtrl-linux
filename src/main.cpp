@@ -38,10 +38,10 @@ int main(int argc, char** argv)
 {
     qInstallMessageHandler(qt_msg_handler);
 
-    QApplication app{argc, argv};
+    QApplication app {argc, argv};
+    SettingsManager& settings_manager {SettingsManager::instance()};
 
-    SettingsManager& settings_manager_instance{SettingsManager::get_instance()};
-    QObject::connect(&settings_manager_instance, &SettingsManager::error,
+    QObject::connect(&settings_manager, &SettingsManager::error,
                      [](const QString& err_msg)
     {
         qCritical().nospace().noquote() << err_msg;
@@ -49,12 +49,12 @@ int main(int argc, char** argv)
         std::exit(1);
     });
 
-    settings_manager_instance.open_file(QIODevice::ReadOnly);
-    const auto app_settings{settings_manager_instance.load_settings()};
-    settings_manager_instance.close_file();
+    settings_manager.open_file(QIODevice::ReadOnly);
+    const auto app_settings{settings_manager.load_settings()};
+    settings_manager.close_file();
     const bool minimize_to_tray_on_startup{app_settings["minimize_to_tray_on_startup"].toBool()};
 
-    MainWindow main_window{};
+    MainWindow main_window {};
 
     if (minimize_to_tray_on_startup)
     {

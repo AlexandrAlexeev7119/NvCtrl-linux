@@ -17,11 +17,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
+add_subdirectory(lib/NVMLpp/)
 
 file(GLOB_RECURSE SRC src/*.cpp)
 file(GLOB_RECURSE HDR include/*.hpp)
 file(GLOB_RECURSE UI ui/*.ui)
-file(GLOB_RECURSE EXT_LIBS lib/*.h lib/*.hpp)
 
 set(PROJECT_SOURCES
     ${SRC}
@@ -41,8 +41,8 @@ else()
     )
 endif()
 
-include_directories(${INCLUDE_DIRECTORIES} ./include)
-target_link_libraries(GWEpp PRIVATE Qt${QT_VERSION_MAJOR}::Widgets nvidia-ml)
+include_directories(${INCLUDE_DIRECTORIES} ./include ./lib/NVMLpp/include)
+target_link_libraries(GWEpp PRIVATE Qt${QT_VERSION_MAJOR}::Widgets NVMLpp)
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(GWEpp)
