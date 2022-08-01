@@ -116,6 +116,11 @@ void MainWindow::on_GpuClockController_memory_clock(unsigned memory_clock)
     ui->lineEdit_memory_clock_current->setText(QString::number(memory_clock) + " MHz");
 }
 
+void MainWindow::on_GpuClockController_error()
+{
+    ui->groupBox_clock_info->setDisabled(false);
+}
+
 void MainWindow::connect_slots_and_signals()
 {
     connect(&tray_icon_, &QSystemTrayIcon::activated, this, &MainWindow::toggle_tray);
@@ -132,6 +137,7 @@ void MainWindow::connect_slots_and_signals()
     connect(&gpu_clock_controller_, &GpuClockController::video_clock, this, &MainWindow::on_GpuClockController_video_clock);
     connect(&gpu_clock_controller_, &GpuClockController::sm_clock, this, &MainWindow::on_GpuClockController_sm_clock);
     connect(&gpu_clock_controller_, &GpuClockController::memory_clock, this, &MainWindow::on_GpuClockController_memory_clock);
+    connect(&gpu_clock_controller_, &GpuClockController::error, this, &MainWindow::on_GpuClockController_error);
 
     connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_utilizations_controller_, &GpuUtilizationsController::update_info);
     connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_power_controller_, &GpuPowerController::update_info);
@@ -202,7 +208,20 @@ void MainWindow::set_static_info()
     catch (const NVMLpp::errors::error_not_supported&)
     {
         ui->groupBox_power_control->setEnabled(false);
-        qWarning().noquote().nospace() << "Power control not supported, form disabled";
+        qWarning().noquote().nospace() << "Power control not supported, widget disabled";
+    }
+
+    try
+    {
+        ui->lineEdit_graphics_clock_max->setText(QString::number(current_gpu->get_max_clock_graphics()) + " MHz");
+        ui->lineEdit_video_clock_max->setText(QString::number(current_gpu->get_max_clock_video()) + " MHz");
+        ui->lineEdit_sm_clock_max->setText(QString::number(current_gpu->get_max_clock_sm()) + " MHz");
+        ui->lineEdit_memory_clock_max->setText(QString::number(current_gpu->get_max_clock_memory()) + " MHz");
+    }
+    catch (const NVMLpp::errors::error&)
+    {
+        ui->groupBox_clock_info->setEnabled(false);
+        qWarning().noquote().nospace() << "Clock control no supported, widget disabled";
     }
 
     qDebug().noquote().nospace() << "Static info has been set";
