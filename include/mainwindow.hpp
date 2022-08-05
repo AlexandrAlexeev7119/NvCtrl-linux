@@ -39,6 +39,7 @@ private slots:
     void on_GpuClockController_video_clock(unsigned video_clock);
     void on_GpuClockController_sm_clock(unsigned sm_clock);
     void on_GpuClockController_memory_clock(unsigned memory_clock);
+    void on_GpuClockController_error();
 
     void on_comboBox_select_GPU_activated(int index);
     void on_pushButton_apply_power_limit_clicked();
@@ -62,6 +63,8 @@ private:
     std::vector<NVMLpp::NVML_device> nvml_devices_list_;
 
 protected:
+    void closeEvent(QCloseEvent* event);
+
     void connect_slots_and_signals();
     void setup_tray_menu();
     void load_app_settings();
@@ -69,6 +72,4 @@ protected:
     void load_GPUs();    
     NVMLpp::NVML_device* get_current_gpu();
     void set_current_gpu_for_controllers() noexcept;
-
-    void closeEvent(QCloseEvent* event);
 };

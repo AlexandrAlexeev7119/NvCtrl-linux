@@ -20,6 +20,7 @@ signals:
     void video_clock(unsigned);
     void sm_clock(unsigned);
     void memory_clock(unsigned);
+    void error();
 
 private:
     const NVMLpp::NVML_device* current_gpu_;

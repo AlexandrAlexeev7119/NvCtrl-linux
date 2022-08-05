@@ -16,5 +16,8 @@ void GpuClockController::update_info()
         emit sm_clock(current_gpu_->get_clock_sm());
         emit memory_clock(current_gpu_->get_clock_memory());
     }
-    catch (const NVMLpp::errors::error&) {}
+    catch (const NVMLpp::errors::error&)
+    {
+        emit error();
+    }
 }
