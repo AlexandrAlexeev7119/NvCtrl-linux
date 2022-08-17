@@ -12,6 +12,8 @@
 #include "gpu_power_controller.hpp"
 #include "gpu_clock_controller.hpp"
 
+#include "settings_dialog.hpp"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -27,7 +29,7 @@ public:
 
 private slots:
     void toggle_tray();
-    void apply_settings(const QJsonObject& settings);
+    void on_settings_applied(const QJsonObject& app_settings);
 
     void on_GpuUtilizationsController_gpu_utilization(unsigned gpu_utilization);
     void on_GpuUtilizationsController_memory_utilization(unsigned memory_utilization, unsigned used_memory);
@@ -46,6 +48,7 @@ private slots:
 
     void on_actionUpdate_GPUs_list_triggered();
     void on_actionExit_triggered();
+    void on_actionSettings_triggered();
 
 private:
     Ui::MainWindow* ui;
@@ -61,6 +64,8 @@ private:
     int update_freq_ms_;
 
     std::vector<NVMLpp::NVML_device> nvml_devices_list_;
+
+    SettingsDialog settings_dialog_window_;
 
 protected:
     void closeEvent(QCloseEvent* event);
