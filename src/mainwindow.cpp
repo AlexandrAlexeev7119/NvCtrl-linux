@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget* parent)
     , minimize_to_tray_on_close_ {false}
     , update_freq_ms_ {}
     , nvml_devices_list_ {}
+    , settings_dialog_window_ {this}
 {
     ui->setupUi(this);
     setMinimumSize(size());
@@ -41,8 +42,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
-
 void MainWindow::toggle_tray()
 {
     if (isHidden())
@@ -56,12 +55,12 @@ void MainWindow::toggle_tray()
     }
 }
 
-void MainWindow::apply_settings(const QJsonObject& settings)
+void MainWindow::on_settings_applied(const QJsonObject& app_settings)
 {
-    minimize_to_tray_on_close_ = settings["minimize_to_tray_on_close"].toBool();
-    update_freq_ms_ = settings["update_freq_ms"].toInt();
-
-    qDebug().noquote().nospace() << "New settings applied: " << settings;
+    minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
+    update_freq_ms_ = app_settings["update_freq_ms"].toInt();
+    dynamic_info_update_timer_.setInterval(update_freq_ms_);
+    qDebug().noquote().nospace() << "New settings applied: " << app_settings;
 }
 
 void MainWindow::on_GpuUtilizationsController_gpu_utilization(unsigned gpu_utilization)
@@ -142,6 +141,8 @@ void MainWindow::connect_slots_and_signals()
     connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_utilizations_controller_, &GpuUtilizationsController::update_info);
     connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_power_controller_, &GpuPowerController::update_info);
     connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_clock_controller_, &GpuClockController::update_info);
+
+    connect(&settings_dialog_window_, &SettingsDialog::settings_applied, this, &MainWindow::on_settings_applied);
 
     connect(&settings_manager_, &SettingsManager::error, this, [this](const QString& err_msg)
     {
@@ -297,4 +298,9 @@ void MainWindow::on_actionExit_triggered()
 {
     minimize_to_tray_on_close_ = false;
     close();
+}
+
+void MainWindow::on_actionSettings_triggered()
+{
+    settings_dialog_window_.show();
 }
