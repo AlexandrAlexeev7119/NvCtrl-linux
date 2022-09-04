@@ -45,5 +45,5 @@ include_directories(${INCLUDE_DIRECTORIES} ./include ./lib/NVMLpp/include)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets NVMLpp)
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(GWEpp)
+    qt_finalize_executable(${PROJECT_NAME})
 endif()
