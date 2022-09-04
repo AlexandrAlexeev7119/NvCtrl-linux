@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(GWEpp VERSION 0.0.1 LANGUAGES CXX)
+project(gwepp VERSION 1.0.3 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -31,19 +31,19 @@ set(PROJECT_SOURCES
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(GWEpp
+    qt_add_executable(${PROJECT_NAME}
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
 else()
-    add_executable(GWEpp
+    add_executable(${PROJECT_NAME}
         ${PROJECT_SOURCES}
     )
 endif()
 
 include_directories(${INCLUDE_DIRECTORIES} ./include ./lib/NVMLpp/include)
-target_link_libraries(GWEpp PRIVATE Qt${QT_VERSION_MAJOR}::Widgets NVMLpp)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets NVMLpp)
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(GWEpp)
+    qt_finalize_executable(${PROJECT_NAME})
 endif()
