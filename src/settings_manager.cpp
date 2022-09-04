@@ -3,7 +3,7 @@
 #include "settings_manager.hpp"
 
 // Default settings filename
-static constexpr const char* DEFAULT_FILENAME{"/etc/gwepp/gwepp.json"};
+static constexpr const char* DEFAULT_FILENAME{"/usr/share/gwepp/gwepp.json"};
 
 SettingsManager::SettingsManager()
     : settings_file_{}
