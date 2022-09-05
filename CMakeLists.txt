@@ -15,8 +15,7 @@ set(CMAKE_AUTOGEN_VERBOSE ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
 add_subdirectory(lib/NVMLpp/)
 add_subdirectory(lib/spdlog/)
@@ -32,20 +31,7 @@ set(PROJECT_SOURCES
     ${EXT_LIBS}
 )
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(${PROJECT_NAME}
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-    )
-else()
-    add_executable(${PROJECT_NAME}
-        ${PROJECT_SOURCES}
-    )
-endif()
+include_directories(${INCLUDE_DIRECTORIES} ./include ./lib/NVMLpp/include ./lib/spdlog/include)
 
-include_directories(${INCLUDE_DIRECTORIES} ./include ./lib/NVMLpp/include)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets NVMLpp spdlog)
-
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(${PROJECT_NAME})
-endif()
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets NVMLpp spdlog)
