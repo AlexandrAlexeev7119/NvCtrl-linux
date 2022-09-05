@@ -60,7 +60,8 @@ void MainWindow::on_settings_applied(const QJsonObject& app_settings)
     minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
     update_freq_ms_ = app_settings["update_freq_ms"].toInt();
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
-    qDebug().noquote().nospace() << "New settings applied: " << app_settings;
+
+    qInfo().noquote().nospace() << "New settings applied: " << app_settings;
 }
 
 void MainWindow::on_GpuUtilizationsController_gpu_utilization(unsigned gpu_utilization)
@@ -177,7 +178,7 @@ void MainWindow::load_app_settings()
     update_freq_ms_ = app_settings["update_freq_ms"].toInt();
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
 
-    qDebug().noquote().nospace() << "Settings has been loaded: " << app_settings;
+    qInfo().noquote().nospace() << "Settings has been loaded: " << app_settings;
 }
 
 void MainWindow::set_static_info()
@@ -225,7 +226,7 @@ void MainWindow::set_static_info()
         qWarning().noquote().nospace() << "Clock control no supported, widget disabled";
     }
 
-    qDebug().noquote().nospace() << "Static info has been set";
+    qInfo().noquote().nospace() << "Static info has been set";
 }
 
 void MainWindow::load_GPUs()
@@ -257,20 +258,20 @@ void MainWindow::set_current_gpu_for_controllers() noexcept
 
 void MainWindow::closeEvent(QCloseEvent* event)
 {
-    qDebug().noquote().nospace() << "minimize_to_tray_on_close_=" << minimize_to_tray_on_close_;
+    qInfo().noquote().nospace() << "minimize_to_tray_on_close_=" << minimize_to_tray_on_close_;
 
     if (minimize_to_tray_on_close_)
     {
         event->ignore();
         hide();
         tray_icon_.show();
-        qDebug().noquote().nospace() << "Event ignored, minimized to tray";
+        qInfo().noquote().nospace() << "Event ignored, minimized to tray";
     }
     else
     {
         tray_icon_.hide();
         event->accept();
-        qDebug().noquote().nospace() << "Event accepted, MainWindow closed";
+        qInfo().noquote().nospace() << "Event accepted, MainWindow closed";
     }
 }
 
@@ -278,7 +279,7 @@ void MainWindow::on_comboBox_select_GPU_activated(int index)
 {
     set_current_gpu_for_controllers();
     set_static_info();
-    qDebug().noquote().nospace() << "GPU selected: " << ui->comboBox_select_GPU->currentText();
+    qInfo().noquote().nospace() << "GPU selected: " << ui->comboBox_select_GPU->currentText();
 }
 
 void MainWindow::on_pushButton_apply_power_limit_clicked()
@@ -288,7 +289,7 @@ void MainWindow::on_pushButton_apply_power_limit_clicked()
 
 void MainWindow::on_actionUpdate_GPUs_list_triggered()
 {
-    qDebug() << "Updating list of GPUs...";
+    qInfo().noquote().noquote() << "Updating GPUs list:";
     nvml_devices_list_.clear();
     ui->comboBox_select_GPU->clear();
     load_GPUs();

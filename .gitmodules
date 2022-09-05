@@ -2,3 +2,6 @@
 	path = lib/NVMLpp
 	url = https://codeberg.org/AlexCr4ckPentest/NVMLpp
 	branch = dev
+[submodule "lib/spdlog"]
+	path = lib/spdlog
+	url = https://github.com/gabime/spdlog

@@ -3,39 +3,32 @@
 #include <QApplication>
 #include <QMessageBox>
 
+#include "spdlog/spdlog.h"
+
 #include "mainwindow.hpp"
 #include "settings_manager.hpp"
 
 static void qt_msg_handler(QtMsgType msg_type, const QMessageLogContext& context,
                            const QString& message)
 {
-    bool is_stderr{false};
     switch (msg_type)
     {
-    case QtMsgType::QtCriticalMsg:
-        std::cout << "[CRITICAL]: ";
-        is_stderr = true;
-        break;
-    case QtMsgType::QtDebugMsg:
-        std::cout << "[DEBUG]: " << context.file << ":" << context.line << " " << context.function << ": ";
-        break;
-    case QtMsgType::QtFatalMsg:
-        std::cerr << "[FATAL]: ";
-        is_stderr = true;
-        break;
-    case QtMsgType::QtInfoMsg:
-        std::cout << "[INFO]: ";
-        break;
-    case QtMsgType::QtWarningMsg:
-        std::cout << "[WARNING]: ";
-        break;
+    case QtMsgType::QtCriticalMsg:  spdlog::critical(message.toStdString()); break;
+    case QtMsgType::QtDebugMsg:     spdlog::debug("{}:{} in {}: {}", context.file, context.line, context.function, message.toStdString()); break;
+    case QtMsgType::QtFatalMsg:     spdlog::critical(message.toStdString()); break;
+    case QtMsgType::QtInfoMsg:      spdlog::info(message.toStdString()); break;
+    case QtMsgType::QtWarningMsg:   spdlog::warn(message.toStdString()); break;
     }
-
-    (is_stderr ? std::cerr : std::cout) << message.toStdString() << "\n";
 }
 
 int main(int argc, char** argv)
 {
+#ifndef NDEBUG
+    spdlog::set_level(spdlog::level::debug);
+#else
+    spdlog::set_level(spdlog::level::info);
+#endif
+
     qInstallMessageHandler(qt_msg_handler);
 
     QApplication app {argc, argv};

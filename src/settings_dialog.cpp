@@ -60,7 +60,7 @@ void SettingsDialog::load_settings_from_file()
     ui->checkBox_minimize_to_tray_on_close->setChecked(app_settings["minimize_to_tray_on_close"].toBool());
     ui->spinBox_update_freq->setValue(app_settings["update_freq_ms"].toInt());
 
-    qDebug().noquote().nospace() << "Settings on form loaded";
+    qInfo().noquote().nospace() << "Settings on form loaded";
 }
 
 void SettingsDialog::save_settings_to_file(const QJsonObject& app_settings)
@@ -68,4 +68,6 @@ void SettingsDialog::save_settings_to_file(const QJsonObject& app_settings)
     settings_manager_.open_file(QIODevice::WriteOnly);
     settings_manager_.save_settings(app_settings);
     settings_manager_.close_file();
+
+    qInfo().noquote().nospace() << "Settings saved to file";
 }

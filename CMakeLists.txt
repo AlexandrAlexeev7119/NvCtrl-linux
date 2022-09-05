@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(gwepp VERSION 1.0.3 LANGUAGES CXX)
+project(gwepp VERSION 1.0.4 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -17,7 +17,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
+
 add_subdirectory(lib/NVMLpp/)
+add_subdirectory(lib/spdlog/)
 
 file(GLOB_RECURSE SRC src/*.cpp)
 file(GLOB_RECURSE HDR include/*.hpp)
@@ -42,7 +44,7 @@ else()
 endif()
 
 include_directories(${INCLUDE_DIRECTORIES} ./include ./lib/NVMLpp/include)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets NVMLpp)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets NVMLpp spdlog)
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(${PROJECT_NAME})
