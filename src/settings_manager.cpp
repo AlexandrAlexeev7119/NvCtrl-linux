@@ -1,34 +1,44 @@
+#include <cstdlib>
+
 #include <QJsonDocument>
 
 #include "settings_manager.hpp"
 
-// Default settings filename
+
 static constexpr const char* DEFAULT_FILENAME{"/usr/share/gwepp/gwepp.json"};
+
+static const auto get_filename_in_home_dir {
+    []() -> QString {
+        QString current_user {std::getenv("USER")};
+        return "/home/" + current_user + "/.config/gwepp/gwepp.json";
+    }
+};
+
+
 
 SettingsManager::SettingsManager()
     : settings_file_{}
-{}
-
-SettingsManager::SettingsManager(const QString& filename)
-    : settings_file_{filename}
-{}
-
-void SettingsManager::set_file_name(const QString& filename)
 {
-    settings_file_.setFileName(filename);
+    settings_file_.setFileName(get_filename_in_home_dir());
 }
 
 QString SettingsManager::get_file_name() const
-{
-    return settings_file_.fileName();
-}
+{ return settings_file_.fileName(); }
 
 void SettingsManager::open_file(QIODevice::OpenMode open_mode)
 {
+    // First of all, try to open settings file from /home/<user>/.config/gwepp/
     if (!settings_file_.open(open_mode))
     {
-        emit error(settings_file_.errorString() + ": " + get_file_name());
+        // Otherwise try to open from default location /usr/share/gwepp/
+        settings_file_.setFileName(DEFAULT_FILENAME);
+        if (!settings_file_.open(open_mode))
+        {
+            emit error(settings_file_.errorString() + ": " + get_file_name());
+        }
     }
+
+    qInfo().noquote().nospace() << "Settings file selected: " << get_file_name();
 }
 
 void SettingsManager::close_file()
@@ -55,6 +65,6 @@ QJsonObject SettingsManager::load_settings()
 
 SettingsManager& SettingsManager::instance()
 {
-    static SettingsManager settings_manager{DEFAULT_FILENAME};
+    static SettingsManager settings_manager{};
     return settings_manager;
 }
