@@ -4,8 +4,10 @@ no other shit such as python
 
 no other shit such as python
 
-## UI look
-![UI look picture here](img/ui-look.png)
+## UI preview
+![UI 1](img/ui1.png)
+![UI 2](img/ui2.png)
+![UI 3](img/ui3.png)
 
 
 ## Building from sources
