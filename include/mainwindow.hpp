@@ -6,7 +6,6 @@
 #include <QTimer>
 #include <QMenu>
 
-#include "settings_manager.hpp"
 #include "nvmlpp/nvmlpp_device.hpp"
 #include "gpu_utilizations_controller.hpp"
 #include "gpu_power_controller.hpp"
@@ -22,7 +21,8 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    MainWindow(QWidget* parent = nullptr);
+
+    MainWindow(const QJsonObject& app_settings, QWidget* parent = nullptr);
     ~MainWindow();
 
     inline QSystemTrayIcon& get_tray_icon() noexcept { return tray_icon_; }
@@ -53,7 +53,6 @@ private slots:
 private:
     Ui::MainWindow* ui;
     QSystemTrayIcon tray_icon_;
-    SettingsManager& settings_manager_;
 
     GpuUtilizationsController gpu_utilizations_controller_;
     GpuPowerController gpu_power_controller_;
@@ -72,7 +71,7 @@ protected:
 
     void connect_slots_and_signals();
     void setup_tray_menu();
-    void load_app_settings();
+    void load_app_settings(const QJsonObject& app_settings);
     void set_static_info();
     void load_GPUs();    
     NVMLpp::NVML_device* get_current_gpu();

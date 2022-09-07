@@ -45,9 +45,9 @@ int main(int argc, char** argv)
     settings_manager.open_file(QIODevice::ReadOnly);
     const auto app_settings{settings_manager.load_settings()};
     settings_manager.close_file();
-    const bool minimize_to_tray_on_startup{app_settings["minimize_to_tray_on_startup"].toBool()};
 
-    MainWindow main_window {};
+    const bool minimize_to_tray_on_startup {app_settings["minimize_to_tray_on_startup"].toBool()};
+    MainWindow main_window {app_settings};
 
     if (minimize_to_tray_on_startup)
     {

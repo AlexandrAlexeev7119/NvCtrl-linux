@@ -7,17 +7,14 @@
 
 #include "nvmlpp/nvmlpp_session.hpp"
 
-MainWindow::MainWindow(QWidget* parent)
+MainWindow::MainWindow(const QJsonObject& app_settings, QWidget* parent)
     : QMainWindow {parent}
     , ui {new Ui::MainWindow}
     , tray_icon_ {this}
-    , settings_manager_ {SettingsManager::instance()}
     , gpu_utilizations_controller_ {}
     , gpu_power_controller_ {}
     , gpu_clock_controller_ {}
     , dynamic_info_update_timer_ {}
-    , minimize_to_tray_on_close_ {false}
-    , update_freq_ms_ {}
     , nvml_devices_list_ {}
     , settings_dialog_window_ {this}
 {
@@ -26,7 +23,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     connect_slots_and_signals();
     setup_tray_menu();
-    load_app_settings();
+    load_app_settings(app_settings);
     load_GPUs();
 
     set_static_info();
@@ -145,13 +142,6 @@ void MainWindow::connect_slots_and_signals()
 
     connect(&settings_dialog_window_, &SettingsDialog::settings_applied, this, &MainWindow::on_settings_applied);
 
-    connect(&settings_manager_, &SettingsManager::error, this, [this](const QString& err_msg)
-    {
-        qCritical().nospace().noquote() << err_msg;
-        QMessageBox::critical(this, "Error", err_msg);
-        on_actionExit_triggered();
-    });
-
     connect(ui->horizontalSlider_change_power_limit, &QSlider::valueChanged, this, [this](int value)
     {
         ui->label_power_limit_slider_indicator->setText(QString::number(value));
@@ -166,14 +156,8 @@ void MainWindow::setup_tray_menu()
     tray_icon_.setContextMenu(tray_menu);
 }
 
-void MainWindow::load_app_settings()
+void MainWindow::load_app_settings(const QJsonObject& app_settings)
 {
-    auto& settings_manager {SettingsManager::instance()};
-    settings_manager.open_file(QIODevice::ReadOnly);
-
-    const auto app_settings{settings_manager.load_settings()};
-    settings_manager.close_file();
-
     minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
     update_freq_ms_ = app_settings["update_freq_ms"].toInt();
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
