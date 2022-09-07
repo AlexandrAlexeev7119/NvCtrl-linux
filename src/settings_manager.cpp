@@ -38,7 +38,7 @@ void SettingsManager::open_file(QIODevice::OpenMode open_mode)
         }
     }
 
-    qInfo().noquote().nospace() << "Settings file selected: " << get_file_name();
+    qInfo().noquote().nospace() << "Settings file opened: " << get_file_name();
 }
 
 void SettingsManager::close_file()

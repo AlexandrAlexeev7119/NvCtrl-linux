@@ -210,6 +210,7 @@ void MainWindow::set_static_info()
     catch (const NVMLpp::errors::error_not_supported&)
     {
         ui->groupBox_power_control->setEnabled(false);
+        ui->groupBox_power_control->setToolTip("Power control not supported, widget disabled");
         qWarning().noquote().nospace() << "Power control not supported, widget disabled";
     }
 
@@ -223,6 +224,7 @@ void MainWindow::set_static_info()
     catch (const NVMLpp::errors::error&)
     {
         ui->groupBox_clock_info->setEnabled(false);
+        ui->groupBox_clock_info->setToolTip("Clock control no supported, widget disabled");
         qWarning().noquote().nospace() << "Clock control no supported, widget disabled";
     }
 
@@ -258,8 +260,6 @@ void MainWindow::set_current_gpu_for_controllers() noexcept
 
 void MainWindow::closeEvent(QCloseEvent* event)
 {
-    qInfo().noquote().nospace() << "minimize_to_tray_on_close_=" << minimize_to_tray_on_close_;
-
     if (minimize_to_tray_on_close_)
     {
         event->ignore();
