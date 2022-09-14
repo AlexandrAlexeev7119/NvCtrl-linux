@@ -17,6 +17,7 @@ MainWindow::MainWindow(const QJsonObject& app_settings, QWidget* parent)
     , dynamic_info_update_timer_ {}
     , nvml_devices_list_ {}
     , settings_dialog_window_ {this}
+    , tray_menu_ {this}
 {
     ui->setupUi(this);
     setMinimumSize(size());
@@ -122,7 +123,7 @@ void MainWindow::connect_slots_and_signals()
 {
     connect(&tray_icon_, &QSystemTrayIcon::activated, this, &MainWindow::toggle_tray);
 
-    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::gpu_utilization, this, &::MainWindow::on_GpuUtilizationsController_gpu_utilization);
+    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::gpu_utilization, this, &MainWindow::on_GpuUtilizationsController_gpu_utilization);
     connect(&gpu_utilizations_controller_, &GpuUtilizationsController::memory_utilization, this, &MainWindow::on_GpuUtilizationsController_memory_utilization);
     connect(&gpu_utilizations_controller_, &GpuUtilizationsController::encoder_decoder_utilization, this, &MainWindow::on_GpuUtilizationsController_encoder_decoder_utilization);
     connect(&gpu_utilizations_controller_, &GpuUtilizationsController::pstate_level, this, &MainWindow::on_GpuUtilizationsController_pstate_level);
@@ -140,8 +141,6 @@ void MainWindow::connect_slots_and_signals()
     connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_power_controller_, &GpuPowerController::update_info);
     connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_clock_controller_, &GpuClockController::update_info);
 
-    connect(&settings_dialog_window_, &SettingsDialog::settings_applied, this, &MainWindow::on_SettingsDialog_settings_applied);
-
     connect(ui->horizontalSlider_change_power_limit, &QSlider::valueChanged, this, [this](int value)
     {
         ui->label_power_limit_slider_indicator->setText(QString::number(value));
@@ -150,10 +149,9 @@ void MainWindow::connect_slots_and_signals()
 
 void MainWindow::setup_tray_menu()
 {
-    QMenu* tray_menu {new QMenu {this}};
-    tray_menu->addAction("Show/Hide app window", this, &MainWindow::toggle_tray);
-    tray_menu->addAction("Exit", this, &MainWindow::on_actionQuit_triggered);
-    tray_icon_.setContextMenu(tray_menu);
+    tray_menu_.addAction("Show/Hide app window", this, &MainWindow::toggle_tray);
+    tray_menu_.addAction("Exit", this, &MainWindow::on_actionQuit_triggered);
+    tray_icon_.setContextMenu(&tray_menu_);
 }
 
 void MainWindow::load_app_settings(const QJsonObject& app_settings)
@@ -231,7 +229,7 @@ void MainWindow::load_GPUs()
 NVMLpp::NVML_device* MainWindow::get_current_gpu()
 {
     const int current_device_index {ui->comboBox_select_GPU->currentIndex()};
-    return &nvml_devices_list_[current_device_index];
+    return &nvml_devices_list_.at(current_device_index);
 }
 
 void MainWindow::set_current_gpu_for_controllers() noexcept
@@ -271,12 +269,6 @@ void MainWindow::on_pushButton_apply_power_limit_clicked()
     gpu_power_controller_.set_power_limit(ui->horizontalSlider_change_power_limit->value());
 }
 
-void MainWindow::on_actionQuit_triggered()
-{
-    minimize_to_tray_on_close_ = false;
-    close();
-}
-
 void MainWindow::on_actionUpdate_GPUs_list_triggered()
 {
     qInfo().noquote().noquote() << "Updating GPUs list:";
@@ -288,4 +280,10 @@ void MainWindow::on_actionUpdate_GPUs_list_triggered()
 void MainWindow::on_actionSettings_triggered()
 {
     settings_dialog_window_.show();
+}
+
+void MainWindow::on_actionQuit_triggered()
+{
+    minimize_to_tray_on_close_ = false;
+    close();
 }

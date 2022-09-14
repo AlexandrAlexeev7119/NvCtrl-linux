@@ -53,6 +53,7 @@ private slots:
 private:
     Ui::MainWindow* ui;
     QSystemTrayIcon tray_icon_;
+    QMenu tray_menu_;
 
     GpuUtilizationsController gpu_utilizations_controller_;
     GpuPowerController gpu_power_controller_;
