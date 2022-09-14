@@ -1,8 +1,8 @@
-#include "settings_dialog.hpp"
-#include "ui_settings_dialog.h"
-
 #include <QShowEvent>
 #include <QMessageBox>
+
+#include "settings_dialog.hpp"
+#include "ui_settings_dialog.h"
 
 SettingsDialog::SettingsDialog(QWidget* parent)
     : QDialog {parent}

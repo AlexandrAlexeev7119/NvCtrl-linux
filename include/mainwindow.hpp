@@ -12,6 +12,7 @@
 #include "gpu_clock_controller.hpp"
 
 #include "settings_dialog.hpp"
+#include "about_dialog.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -49,6 +50,7 @@ private slots:
     void on_actionUpdate_GPUs_list_triggered();
     void on_actionSettings_triggered();
     void on_actionQuit_triggered();
+    void on_actionAbout_triggered();
 
 private:
     Ui::MainWindow* ui;
@@ -66,6 +68,7 @@ private:
     std::vector<NVMLpp::NVML_device> nvml_devices_list_;
 
     SettingsDialog settings_dialog_window_;
+    AboutDialog about_dialog_window_;
 
 protected:
     void closeEvent(QCloseEvent* event);

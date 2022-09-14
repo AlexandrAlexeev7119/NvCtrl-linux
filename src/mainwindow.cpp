@@ -17,6 +17,7 @@ MainWindow::MainWindow(const QJsonObject& app_settings, QWidget* parent)
     , dynamic_info_update_timer_ {}
     , nvml_devices_list_ {}
     , settings_dialog_window_ {this}
+    , about_dialog_window_ {this}
     , tray_menu_ {this}
 {
     ui->setupUi(this);
@@ -286,4 +287,9 @@ void MainWindow::on_actionQuit_triggered()
 {
     minimize_to_tray_on_close_ = false;
     close();
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    about_dialog_window_.show();
 }
