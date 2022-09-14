@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>362</width>
-    <height>191</height>
+    <width>420</width>
+    <height>240</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,7 +30,7 @@
    <item row="0" column="0" colspan="4">
     <widget class="QLabel" name="label_program_name">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;GWEpp - GreenWithEnvy plus plus&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;A program for control Nvida GPU on GNU/Linux&lt;br/&gt;Re-implementation original GWE which is written in Python&lt;br/&gt;But GWEpp uses only Qt, C++ and NVML directly&lt;br/&gt;and without extra dependencies&lt;/p&gt;&lt;p align=&quot;right&quot;&gt;&lt;span style=&quot; font-size:9pt;&quot;&gt;Copyright © 2022 AlexCr4ckPentest&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;GWEpp - GreenWithEnvy plus plus&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;A program for control Nvida GPU on GNU/Linux&lt;br/&gt;Re-implementation of original GWE which is written in Python&lt;br/&gt;But GWEpp uses only Qt, C++ and NVML directly&lt;br/&gt;and without extra dependencies&lt;br/&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:9pt;&quot;&gt;Copyright © 2022 AlexCr4ckPentest&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
