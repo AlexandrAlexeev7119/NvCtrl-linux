@@ -654,7 +654,7 @@
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>&amp;File</string>
     </property>
     <addaction name="actionUpdate_GPUs_list"/>
     <addaction name="actionSettings"/>
@@ -663,7 +663,7 @@
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Help</string>
+     <string>&amp;Help</string>
     </property>
     <addaction name="actionAbout"/>
     <addaction name="actionReport_a_bug"/>
@@ -687,7 +687,7 @@
     <iconset theme="preferences-other"/>
    </property>
    <property name="text">
-    <string>Settings</string>
+    <string>&amp;Settings</string>
    </property>
   </action>
   <action name="actionQuit">
@@ -707,7 +707,7 @@
     <iconset theme="help-about"/>
    </property>
    <property name="text">
-    <string>About</string>
+    <string>&amp;About</string>
    </property>
   </action>
   <action name="actionReport_a_bug">
@@ -715,7 +715,7 @@
     <iconset theme="help-faq"/>
    </property>
    <property name="text">
-    <string>Report a bug</string>
+    <string>&amp;Report a bug</string>
    </property>
   </action>
  </widget>
