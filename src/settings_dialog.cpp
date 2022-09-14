@@ -32,7 +32,7 @@ void SettingsDialog::on_pushButton_apply_clicked()
     emit settings_applied(app_settings);
 }
 
-void SettingsDialog::on_pushButton_cancel_clicked()
+void SettingsDialog::on_pushButton_close_clicked()
 {
     close();
 }
@@ -53,7 +53,7 @@ void SettingsDialog::showEvent(QShowEvent* event_)
 void SettingsDialog::load_settings_from_file()
 {
     settings_manager_.open_file(QIODevice::ReadOnly);
-    const QJsonObject app_settings {settings_manager_.load_settings()};
+    const QJsonObject app_settings {settings_manager_.read_settings()};
     settings_manager_.close_file();
 
     ui->checkBox_minimize_to_tray_on_startup->setChecked(app_settings["minimize_to_tray_on_startup"].toBool());
@@ -66,7 +66,7 @@ void SettingsDialog::load_settings_from_file()
 void SettingsDialog::save_settings_to_file(const QJsonObject& app_settings)
 {
     settings_manager_.open_file(QIODevice::WriteOnly);
-    settings_manager_.save_settings(app_settings);
+    settings_manager_.write_settings(app_settings);
     settings_manager_.close_file();
 
     qInfo().noquote().nospace() << "Settings saved to file";

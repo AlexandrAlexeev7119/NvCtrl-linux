@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>604</width>
-    <height>519</height>
+    <width>600</width>
+    <height>520</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@
     <item row="1" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_info">
        <attribute name="title">
@@ -169,28 +169,28 @@
            <bool>false</bool>
           </property>
           <layout class="QGridLayout" name="gridLayout">
+           <item row="1" column="1" colspan="3">
+            <widget class="QLineEdit" name="lineEdit_GPU_uuid">
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <widget class="QLineEdit" name="lineEdit_GPU_arch">
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="1">
             <widget class="QLineEdit" name="lineEdit_GPU_name">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QLineEdit" name="lineEdit_GPU_VBIOS_ver">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QLineEdit" name="lineEdit_GPU_bus_type">
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -209,18 +209,8 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="2">
-            <widget class="QLabel" name="label_GPU_arch">
-             <property name="text">
-              <string>Arch</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="3">
-            <widget class="QLineEdit" name="lineEdit_GPU_driver_ver">
+           <item row="3" column="1">
+            <widget class="QLineEdit" name="lineEdit_GPU_bus_type">
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -236,6 +226,16 @@
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <widget class="QLineEdit" name="lineEdit_GPU_driver_ver">
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -259,26 +259,6 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="3">
-            <widget class="QLineEdit" name="lineEdit_GPU_arch">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QLabel" name="label_GPU_total_mem">
-             <property name="text">
-              <string>Memory</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_GPU_VBIOS_ver">
              <property name="text">
@@ -299,13 +279,33 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="1" colspan="3">
-            <widget class="QLineEdit" name="lineEdit_GPU_uuid">
+           <item row="2" column="1">
+            <widget class="QLineEdit" name="lineEdit_GPU_VBIOS_ver">
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
              <property name="readOnly">
               <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLabel" name="label_GPU_arch">
+             <property name="text">
+              <string>Arch</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QLabel" name="label_GPU_total_mem">
+             <property name="text">
+              <string>Memory</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -627,6 +627,16 @@
           </layout>
          </widget>
         </item>
+        <item row="1" column="0" colspan="3">
+         <widget class="QGroupBox" name="groupBox">
+          <property name="title">
+           <string>Clock offset</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </widget>
@@ -638,22 +648,33 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>604</width>
-     <height>22</height>
+     <width>600</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>&amp;File</string>
     </property>
     <addaction name="actionUpdate_GPUs_list"/>
     <addaction name="actionSettings"/>
     <addaction name="separator"/>
-    <addaction name="actionExit"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+    <addaction name="actionReport_a_bug"/>
    </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
   </widget>
   <action name="actionUpdate_GPUs_list">
+   <property name="icon">
+    <iconset theme="view-refresh"/>
+   </property>
    <property name="text">
     <string>Update GPUs list</string>
    </property>
@@ -662,16 +683,39 @@
    </property>
   </action>
   <action name="actionSettings">
+   <property name="icon">
+    <iconset theme="preferences-other"/>
+   </property>
    <property name="text">
-    <string>Settings</string>
+    <string>&amp;Settings</string>
    </property>
   </action>
-  <action name="actionExit">
+  <action name="actionQuit">
+   <property name="icon">
+    <iconset theme="application-exit">
+     <normaloff>.</normaloff>.</iconset>
+   </property>
    <property name="text">
-    <string>Exit</string>
+    <string>Quit</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="icon">
+    <iconset theme="help-about"/>
+   </property>
+   <property name="text">
+    <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="actionReport_a_bug">
+   <property name="icon">
+    <iconset theme="help-faq"/>
+   </property>
+   <property name="text">
+    <string>&amp;Report a bug</string>
    </property>
   </action>
  </widget>

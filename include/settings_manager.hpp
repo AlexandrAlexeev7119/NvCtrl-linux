@@ -18,8 +18,8 @@ public:
     void open_file(QIODevice::OpenMode open_mode);
     void close_file();
 
-    void save_settings(const QJsonObject& settings);
-    QJsonObject load_settings();
+    void write_settings(const QJsonObject& settings);
+    QJsonObject read_settings();
 
     static SettingsManager& instance();
 

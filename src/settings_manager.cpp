@@ -38,7 +38,7 @@ void SettingsManager::open_file(QIODevice::OpenMode open_mode)
         }
     }
 
-    qInfo().noquote().nospace() << "Settings file selected: " << get_file_name();
+    qInfo().noquote().nospace() << "Settings file opened: " << get_file_name();
 }
 
 void SettingsManager::close_file()
@@ -49,14 +49,14 @@ void SettingsManager::close_file()
     }
 }
 
-void SettingsManager::save_settings(const QJsonObject& settings)
+void SettingsManager::write_settings(const QJsonObject& settings)
 {
     const QJsonDocument json_doc{settings};
     const QByteArray json_data{json_doc.toJson(QJsonDocument::JsonFormat::Compact)};
     settings_file_.write(json_data);
 }
 
-QJsonObject SettingsManager::load_settings()
+QJsonObject SettingsManager::read_settings()
 {
     const QByteArray raw_data{settings_file_.readAll()};
     const QJsonObject json_obj{QJsonDocument::fromJson(raw_data).object()};
