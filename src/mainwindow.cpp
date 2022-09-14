@@ -289,4 +289,3 @@ void MainWindow::on_actionSettings_triggered()
 {
     settings_dialog_window_.show();
 }
-

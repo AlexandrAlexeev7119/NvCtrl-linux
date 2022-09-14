@@ -43,7 +43,7 @@ int main(int argc, char** argv)
     });
 
     settings_manager.open_file(QIODevice::ReadOnly);
-    const auto app_settings{settings_manager.load_settings()};
+    const auto app_settings{settings_manager.read_settings()};
     settings_manager.close_file();
 
     const bool minimize_to_tray_on_startup {app_settings["minimize_to_tray_on_startup"].toBool()};
