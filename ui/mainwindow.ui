@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>604</width>
-    <height>519</height>
+    <width>600</width>
+    <height>520</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@
     <item row="1" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_info">
        <attribute name="title">
@@ -648,7 +648,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>604</width>
+     <width>600</width>
      <height>22</height>
     </rect>
    </property>
@@ -659,9 +659,17 @@
     <addaction name="actionUpdate_GPUs_list"/>
     <addaction name="actionSettings"/>
     <addaction name="separator"/>
-    <addaction name="actionExit"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+    <addaction name="actionReport_a_bug"/>
    </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
   </widget>
   <action name="actionUpdate_GPUs_list">
    <property name="text">
@@ -676,12 +684,25 @@
     <string>Settings</string>
    </property>
   </action>
-  <action name="actionExit">
+  <action name="actionQuit">
+   <property name="icon">
+    <iconset theme="application-exit"/>
+   </property>
    <property name="text">
-    <string>Exit</string>
+    <string>Quit</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionReport_a_bug">
+   <property name="text">
+    <string>Report a bug</string>
    </property>
   </action>
  </widget>

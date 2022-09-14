@@ -29,9 +29,9 @@ public:
 
 private slots:
     void toggle_tray();
-    void on_settings_applied(const QJsonObject& app_settings);
+    void on_SettingsDialog_settings_applied(const QJsonObject& app_settings);
 
-    void on_GpuUtilizationsController_gpu_utilization(unsigned gpu_utilization);
+    void on_gpu_utilizations_controller__gpu_utilization(unsigned gpu_utilization);
     void on_GpuUtilizationsController_memory_utilization(unsigned memory_utilization, unsigned used_memory);
     void on_GpuUtilizationsController_encoder_decoder_utilization(unsigned encoder_utilization, unsigned decoder_utilization);
     void on_GpuUtilizationsController_pstate_level(unsigned pstate_level);
@@ -47,8 +47,8 @@ private slots:
     void on_pushButton_apply_power_limit_clicked();
 
     void on_actionUpdate_GPUs_list_triggered();
-    void on_actionExit_triggered();
     void on_actionSettings_triggered();
+    void on_actionQuit_triggered();
 
 private:
     Ui::MainWindow* ui;

@@ -52,7 +52,7 @@ void MainWindow::toggle_tray()
     }
 }
 
-void MainWindow::on_settings_applied(const QJsonObject& app_settings)
+void MainWindow::on_SettingsDialog_settings_applied(const QJsonObject& app_settings)
 {
     minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
     update_freq_ms_ = app_settings["update_freq_ms"].toInt();
@@ -61,7 +61,7 @@ void MainWindow::on_settings_applied(const QJsonObject& app_settings)
     qInfo().noquote().nospace() << "New settings applied: " << app_settings;
 }
 
-void MainWindow::on_GpuUtilizationsController_gpu_utilization(unsigned gpu_utilization)
+void MainWindow::on_gpu_utilizations_controller__gpu_utilization(unsigned gpu_utilization)
 {
     ui->progressBar_GPU_usage->setValue(gpu_utilization);
 }
@@ -122,7 +122,7 @@ void MainWindow::connect_slots_and_signals()
 {
     connect(&tray_icon_, &QSystemTrayIcon::activated, this, &MainWindow::toggle_tray);
 
-    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::gpu_utilization, this,&MainWindow::on_GpuUtilizationsController_gpu_utilization);
+//    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::gpu_utilization, this, &MainWindow::on_gpu_utilizations_controller__gpu_utilization);
     connect(&gpu_utilizations_controller_, &GpuUtilizationsController::memory_utilization, this, &MainWindow::on_GpuUtilizationsController_memory_utilization);
     connect(&gpu_utilizations_controller_, &GpuUtilizationsController::encoder_decoder_utilization, this, &MainWindow::on_GpuUtilizationsController_encoder_decoder_utilization);
     connect(&gpu_utilizations_controller_, &GpuUtilizationsController::pstate_level, this, &MainWindow::on_GpuUtilizationsController_pstate_level);
@@ -140,7 +140,7 @@ void MainWindow::connect_slots_and_signals()
     connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_power_controller_, &GpuPowerController::update_info);
     connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_clock_controller_, &GpuClockController::update_info);
 
-    connect(&settings_dialog_window_, &SettingsDialog::settings_applied, this, &MainWindow::on_settings_applied);
+    connect(&settings_dialog_window_, &SettingsDialog::settings_applied, this, &MainWindow::on_SettingsDialog_settings_applied);
 
     connect(ui->horizontalSlider_change_power_limit, &QSlider::valueChanged, this, [this](int value)
     {
@@ -152,7 +152,7 @@ void MainWindow::setup_tray_menu()
 {
     QMenu* tray_menu {new QMenu {this}};
     tray_menu->addAction("Show/Hide app window", this, &MainWindow::toggle_tray);
-    tray_menu->addAction("Exit", this, &MainWindow::on_actionExit_triggered);
+    tray_menu->addAction("Exit", this, &MainWindow::on_actionQuit_triggered);
     tray_icon_.setContextMenu(tray_menu);
 }
 
@@ -249,13 +249,13 @@ void MainWindow::closeEvent(QCloseEvent* event)
         event->ignore();
         hide();
         tray_icon_.show();
-        qInfo().noquote().nospace() << "Event ignored, minimized to tray";
+        qInfo().noquote().nospace() << "Close event ignored, minimized to tray";
     }
     else
     {
         tray_icon_.hide();
         event->accept();
-        qInfo().noquote().nospace() << "Event accepted, MainWindow closed";
+        qInfo().noquote().nospace() << "Close event accepted, MainWindow closed";
     }
 }
 
@@ -271,6 +271,12 @@ void MainWindow::on_pushButton_apply_power_limit_clicked()
     gpu_power_controller_.set_power_limit(ui->horizontalSlider_change_power_limit->value());
 }
 
+void MainWindow::on_actionQuit_triggered()
+{
+    minimize_to_tray_on_close_ = false;
+    close();
+}
+
 void MainWindow::on_actionUpdate_GPUs_list_triggered()
 {
     qInfo().noquote().noquote() << "Updating GPUs list:";
@@ -279,13 +285,8 @@ void MainWindow::on_actionUpdate_GPUs_list_triggered()
     load_GPUs();
 }
 
-void MainWindow::on_actionExit_triggered()
-{
-    minimize_to_tray_on_close_ = false;
-    close();
-}
-
 void MainWindow::on_actionSettings_triggered()
 {
     settings_dialog_window_.show();
 }
+
