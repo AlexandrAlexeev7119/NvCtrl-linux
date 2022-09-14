@@ -61,7 +61,7 @@ void MainWindow::on_SettingsDialog_settings_applied(const QJsonObject& app_setti
     qInfo().noquote().nospace() << "New settings applied: " << app_settings;
 }
 
-void MainWindow::on_gpu_utilizations_controller__gpu_utilization(unsigned gpu_utilization)
+void MainWindow::on_GpuUtilizationsController_gpu_utilization(unsigned gpu_utilization)
 {
     ui->progressBar_GPU_usage->setValue(gpu_utilization);
 }
@@ -122,7 +122,7 @@ void MainWindow::connect_slots_and_signals()
 {
     connect(&tray_icon_, &QSystemTrayIcon::activated, this, &MainWindow::toggle_tray);
 
-//    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::gpu_utilization, this, &MainWindow::on_gpu_utilizations_controller__gpu_utilization);
+    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::gpu_utilization, this, &::MainWindow::on_GpuUtilizationsController_gpu_utilization);
     connect(&gpu_utilizations_controller_, &GpuUtilizationsController::memory_utilization, this, &MainWindow::on_GpuUtilizationsController_memory_utilization);
     connect(&gpu_utilizations_controller_, &GpuUtilizationsController::encoder_decoder_utilization, this, &MainWindow::on_GpuUtilizationsController_encoder_decoder_utilization);
     connect(&gpu_utilizations_controller_, &GpuUtilizationsController::pstate_level, this, &MainWindow::on_GpuUtilizationsController_pstate_level);

@@ -31,7 +31,7 @@ private slots:
     void toggle_tray();
     void on_SettingsDialog_settings_applied(const QJsonObject& app_settings);
 
-    void on_gpu_utilizations_controller__gpu_utilization(unsigned gpu_utilization);
+    void on_GpuUtilizationsController_gpu_utilization(unsigned gpu_utilization);
     void on_GpuUtilizationsController_memory_utilization(unsigned memory_utilization, unsigned used_memory);
     void on_GpuUtilizationsController_encoder_decoder_utilization(unsigned encoder_utilization, unsigned decoder_utilization);
     void on_GpuUtilizationsController_pstate_level(unsigned pstate_level);
