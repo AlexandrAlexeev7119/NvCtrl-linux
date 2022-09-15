@@ -9,17 +9,16 @@ GpuUtilizationsController::GpuUtilizationsController(const NVMLpp::NVML_device* 
 
 void GpuUtilizationsController::update_info()
 {
-    utilization_rates utilisation_rates_ {};
-
     try
     {
-        utilisation_rates_.gpu = current_gpu_->get_gpu_utilization();
-        utilisation_rates_.mem = current_gpu_->get_memory_utilization();
-        utilisation_rates_.mem_used = current_gpu_->get_used_memory();
-        utilisation_rates_.encoder = current_gpu_->get_decoder_utilization();
-        utilisation_rates_.decoder = current_gpu_->get_encoder_utilization();
-        utilisation_rates_.pstate = static_cast<unsigned>(current_gpu_->get_performance_state());
-
+        utilization_rates utilisation_rates_ {
+            .gpu = current_gpu_->get_gpu_utilization(),
+            .mem = current_gpu_->get_memory_utilization(),
+            .mem_used = static_cast<unsigned>(current_gpu_->get_used_memory()),
+            .encoder = current_gpu_->get_encoder_utilization(),
+            .decoder = current_gpu_->get_decoder_utilization(),
+            .pstate = static_cast<unsigned>(current_gpu_->get_performance_state())
+        };
         emit info_ready(utilisation_rates_);
     }
     catch (const NVMLpp::errors::error_not_supported&)
