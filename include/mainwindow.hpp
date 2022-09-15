@@ -29,12 +29,12 @@ public:
 
 private slots:
     void toggle_tray();
+    void update_dynamic_info();
     void on_SettingsDialog_settings_applied(const QJsonObject& app_settings);
 
     void on_GpuUtilizationsController_info_ready(const GpuUtilizationsController::utilization_rates& utilization_rates);
 
-    void on_GpuPowerController_power_usage(unsigned power_usage);
-    void on_GpuPowerController_power_limit(unsigned power_limit);
+    void on_GpuPowerController_info_ready(const GpuPowerController::power_rates& power_rates);
 
     void on_GpuClockController_info_ready(const GpuClockController::clock_values& clock_values);
     void on_GpuClockController_error();

@@ -22,13 +22,14 @@ void GpuPowerController::set_power_limit(unsigned limit)
 
 void GpuPowerController::update_info()
 {
-    if (current_gpu_)
+    try
     {
-        try
-        {
-            emit power_usage(current_gpu_->get_current_power_usage());
-            emit power_limit(current_gpu_->get_current_power_limit());
-        }
-        catch (const NVMLpp::errors::error_not_supported&) {}
+        power_rates power_rates_ {
+            .usage = current_gpu_->get_current_power_usage(),
+            .limit = current_gpu_->get_current_power_limit()
+        };
+        emit info_ready(power_rates_);
     }
+    catch (const NVMLpp::errors::error_not_supported&)
+    { }
 }

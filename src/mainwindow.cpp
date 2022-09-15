@@ -54,6 +54,11 @@ void MainWindow::toggle_tray()
     }
 }
 
+void MainWindow::update_dynamic_info()
+{
+
+}
+
 void MainWindow::on_SettingsDialog_settings_applied(const QJsonObject& app_settings)
 {
     minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
@@ -73,22 +78,18 @@ void MainWindow::on_GpuUtilizationsController_info_ready(const GpuUtilizationsCo
     ui->lineEdit_current_pstate->setText("Pstate: " + QString::number(utilization_rates.pstate));
 }
 
+void MainWindow::on_GpuPowerController_info_ready(const GpuPowerController::power_rates& power_rates)
+{
+    ui->lineEdit_current_power_usage->setText(QString::number(power_rates.usage) + " W");
+    ui->lineEdit_current_power_limit->setText(QString::number(power_rates.limit) + " W");
+}
+
 void MainWindow::on_GpuClockController_info_ready(const GpuClockController::clock_values& clock_values)
 {
     ui->lineEdit_graphics_clock_current->setText(QString::number(clock_values.graphics) + " MHz");
     ui->lineEdit_video_clock_current->setText(QString::number(clock_values.video) + " MHz");
     ui->lineEdit_sm_clock_current->setText(QString::number(clock_values.sm) + " MHz");
     ui->lineEdit_memory_clock_current->setText(QString::number(clock_values.mem) + " MHz");
-}
-
-void MainWindow::on_GpuPowerController_power_usage(unsigned power_usage)
-{
-    ui->lineEdit_current_power_usage->setText(QString::number(power_usage) + " W");
-}
-
-void MainWindow::on_GpuPowerController_power_limit(unsigned power_limit)
-{
-    ui->lineEdit_current_power_limit->setText(QString::number(power_limit) + " W");
 }
 
 void MainWindow::on_GpuClockController_error()
@@ -103,8 +104,7 @@ void MainWindow::connect_slots_and_signals()
 
     connect(&gpu_utilizations_controller_, &GpuUtilizationsController::info_ready, this, &MainWindow::on_GpuUtilizationsController_info_ready);
 
-    connect(&gpu_power_controller_, &GpuPowerController::power_usage, this, &MainWindow::on_GpuPowerController_power_usage);
-    connect(&gpu_power_controller_, &GpuPowerController::power_limit, this, &MainWindow::on_GpuPowerController_power_limit);
+    connect(&gpu_power_controller_, &GpuPowerController::info_ready, this, &::MainWindow::on_GpuPowerController_info_ready);
 
     connect(&gpu_clock_controller_, &GpuClockController::info_ready, this, &MainWindow::on_GpuClockController_info_ready);
     connect(&gpu_clock_controller_, &GpuClockController::error, this, &MainWindow::on_GpuClockController_error);
