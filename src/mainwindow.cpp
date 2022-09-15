@@ -63,26 +63,14 @@ void MainWindow::on_SettingsDialog_settings_applied(const QJsonObject& app_setti
     qInfo().noquote().nospace() << "New settings applied: " << app_settings;
 }
 
-void MainWindow::on_GpuUtilizationsController_gpu_utilization(unsigned gpu_utilization)
+void MainWindow::on_GpuUtilizationsController_info_ready(const GpuUtilizationsController::utilization_rates& utilization_rates)
 {
-    ui->progressBar_GPU_usage->setValue(gpu_utilization);
-}
-
-void MainWindow::on_GpuUtilizationsController_memory_utilization(unsigned memory_utilization, unsigned used_memory)
-{
-    ui->progressBar_GPU_mem_usage->setValue(memory_utilization);
-    ui->lineEdit_GPU_mem_usage->setText(QString::number(used_memory) + " of " + ui->lineEdit_GPU_total_mem->text());
-}
-
-void MainWindow::on_GpuUtilizationsController_encoder_decoder_utilization(unsigned encoder_utilization, unsigned decoder_utilization)
-{
-    ui->progressBar_GPU_encoder_usage->setValue(encoder_utilization);
-    ui->progressBar_GPU_decoder_usage->setValue(decoder_utilization);
-}
-
-void MainWindow::on_GpuUtilizationsController_pstate_level(unsigned pstate_level)
-{
-    ui->lineEdit_current_pstate->setText("Pstate: " + QString::number(pstate_level));
+    ui->progressBar_GPU_usage->setValue(utilization_rates.gpu);
+    ui->progressBar_GPU_mem_usage->setValue(utilization_rates.mem);
+    ui->progressBar_GPU_encoder_usage->setValue(utilization_rates.encoder);
+    ui->progressBar_GPU_decoder_usage->setValue(utilization_rates.decoder);
+    ui->lineEdit_GPU_mem_usage->setText(QString::number(utilization_rates.mem_used) + " MiB");
+    ui->lineEdit_current_pstate->setText("Pstate: " + QString::number(utilization_rates.pstate));
 }
 
 void MainWindow::on_GpuPowerController_power_usage(unsigned power_usage)
@@ -118,16 +106,14 @@ void MainWindow::on_GpuClockController_memory_clock(unsigned memory_clock)
 void MainWindow::on_GpuClockController_error()
 {
     ui->groupBox_clock_info->setDisabled(false);
+    ui->groupBox_clock_info->setToolTip("Clock control no supported, widget disabled");
 }
 
 void MainWindow::connect_slots_and_signals()
 {
     connect(&tray_icon_, &QSystemTrayIcon::activated, this, &MainWindow::toggle_tray);
 
-    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::gpu_utilization, this, &MainWindow::on_GpuUtilizationsController_gpu_utilization);
-    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::memory_utilization, this, &MainWindow::on_GpuUtilizationsController_memory_utilization);
-    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::encoder_decoder_utilization, this, &MainWindow::on_GpuUtilizationsController_encoder_decoder_utilization);
-    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::pstate_level, this, &MainWindow::on_GpuUtilizationsController_pstate_level);
+    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::info_ready, this, &MainWindow::on_GpuUtilizationsController_info_ready);
 
     connect(&gpu_power_controller_, &GpuPowerController::power_usage, this, &MainWindow::on_GpuPowerController_power_usage);
     connect(&gpu_power_controller_, &GpuPowerController::power_limit, this, &MainWindow::on_GpuPowerController_power_limit);

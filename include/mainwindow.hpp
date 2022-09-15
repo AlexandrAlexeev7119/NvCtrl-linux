@@ -22,7 +22,6 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-
     MainWindow(const QJsonObject& app_settings, QWidget* parent = nullptr);
     ~MainWindow();
 
@@ -32,10 +31,7 @@ private slots:
     void toggle_tray();
     void on_SettingsDialog_settings_applied(const QJsonObject& app_settings);
 
-    void on_GpuUtilizationsController_gpu_utilization(unsigned gpu_utilization);
-    void on_GpuUtilizationsController_memory_utilization(unsigned memory_utilization, unsigned used_memory);
-    void on_GpuUtilizationsController_encoder_decoder_utilization(unsigned encoder_utilization, unsigned decoder_utilization);
-    void on_GpuUtilizationsController_pstate_level(unsigned pstate_level);
+    void on_GpuUtilizationsController_info_ready(const GpuUtilizationsController::utilization_rates& utilization_rates);
     void on_GpuPowerController_power_usage(unsigned power_usage);
     void on_GpuPowerController_power_limit(unsigned power_limit);
     void on_GpuClockController_graphics_clock(unsigned graphics_clock);
