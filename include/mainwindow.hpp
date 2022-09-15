@@ -32,12 +32,11 @@ private slots:
     void on_SettingsDialog_settings_applied(const QJsonObject& app_settings);
 
     void on_GpuUtilizationsController_info_ready(const GpuUtilizationsController::utilization_rates& utilization_rates);
+
     void on_GpuPowerController_power_usage(unsigned power_usage);
     void on_GpuPowerController_power_limit(unsigned power_limit);
-    void on_GpuClockController_graphics_clock(unsigned graphics_clock);
-    void on_GpuClockController_video_clock(unsigned video_clock);
-    void on_GpuClockController_sm_clock(unsigned sm_clock);
-    void on_GpuClockController_memory_clock(unsigned memory_clock);
+
+    void on_GpuClockController_info_ready(const GpuClockController::clock_values& clock_values);
     void on_GpuClockController_error();
 
     void on_comboBox_select_GPU_activated(int index);

@@ -73,6 +73,14 @@ void MainWindow::on_GpuUtilizationsController_info_ready(const GpuUtilizationsCo
     ui->lineEdit_current_pstate->setText("Pstate: " + QString::number(utilization_rates.pstate));
 }
 
+void MainWindow::on_GpuClockController_info_ready(const GpuClockController::clock_values& clock_values)
+{
+    ui->lineEdit_graphics_clock_current->setText(QString::number(clock_values.graphics) + " MHz");
+    ui->lineEdit_video_clock_current->setText(QString::number(clock_values.video) + " MHz");
+    ui->lineEdit_sm_clock_current->setText(QString::number(clock_values.sm) + " MHz");
+    ui->lineEdit_memory_clock_current->setText(QString::number(clock_values.mem) + " MHz");
+}
+
 void MainWindow::on_GpuPowerController_power_usage(unsigned power_usage)
 {
     ui->lineEdit_current_power_usage->setText(QString::number(power_usage) + " W");
@@ -81,26 +89,6 @@ void MainWindow::on_GpuPowerController_power_usage(unsigned power_usage)
 void MainWindow::on_GpuPowerController_power_limit(unsigned power_limit)
 {
     ui->lineEdit_current_power_limit->setText(QString::number(power_limit) + " W");
-}
-
-void MainWindow::on_GpuClockController_graphics_clock(unsigned graphics_clock)
-{
-    ui->lineEdit_graphics_clock_current->setText(QString::number(graphics_clock) + " MHz");
-}
-
-void MainWindow::on_GpuClockController_video_clock(unsigned video_clock)
-{
-    ui->lineEdit_video_clock_current->setText(QString::number(video_clock) + " MHz");
-}
-
-void MainWindow::on_GpuClockController_sm_clock(unsigned sm_clock)
-{
-    ui->lineEdit_sm_clock_current->setText(QString::number(sm_clock) + " MHz");
-}
-
-void MainWindow::on_GpuClockController_memory_clock(unsigned memory_clock)
-{
-    ui->lineEdit_memory_clock_current->setText(QString::number(memory_clock) + " MHz");
 }
 
 void MainWindow::on_GpuClockController_error()
@@ -118,10 +106,7 @@ void MainWindow::connect_slots_and_signals()
     connect(&gpu_power_controller_, &GpuPowerController::power_usage, this, &MainWindow::on_GpuPowerController_power_usage);
     connect(&gpu_power_controller_, &GpuPowerController::power_limit, this, &MainWindow::on_GpuPowerController_power_limit);
 
-    connect(&gpu_clock_controller_, &GpuClockController::graphics_clock, this, &MainWindow::on_GpuClockController_graphics_clock);
-    connect(&gpu_clock_controller_, &GpuClockController::video_clock, this, &MainWindow::on_GpuClockController_video_clock);
-    connect(&gpu_clock_controller_, &GpuClockController::sm_clock, this, &MainWindow::on_GpuClockController_sm_clock);
-    connect(&gpu_clock_controller_, &GpuClockController::memory_clock, this, &MainWindow::on_GpuClockController_memory_clock);
+    connect(&gpu_clock_controller_, &GpuClockController::info_ready, this, &MainWindow::on_GpuClockController_info_ready);
     connect(&gpu_clock_controller_, &GpuClockController::error, this, &MainWindow::on_GpuClockController_error);
 
     connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_utilizations_controller_, &GpuUtilizationsController::update_info);
