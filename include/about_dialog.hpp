@@ -18,4 +18,3 @@ private slots:
 private:
     Ui::AboutDialog* ui;
 };
-
