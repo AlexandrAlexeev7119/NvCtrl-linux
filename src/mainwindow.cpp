@@ -1,5 +1,4 @@
 #include <QMessageBox>
-#include <QProcess>
 
 #include "mainwindow.hpp"
 #include "nvmlpp/util/nvmlpp_errors.hpp"
@@ -19,6 +18,7 @@ MainWindow::MainWindow(const QJsonObject& app_settings, QWidget* parent)
     , settings_dialog_window_ {this}
     , about_dialog_window_ {this}
     , tray_menu_ {this}
+    , report_a_bug_dialog_window_ {this}
 {
     ui->setupUi(this);
     setMinimumSize(size());
@@ -29,9 +29,7 @@ MainWindow::MainWindow(const QJsonObject& app_settings, QWidget* parent)
     load_GPUs();
 
     set_static_info();
-    gpu_utilizations_controller_.update_info();
-    gpu_power_controller_.update_info();
-    gpu_clock_controller_.update_info();
+    update_dynamic_info();
 
     dynamic_info_update_timer_.start();
 }
@@ -56,7 +54,9 @@ void MainWindow::toggle_tray()
 
 void MainWindow::update_dynamic_info()
 {
-
+    gpu_utilizations_controller_.update_info();
+    gpu_power_controller_.update_info();
+    gpu_clock_controller_.update_info();
 }
 
 void MainWindow::on_SettingsDialog_settings_applied(const QJsonObject& app_settings)
@@ -101,18 +101,11 @@ void MainWindow::on_GpuClockController_error()
 void MainWindow::connect_slots_and_signals()
 {
     connect(&tray_icon_, &QSystemTrayIcon::activated, this, &MainWindow::toggle_tray);
-
     connect(&gpu_utilizations_controller_, &GpuUtilizationsController::info_ready, this, &MainWindow::on_GpuUtilizationsController_info_ready);
-
     connect(&gpu_power_controller_, &GpuPowerController::info_ready, this, &::MainWindow::on_GpuPowerController_info_ready);
-
     connect(&gpu_clock_controller_, &GpuClockController::info_ready, this, &MainWindow::on_GpuClockController_info_ready);
     connect(&gpu_clock_controller_, &GpuClockController::error, this, &MainWindow::on_GpuClockController_error);
-
-    connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_utilizations_controller_, &GpuUtilizationsController::update_info);
-    connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_power_controller_, &GpuPowerController::update_info);
-    connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_clock_controller_, &GpuClockController::update_info);
-
+    connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
     connect(ui->horizontalSlider_change_power_limit, &QSlider::valueChanged, this, [this](int value)
     {
         ui->label_power_limit_slider_indicator->setText(QString::number(value));
@@ -263,4 +256,9 @@ void MainWindow::on_actionQuit_triggered()
 void MainWindow::on_actionAbout_triggered()
 {
     about_dialog_window_.show();
+}
+
+void MainWindow::on_actionReport_a_bug_triggered()
+{
+    report_a_bug_dialog_window_.show();
 }

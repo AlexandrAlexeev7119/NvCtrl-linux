@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>320</width>
+    <width>294</width>
     <height>173</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Settings</string>
+   <string>GWEpp: Settings</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="4">

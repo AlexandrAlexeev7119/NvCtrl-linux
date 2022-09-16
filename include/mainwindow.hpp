@@ -13,6 +13,7 @@
 
 #include "settings_dialog.hpp"
 #include "about_dialog.hpp"
+#include "report_a_bug_dialog.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -33,9 +34,7 @@ private slots:
     void on_SettingsDialog_settings_applied(const QJsonObject& app_settings);
 
     void on_GpuUtilizationsController_info_ready(const GpuUtilizationsController::utilization_rates& utilization_rates);
-
     void on_GpuPowerController_info_ready(const GpuPowerController::power_rates& power_rates);
-
     void on_GpuClockController_info_ready(const GpuClockController::clock_values& clock_values);
     void on_GpuClockController_error();
 
@@ -46,6 +45,7 @@ private slots:
     void on_actionSettings_triggered();
     void on_actionQuit_triggered();
     void on_actionAbout_triggered();
+    void on_actionReport_a_bug_triggered();
 
 private:
     Ui::MainWindow* ui;
@@ -64,6 +64,7 @@ private:
 
     SettingsDialog settings_dialog_window_;
     AboutDialog about_dialog_window_;
+    ReportABugDialog report_a_bug_dialog_window_;
 
 protected:
     void closeEvent(QCloseEvent* event);
@@ -72,7 +73,7 @@ protected:
     void setup_tray_menu();
     void load_app_settings(const QJsonObject& app_settings);
     void set_static_info();
-    void load_GPUs();    
+    void load_GPUs();
     NVMLpp::NVML_device* get_current_gpu();
     void set_current_gpu_for_controllers() noexcept;
 };
