@@ -1,5 +1,4 @@
 #include <QMessageBox>
-#include <QProcess>
 
 #include "mainwindow.hpp"
 #include "nvmlpp/util/nvmlpp_errors.hpp"
@@ -17,7 +16,9 @@ MainWindow::MainWindow(const QJsonObject& app_settings, QWidget* parent)
     , dynamic_info_update_timer_ {}
     , nvml_devices_list_ {}
     , settings_dialog_window_ {this}
+    , about_dialog_window_ {this}
     , tray_menu_ {this}
+    , report_a_bug_dialog_window_ {this}
 {
     ui->setupUi(this);
     setMinimumSize(size());
@@ -28,9 +29,7 @@ MainWindow::MainWindow(const QJsonObject& app_settings, QWidget* parent)
     load_GPUs();
 
     set_static_info();
-    gpu_utilizations_controller_.update_info();
-    gpu_power_controller_.update_info();
-    gpu_clock_controller_.update_info();
+    update_dynamic_info();
 
     dynamic_info_update_timer_.start();
 }
@@ -53,6 +52,13 @@ void MainWindow::toggle_tray()
     }
 }
 
+void MainWindow::update_dynamic_info()
+{
+    gpu_utilizations_controller_.update_info();
+    gpu_power_controller_.update_info();
+    gpu_clock_controller_.update_info();
+}
+
 void MainWindow::on_SettingsDialog_settings_applied(const QJsonObject& app_settings)
 {
     minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
@@ -62,85 +68,44 @@ void MainWindow::on_SettingsDialog_settings_applied(const QJsonObject& app_setti
     qInfo().noquote().nospace() << "New settings applied: " << app_settings;
 }
 
-void MainWindow::on_GpuUtilizationsController_gpu_utilization(unsigned gpu_utilization)
+void MainWindow::on_GpuUtilizationsController_info_ready(const GpuUtilizationsController::utilization_rates& utilization_rates)
 {
-    ui->progressBar_GPU_usage->setValue(gpu_utilization);
+    ui->progressBar_GPU_usage->setValue(utilization_rates.gpu);
+    ui->progressBar_GPU_mem_usage->setValue(utilization_rates.mem);
+    ui->progressBar_GPU_encoder_usage->setValue(utilization_rates.encoder);
+    ui->progressBar_GPU_decoder_usage->setValue(utilization_rates.decoder);
+    ui->lineEdit_GPU_mem_usage->setText(QString::number(utilization_rates.mem_used) + " MiB");
+    ui->lineEdit_current_pstate->setText("Pstate: " + QString::number(utilization_rates.pstate));
 }
 
-void MainWindow::on_GpuUtilizationsController_memory_utilization(unsigned memory_utilization, unsigned used_memory)
+void MainWindow::on_GpuPowerController_info_ready(const GpuPowerController::power_rates& power_rates)
 {
-    ui->progressBar_GPU_mem_usage->setValue(memory_utilization);
-    ui->lineEdit_GPU_mem_usage->setText(QString::number(used_memory) + " of " + ui->lineEdit_GPU_total_mem->text());
+    ui->lineEdit_current_power_usage->setText(QString::number(power_rates.usage) + " W");
+    ui->lineEdit_current_power_limit->setText(QString::number(power_rates.limit) + " W");
 }
 
-void MainWindow::on_GpuUtilizationsController_encoder_decoder_utilization(unsigned encoder_utilization, unsigned decoder_utilization)
+void MainWindow::on_GpuClockController_info_ready(const GpuClockController::clock_values& clock_values)
 {
-    ui->progressBar_GPU_encoder_usage->setValue(encoder_utilization);
-    ui->progressBar_GPU_decoder_usage->setValue(decoder_utilization);
-}
-
-void MainWindow::on_GpuUtilizationsController_pstate_level(unsigned pstate_level)
-{
-    ui->lineEdit_current_pstate->setText("Pstate: " + QString::number(pstate_level));
-}
-
-void MainWindow::on_GpuPowerController_power_usage(unsigned power_usage)
-{
-    ui->lineEdit_current_power_usage->setText(QString::number(power_usage) + " W");
-}
-
-void MainWindow::on_GpuPowerController_power_limit(unsigned power_limit)
-{
-    ui->lineEdit_current_power_limit->setText(QString::number(power_limit) + " W");
-}
-
-void MainWindow::on_GpuClockController_graphics_clock(unsigned graphics_clock)
-{
-    ui->lineEdit_graphics_clock_current->setText(QString::number(graphics_clock) + " MHz");
-}
-
-void MainWindow::on_GpuClockController_video_clock(unsigned video_clock)
-{
-    ui->lineEdit_video_clock_current->setText(QString::number(video_clock) + " MHz");
-}
-
-void MainWindow::on_GpuClockController_sm_clock(unsigned sm_clock)
-{
-    ui->lineEdit_sm_clock_current->setText(QString::number(sm_clock) + " MHz");
-}
-
-void MainWindow::on_GpuClockController_memory_clock(unsigned memory_clock)
-{
-    ui->lineEdit_memory_clock_current->setText(QString::number(memory_clock) + " MHz");
+    ui->lineEdit_graphics_clock_current->setText(QString::number(clock_values.graphics) + " MHz");
+    ui->lineEdit_video_clock_current->setText(QString::number(clock_values.video) + " MHz");
+    ui->lineEdit_sm_clock_current->setText(QString::number(clock_values.sm) + " MHz");
+    ui->lineEdit_memory_clock_current->setText(QString::number(clock_values.mem) + " MHz");
 }
 
 void MainWindow::on_GpuClockController_error()
 {
     ui->groupBox_clock_info->setDisabled(false);
+    ui->groupBox_clock_info->setToolTip("Clock control no supported, widget disabled");
 }
 
 void MainWindow::connect_slots_and_signals()
 {
     connect(&tray_icon_, &QSystemTrayIcon::activated, this, &MainWindow::toggle_tray);
-
-    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::gpu_utilization, this, &MainWindow::on_GpuUtilizationsController_gpu_utilization);
-    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::memory_utilization, this, &MainWindow::on_GpuUtilizationsController_memory_utilization);
-    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::encoder_decoder_utilization, this, &MainWindow::on_GpuUtilizationsController_encoder_decoder_utilization);
-    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::pstate_level, this, &MainWindow::on_GpuUtilizationsController_pstate_level);
-
-    connect(&gpu_power_controller_, &GpuPowerController::power_usage, this, &MainWindow::on_GpuPowerController_power_usage);
-    connect(&gpu_power_controller_, &GpuPowerController::power_limit, this, &MainWindow::on_GpuPowerController_power_limit);
-
-    connect(&gpu_clock_controller_, &GpuClockController::graphics_clock, this, &MainWindow::on_GpuClockController_graphics_clock);
-    connect(&gpu_clock_controller_, &GpuClockController::video_clock, this, &MainWindow::on_GpuClockController_video_clock);
-    connect(&gpu_clock_controller_, &GpuClockController::sm_clock, this, &MainWindow::on_GpuClockController_sm_clock);
-    connect(&gpu_clock_controller_, &GpuClockController::memory_clock, this, &MainWindow::on_GpuClockController_memory_clock);
+    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::info_ready, this, &MainWindow::on_GpuUtilizationsController_info_ready);
+    connect(&gpu_power_controller_, &GpuPowerController::info_ready, this, &::MainWindow::on_GpuPowerController_info_ready);
+    connect(&gpu_clock_controller_, &GpuClockController::info_ready, this, &MainWindow::on_GpuClockController_info_ready);
     connect(&gpu_clock_controller_, &GpuClockController::error, this, &MainWindow::on_GpuClockController_error);
-
-    connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_utilizations_controller_, &GpuUtilizationsController::update_info);
-    connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_power_controller_, &GpuPowerController::update_info);
-    connect(&dynamic_info_update_timer_, &QTimer::timeout, &gpu_clock_controller_, &GpuClockController::update_info);
-
+    connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
     connect(ui->horizontalSlider_change_power_limit, &QSlider::valueChanged, this, [this](int value)
     {
         ui->label_power_limit_slider_indicator->setText(QString::number(value));
@@ -286,4 +251,14 @@ void MainWindow::on_actionQuit_triggered()
 {
     minimize_to_tray_on_close_ = false;
     close();
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    about_dialog_window_.show();
+}
+
+void MainWindow::on_actionReport_a_bug_triggered()
+{
+    report_a_bug_dialog_window_.show();
 }

@@ -11,10 +11,13 @@ void GpuClockController::update_info()
 {
     try
     {
-        emit graphics_clock(current_gpu_->get_clock_graphics());
-        emit video_clock(current_gpu_->get_clock_video());
-        emit sm_clock(current_gpu_->get_clock_sm());
-        emit memory_clock(current_gpu_->get_clock_memory());
+        clock_values clock_values_ {
+            .graphics = current_gpu_->get_clock_graphics(),
+            .video = current_gpu_->get_clock_video(),
+            .sm = current_gpu_->get_clock_sm(),
+            .mem = current_gpu_->get_clock_memory()
+        };
+        emit info_ready(clock_values_);
     }
     catch (const NVMLpp::errors::error&)
     {

@@ -7,6 +7,12 @@ class GpuPowerController : public QObject
 {
     Q_OBJECT
 public:
+    struct power_rates
+    {
+        unsigned usage;
+        unsigned limit;
+    };
+
     GpuPowerController(const NVMLpp::NVML_device* nvml_device = nullptr, QObject* parrent = nullptr);
     inline void set_device(const NVMLpp::NVML_device* nvml_device) noexcept { current_gpu_ = nvml_device; }
 
@@ -15,6 +21,7 @@ public slots:
     void update_info();
 
 signals:
+    void info_ready(const GpuPowerController::power_rates&);
     void power_usage(unsigned);
     void power_limit(unsigned);
     void error(const QString&);
