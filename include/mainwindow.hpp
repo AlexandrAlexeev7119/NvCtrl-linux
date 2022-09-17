@@ -46,6 +46,7 @@ private slots:
     void on_actionQuit_triggered();
     void on_actionAbout_triggered();
     void on_actionReport_a_bug_triggered();
+    void on_actionShow_GPU_UUID_toggled(bool checked);
 
 private:
     Ui::MainWindow* ui;

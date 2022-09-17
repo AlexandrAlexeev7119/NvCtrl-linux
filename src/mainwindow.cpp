@@ -167,11 +167,20 @@ void MainWindow::set_static_info()
     const auto& current_gpu {get_current_gpu()};
     ui->lineEdit_GPU_name->setText(QString::fromStdString(current_gpu->get_name()));
     ui->lineEdit_GPU_arch->setText(QString::fromStdString(current_gpu->get_arch()));
-    ui->lineEdit_GPU_uuid->setText(QString::fromStdString(current_gpu->get_uuid()));
     ui->lineEdit_GPU_VBIOS_ver->setText(QString::fromStdString(current_gpu->get_vbios_version()));
     ui->lineEdit_GPU_driver_ver->setText(QString::fromStdString(NVMLpp::Session::instance().get_system_driver_version()));
     ui->lineEdit_GPU_bus_type->setText(QString::fromStdString(current_gpu->get_bus_type()) + " " + QString::fromStdString(current_gpu->get_pci_bus_id()));
     ui->lineEdit_GPU_total_mem->setText(QString::number(current_gpu->get_total_memory()) + " MiB");
+
+    if (ui->actionShow_GPU_UUID->isChecked())
+    {
+        ui->lineEdit_GPU_uuid->setText(QString::fromStdString(current_gpu->get_uuid()));
+    }
+    else
+    {
+        ui->lineEdit_GPU_uuid->setText("************************");
+        ui->lineEdit_GPU_uuid->setToolTip("Disabled for a privacy reasons (enable: View -> show GPU UUID)");
+    }
 
     try
     {
@@ -317,4 +326,21 @@ void MainWindow::on_actionAbout_triggered()
 void MainWindow::on_actionReport_a_bug_triggered()
 {
     report_a_bug_dialog_window_.show();
+}
+
+
+
+void MainWindow::on_actionShow_GPU_UUID_toggled(bool checked)
+{
+    if (checked)
+    {
+        const auto& current_gpu {get_current_gpu()};
+        ui->lineEdit_GPU_uuid->setText(QString::fromStdString(current_gpu->get_uuid()));
+        ui->lineEdit_GPU_uuid->setToolTip("");
+    }
+    else
+    {
+        ui->lineEdit_GPU_uuid->setText("************************");
+        ui->lineEdit_GPU_uuid->setToolTip("Disabled for a privacy reasons (enable: View -> show GPU UUID)");
+    }
 }
