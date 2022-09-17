@@ -13,6 +13,8 @@ private:
     ~SettingsManager() = default;
 
 public:
+    static const QJsonObject default_settings;
+
     void set_file_name(const QString& filename);
     QString get_file_name() const;
     void open_file(QIODevice::OpenMode open_mode);

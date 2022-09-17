@@ -1,12 +1,13 @@
 #include <QMessageBox>
 
 #include "mainwindow.hpp"
-#include "nvmlpp/util/nvmlpp_errors.hpp"
 #include "ui_mainwindow.h"
 
+#include "settings_manager.hpp"
 #include "nvmlpp/nvmlpp_session.hpp"
+#include "nvmlpp/util/nvmlpp_errors.hpp"
 
-MainWindow::MainWindow(const QJsonObject& app_settings, QWidget* parent)
+MainWindow::MainWindow(QJsonObject app_settings, QWidget* parent)
     : QMainWindow {parent}
     , ui {new Ui::MainWindow}
     , tray_icon_ {this}
@@ -25,7 +26,7 @@ MainWindow::MainWindow(const QJsonObject& app_settings, QWidget* parent)
 
     connect_slots_and_signals();
     setup_tray_menu();
-    load_app_settings(app_settings);
+    load_and_validate_app_settings(std::move(app_settings));
     load_GPUs();
 
     set_static_info();
@@ -34,10 +35,14 @@ MainWindow::MainWindow(const QJsonObject& app_settings, QWidget* parent)
     dynamic_info_update_timer_.start();
 }
 
+
+
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+
 
 void MainWindow::toggle_tray()
 {
@@ -52,12 +57,16 @@ void MainWindow::toggle_tray()
     }
 }
 
+
+
 void MainWindow::update_dynamic_info()
 {
     gpu_utilizations_controller_.update_info();
     gpu_power_controller_.update_info();
     gpu_clock_controller_.update_info();
 }
+
+
 
 void MainWindow::on_SettingsDialog_settings_applied(const QJsonObject& app_settings)
 {
@@ -67,6 +76,8 @@ void MainWindow::on_SettingsDialog_settings_applied(const QJsonObject& app_setti
 
     qInfo().noquote().nospace() << "New settings applied: " << app_settings;
 }
+
+
 
 void MainWindow::on_GpuUtilizationsController_info_ready(const GpuUtilizationsController::utilization_rates& utilization_rates)
 {
@@ -78,11 +89,15 @@ void MainWindow::on_GpuUtilizationsController_info_ready(const GpuUtilizationsCo
     ui->lineEdit_current_pstate->setText("Pstate: " + QString::number(utilization_rates.pstate));
 }
 
+
+
 void MainWindow::on_GpuPowerController_info_ready(const GpuPowerController::power_rates& power_rates)
 {
     ui->lineEdit_current_power_usage->setText(QString::number(power_rates.usage) + " W");
     ui->lineEdit_current_power_limit->setText(QString::number(power_rates.limit) + " W");
 }
+
+
 
 void MainWindow::on_GpuClockController_info_ready(const GpuClockController::clock_values& clock_values)
 {
@@ -92,11 +107,15 @@ void MainWindow::on_GpuClockController_info_ready(const GpuClockController::cloc
     ui->lineEdit_memory_clock_current->setText(QString::number(clock_values.mem) + " MHz");
 }
 
+
+
 void MainWindow::on_GpuClockController_error()
 {
     ui->groupBox_clock_info->setDisabled(false);
     ui->groupBox_clock_info->setToolTip("Clock control no supported, widget disabled");
 }
+
+
 
 void MainWindow::connect_slots_and_signals()
 {
@@ -112,6 +131,8 @@ void MainWindow::connect_slots_and_signals()
     });
 }
 
+
+
 void MainWindow::setup_tray_menu()
 {
     tray_menu_.addAction("Show/Hide app window", this, &MainWindow::toggle_tray);
@@ -119,25 +140,47 @@ void MainWindow::setup_tray_menu()
     tray_icon_.setContextMenu(&tray_menu_);
 }
 
-void MainWindow::load_app_settings(const QJsonObject& app_settings)
+
+
+void MainWindow::load_and_validate_app_settings(QJsonObject app_settings)
 {
     minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
     update_freq_ms_ = app_settings["update_freq_ms"].toInt();
-    dynamic_info_update_timer_.setInterval(update_freq_ms_);
 
-    qInfo().noquote().nospace() << "Settings has been loaded: " << app_settings;
+    if (update_freq_ms_ < 500)
+    {
+        update_freq_ms_ = 500;
+        qWarning().noquote().nospace() << "Wrong settings detected, fallback to default";
+        SettingsManager::instance().open_file(QIODevice::WriteOnly);
+        SettingsManager::instance().write_settings(SettingsManager::default_settings);
+        SettingsManager::instance().close_file();
+    }
+
+    dynamic_info_update_timer_.setInterval(update_freq_ms_);
+    qInfo().noquote().nospace() << "Settings for MainWindow has been loaded";
 }
+
+
 
 void MainWindow::set_static_info()
 {
     const auto& current_gpu {get_current_gpu()};
     ui->lineEdit_GPU_name->setText(QString::fromStdString(current_gpu->get_name()));
     ui->lineEdit_GPU_arch->setText(QString::fromStdString(current_gpu->get_arch()));
-    ui->lineEdit_GPU_uuid->setText(QString::fromStdString(current_gpu->get_uuid()));
     ui->lineEdit_GPU_VBIOS_ver->setText(QString::fromStdString(current_gpu->get_vbios_version()));
     ui->lineEdit_GPU_driver_ver->setText(QString::fromStdString(NVMLpp::Session::instance().get_system_driver_version()));
     ui->lineEdit_GPU_bus_type->setText(QString::fromStdString(current_gpu->get_bus_type()) + " " + QString::fromStdString(current_gpu->get_pci_bus_id()));
     ui->lineEdit_GPU_total_mem->setText(QString::number(current_gpu->get_total_memory()) + " MiB");
+
+    if (ui->actionShow_GPU_UUID->isChecked())
+    {
+        ui->lineEdit_GPU_uuid->setText(QString::fromStdString(current_gpu->get_uuid()));
+    }
+    else
+    {
+        ui->lineEdit_GPU_uuid->setText("************************");
+        ui->lineEdit_GPU_uuid->setToolTip("Disabled for a privacy reasons (enable: View -> show GPU UUID)");
+    }
 
     try
     {
@@ -178,6 +221,8 @@ void MainWindow::set_static_info()
     qInfo().noquote().nospace() << "Static info has been set";
 }
 
+
+
 void MainWindow::load_GPUs()
 {
     nvml_devices_list_ = NVMLpp::Session::instance().get_devices();
@@ -191,11 +236,15 @@ void MainWindow::load_GPUs()
     qInfo().noquote().nospace() << "Total GPUs found: " << nvml_devices_list_.size();
 }
 
+
+
 NVMLpp::NVML_device* MainWindow::get_current_gpu()
 {
     const int current_device_index {ui->comboBox_select_GPU->currentIndex()};
     return &nvml_devices_list_.at(current_device_index);
 }
+
+
 
 void MainWindow::set_current_gpu_for_controllers() noexcept
 {
@@ -204,6 +253,8 @@ void MainWindow::set_current_gpu_for_controllers() noexcept
     gpu_power_controller_.set_device(current_gpu);
     gpu_clock_controller_.set_device(current_gpu);
 }
+
+
 
 void MainWindow::closeEvent(QCloseEvent* event)
 {
@@ -222,6 +273,8 @@ void MainWindow::closeEvent(QCloseEvent* event)
     }
 }
 
+
+
 void MainWindow::on_comboBox_select_GPU_activated(int index)
 {
     set_current_gpu_for_controllers();
@@ -229,10 +282,14 @@ void MainWindow::on_comboBox_select_GPU_activated(int index)
     qInfo().noquote().nospace() << "GPU selected: " << ui->comboBox_select_GPU->currentText();
 }
 
+
+
 void MainWindow::on_pushButton_apply_power_limit_clicked()
 {
     gpu_power_controller_.set_power_limit(ui->horizontalSlider_change_power_limit->value());
 }
+
+
 
 void MainWindow::on_actionUpdate_GPUs_list_triggered()
 {
@@ -242,10 +299,14 @@ void MainWindow::on_actionUpdate_GPUs_list_triggered()
     load_GPUs();
 }
 
+
+
 void MainWindow::on_actionSettings_triggered()
 {
     settings_dialog_window_.show();
 }
+
+
 
 void MainWindow::on_actionQuit_triggered()
 {
@@ -253,12 +314,33 @@ void MainWindow::on_actionQuit_triggered()
     close();
 }
 
+
+
 void MainWindow::on_actionAbout_triggered()
 {
     about_dialog_window_.show();
 }
 
+
+
 void MainWindow::on_actionReport_a_bug_triggered()
 {
     report_a_bug_dialog_window_.show();
+}
+
+
+
+void MainWindow::on_actionShow_GPU_UUID_toggled(bool checked)
+{
+    if (checked)
+    {
+        const auto& current_gpu {get_current_gpu()};
+        ui->lineEdit_GPU_uuid->setText(QString::fromStdString(current_gpu->get_uuid()));
+        ui->lineEdit_GPU_uuid->setToolTip("");
+    }
+    else
+    {
+        ui->lineEdit_GPU_uuid->setText("************************");
+        ui->lineEdit_GPU_uuid->setToolTip("Disabled for a privacy reasons (enable: View -> show GPU UUID)");
+    }
 }

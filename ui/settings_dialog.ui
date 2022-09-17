@@ -80,6 +80,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>pushButton_apply</tabstop>
+  <tabstop>pushButton_close</tabstop>
+  <tabstop>spinBox_update_freq</tabstop>
+  <tabstop>checkBox_minimize_to_tray_on_close</tabstop>
+  <tabstop>checkBox_minimize_to_tray_on_startup</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <QApplication>
 #include <QMessageBox>
 
@@ -14,7 +12,7 @@ static void qt_msg_handler(QtMsgType msg_type, const QMessageLogContext& context
     switch (msg_type)
     {
     case QtMsgType::QtCriticalMsg:  spdlog::critical(message.toStdString()); break;
-    case QtMsgType::QtDebugMsg:     spdlog::debug("{}:{} in {}: {}", context.file, context.line, context.function, message.toStdString()); break;
+    case QtMsgType::QtDebugMsg:     spdlog::debug("[{}:{}]: {}", context.file, context.line, message.toStdString()); break;
     case QtMsgType::QtFatalMsg:     spdlog::critical(message.toStdString()); break;
     case QtMsgType::QtInfoMsg:      spdlog::info(message.toStdString()); break;
     case QtMsgType::QtWarningMsg:   spdlog::warn(message.toStdString()); break;
@@ -28,7 +26,6 @@ int main(int argc, char** argv)
 #else
     spdlog::set_level(spdlog::level::info);
 #endif
-
     qInstallMessageHandler(qt_msg_handler);
 
     QApplication app {argc, argv};
@@ -47,7 +44,7 @@ int main(int argc, char** argv)
     settings_manager.close_file();
 
     const bool minimize_to_tray_on_startup {app_settings["minimize_to_tray_on_startup"].toBool()};
-    MainWindow main_window {app_settings};
+    MainWindow main_window {std::move(app_settings)};
 
     if (minimize_to_tray_on_startup)
     {

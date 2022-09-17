@@ -1,4 +1,5 @@
 #include <QProcess>
+#include <QDebug>
 
 #include "gpu_power_controller.hpp"
 #include "nvmlpp/util/nvmlpp_errors.hpp"
@@ -18,6 +19,7 @@ void GpuPowerController::set_power_limit(unsigned limit)
     {
         emit error("Error: failed to apply power limit");
     }
+    qInfo().nospace().noquote() << "Power limit was set to: " << limit;
 }
 
 void GpuPowerController::update_info()

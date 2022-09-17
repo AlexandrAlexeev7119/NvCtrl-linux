@@ -23,7 +23,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    MainWindow(const QJsonObject& app_settings, QWidget* parent = nullptr);
+    MainWindow(QJsonObject app_settings, QWidget* parent = nullptr);
     ~MainWindow();
 
     inline QSystemTrayIcon& get_tray_icon() noexcept { return tray_icon_; }
@@ -46,6 +46,7 @@ private slots:
     void on_actionQuit_triggered();
     void on_actionAbout_triggered();
     void on_actionReport_a_bug_triggered();
+    void on_actionShow_GPU_UUID_toggled(bool checked);
 
 private:
     Ui::MainWindow* ui;
@@ -71,7 +72,7 @@ protected:
 
     void connect_slots_and_signals();
     void setup_tray_menu();
-    void load_app_settings(const QJsonObject& app_settings);
+    void load_and_validate_app_settings(QJsonObject app_settings);
     void set_static_info();
     void load_GPUs();
     NVMLpp::NVML_device* get_current_gpu();
