@@ -85,7 +85,7 @@ void MainWindow::on_GpuUtilizationsController_info_ready(const GpuUtilizationsCo
     ui->progressBar_GPU_mem_usage->setValue(utilization_rates.mem);
     ui->progressBar_GPU_encoder_usage->setValue(utilization_rates.encoder);
     ui->progressBar_GPU_decoder_usage->setValue(utilization_rates.decoder);
-    ui->lineEdit_GPU_mem_usage->setText(QString::number(utilization_rates.mem_used) + " MiB");
+    ui->lineEdit_GPU_mem_usage->setText(QString::number(utilization_rates.mem_used / 1024 / 1024) + " MiB");
     ui->lineEdit_current_pstate->setText("Pstate: " + QString::number(utilization_rates.pstate));
 }
 
@@ -93,8 +93,8 @@ void MainWindow::on_GpuUtilizationsController_info_ready(const GpuUtilizationsCo
 
 void MainWindow::on_GpuPowerController_info_ready(const GpuPowerController::power_rates& power_rates)
 {
-    ui->lineEdit_current_power_usage->setText(QString::number(power_rates.usage) + " W");
-    ui->lineEdit_current_power_limit->setText(QString::number(power_rates.limit) + " W");
+    ui->lineEdit_current_power_usage->setText(QString::number(power_rates.usage / 1000) + " W");
+    ui->lineEdit_current_power_limit->setText(QString::number(power_rates.limit / 1000) + " W");
 }
 
 
@@ -170,7 +170,7 @@ void MainWindow::set_static_info()
     ui->lineEdit_GPU_VBIOS_ver->setText(QString::fromStdString(current_gpu->get_vbios_version()));
     ui->lineEdit_GPU_driver_ver->setText(QString::fromStdString(NVMLpp::Session::instance().get_system_driver_version()));
     ui->lineEdit_GPU_bus_type->setText(QString::fromStdString(current_gpu->get_bus_type()) + " " + QString::fromStdString(current_gpu->get_pci_bus_id()));
-    ui->lineEdit_GPU_total_mem->setText(QString::number(current_gpu->get_total_memory()) + " MiB");
+    ui->lineEdit_GPU_total_mem->setText(QString::number(current_gpu->get_total_memory() / 1024 / 1024) + " MiB");
 
     if (ui->actionShow_GPU_UUID->isChecked())
     {
@@ -184,12 +184,12 @@ void MainWindow::set_static_info()
 
     try
     {
-        const unsigned min_power_limit {current_gpu->get_min_power_limit()};
-        const unsigned max_power_limit {current_gpu->get_max_power_limit()};
-        const unsigned current_power_limit {current_gpu->get_current_power_limit()};
+        const unsigned min_power_limit {current_gpu->get_min_power_limit() / 1000};
+        const unsigned max_power_limit {current_gpu->get_max_power_limit() / 1000};
+        const unsigned current_power_limit {current_gpu->get_current_power_limit() / 1000};
 
-        ui->lineEdit_default_power_limit->setText(QString::number(current_gpu->get_default_power_limit()) + " W");
-        ui->lineEdit_enforced_power_limit->setText(QString::number(current_gpu->get_enforced_power_limit()) + " W");
+        ui->lineEdit_default_power_limit->setText(QString::number(current_gpu->get_default_power_limit() / 1000) + " W");
+        ui->lineEdit_enforced_power_limit->setText(QString::number(current_gpu->get_enforced_power_limit() / 1000) + " W");
         ui->label_power_limit_slider_indicator->setText(QString::number(current_power_limit));
         ui->lineEdit_min_power_limit->setText(QString::number(min_power_limit) + " W");
         ui->lineEdit_max_power_limit->setText(QString::number(max_power_limit) + " W");
