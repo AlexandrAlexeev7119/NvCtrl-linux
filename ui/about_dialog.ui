@@ -14,7 +14,7 @@
    <string>GWEpp: About</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="0" colspan="3">
+   <item row="5" column="0" colspan="3">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -37,17 +37,27 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="3">
+   <item row="5" column="3">
     <widget class="QPushButton" name="pushButton_ok">
      <property name="text">
       <string>Ok</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="4">
+   <item row="2" column="3">
+    <widget class="QLabel" name="label_version">
+     <property name="text">
+      <string>v1.1.2</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="3">
     <widget class="QLabel" name="label_copyright">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Copyright © 2022 AlexCr4ckPentest&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright © 2022 AlexCr4ckPentest&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </item>
