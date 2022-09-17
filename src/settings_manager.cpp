@@ -8,8 +8,8 @@ static constexpr const char* DEFAULT_FILENAME{"/usr/share/gwepp/gwepp.json"};
 
 static QString get_filename_in_home_dir()
 {
-    const QString home_dir {std::getenv("HOME")};
-    return home_dir + ".config/gwepp/gwepp.json";
+    const QString username {std::getenv("USER")};
+    return "/home/" + username + "/.config/gwepp/gwepp.json";
 }
 
 
