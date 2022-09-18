@@ -31,7 +31,12 @@ set(PROJECT_SOURCES
     ${EXT_LIBS}
 )
 
-include_directories(${INCLUDE_DIRECTORIES} ./include ./lib/NVMLpp/include ./lib/spdlog/include)
+include_directories(${INCLUDE_DIRECTORIES}
+    ./include
+    ./lib/NVMLpp/include
+    ./lib/spdlog/include
+    ./lib/XNvCtrlpp/include
+)
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets NVMLpp spdlog)
