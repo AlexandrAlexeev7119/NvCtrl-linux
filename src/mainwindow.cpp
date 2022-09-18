@@ -14,6 +14,7 @@ MainWindow::MainWindow(QJsonObject app_settings, QWidget* parent)
     , gpu_utilizations_controller_ {}
     , gpu_power_controller_ {}
     , gpu_clock_controller_ {}
+    , gpu_fan_controller_ {}
     , dynamic_info_update_timer_ {}
     , nvml_devices_list_ {}
     , settings_dialog_window_ {this}
@@ -64,6 +65,7 @@ void MainWindow::update_dynamic_info()
     gpu_utilizations_controller_.update_info();
     gpu_power_controller_.update_info();
     gpu_clock_controller_.update_info();
+    gpu_fan_controller_.update_info();
 }
 
 
@@ -109,6 +111,13 @@ void MainWindow::on_GpuClockController_info_ready(const GpuClockController::cloc
 
 
 
+void MainWindow::on_GpuFanController_info_ready(const GpuFanController::fan_rates& fan_rates)
+{
+    ui->label_current_fan_speed->setText(QString::number(fan_rates.speed) + "%");
+}
+
+
+
 void MainWindow::on_GpuClockController_error()
 {
     ui->groupBox_clock_info->setDisabled(false);
@@ -123,11 +132,15 @@ void MainWindow::connect_slots_and_signals()
     connect(&gpu_utilizations_controller_, &GpuUtilizationsController::info_ready, this, &MainWindow::on_GpuUtilizationsController_info_ready);
     connect(&gpu_power_controller_, &GpuPowerController::info_ready, this, &::MainWindow::on_GpuPowerController_info_ready);
     connect(&gpu_clock_controller_, &GpuClockController::info_ready, this, &MainWindow::on_GpuClockController_info_ready);
+    connect(&gpu_fan_controller_, &GpuFanController::info_ready, this, &MainWindow::on_GpuFanController_info_ready);
     connect(&gpu_clock_controller_, &GpuClockController::error, this, &MainWindow::on_GpuClockController_error);
     connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
     connect(ui->horizontalSlider_change_power_limit, &QSlider::valueChanged, this, [this](int value)
     {
         ui->label_power_limit_slider_indicator->setText(QString::number(value));
+    });
+    connect(ui->horizontalSlider_set_fan_speed, &QSlider::valueChanged, this, [this](int value) {
+        ui->label_set_fan_speed_slider_indicator->setText(QString::number(value) + "%");
     });
 }
 
@@ -248,10 +261,11 @@ NVMLpp::NVML_device* MainWindow::get_current_gpu()
 
 void MainWindow::set_current_gpu_for_controllers() noexcept
 {
-    const auto& current_gpu {get_current_gpu()};
+    const auto current_gpu {get_current_gpu()};
     gpu_utilizations_controller_.set_device(current_gpu);
     gpu_power_controller_.set_device(current_gpu);
     gpu_clock_controller_.set_device(current_gpu);
+    gpu_fan_controller_.set_device(current_gpu);
 }
 
 
@@ -287,6 +301,13 @@ void MainWindow::on_comboBox_select_GPU_activated(int index)
 void MainWindow::on_pushButton_apply_power_limit_clicked()
 {
     gpu_power_controller_.set_power_limit(ui->horizontalSlider_change_power_limit->value());
+}
+
+
+
+void MainWindow::on_pushButton_apply_fan_speed_clicked()
+{
+    gpu_fan_controller_.set_fan_speed(ui->horizontalSlider_set_fan_speed->value());
 }
 
 
