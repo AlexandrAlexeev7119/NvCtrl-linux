@@ -19,7 +19,7 @@ void GpuClockController::update_info()
         };
         emit info_ready(clock_values_);
     }
-    catch (const NVMLpp::errors::error&)
+    catch (const NVMLpp::errors::error_not_supported&)
     {
         emit error();
     }

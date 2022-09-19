@@ -7,9 +7,11 @@
 #include <QMenu>
 
 #include "nvmlpp/nvmlpp_device.hpp"
+
 #include "gpu_utilizations_controller.hpp"
 #include "gpu_power_controller.hpp"
 #include "gpu_clock_controller.hpp"
+#include "gpu_fan_controller.hpp"
 
 #include "settings_dialog.hpp"
 #include "about_dialog.hpp"
@@ -36,10 +38,15 @@ private slots:
     void on_GpuUtilizationsController_info_ready(const GpuUtilizationsController::utilization_rates& utilization_rates);
     void on_GpuPowerController_info_ready(const GpuPowerController::power_rates& power_rates);
     void on_GpuClockController_info_ready(const GpuClockController::clock_values& clock_values);
+    void on_GpuFanController_info_ready(const GpuFanController::fan_rates& fan_rates);
+
+    void on_GpuPowerController_error();
     void on_GpuClockController_error();
+    void on_GpuFanController_error();
 
     void on_comboBox_select_GPU_activated(int index);
     void on_pushButton_apply_power_limit_clicked();
+    void on_pushButton_apply_fan_speed_clicked();
 
     void on_actionUpdate_GPUs_list_triggered();
     void on_actionSettings_triggered();
@@ -47,6 +54,7 @@ private slots:
     void on_actionAbout_triggered();
     void on_actionReport_a_bug_triggered();
     void on_actionShow_GPU_UUID_toggled(bool checked);
+
 
 private:
     Ui::MainWindow* ui;
@@ -56,6 +64,7 @@ private:
     GpuUtilizationsController gpu_utilizations_controller_;
     GpuPowerController gpu_power_controller_;
     GpuClockController gpu_clock_controller_;
+    GpuFanController gpu_fan_controller_;
 
     QTimer dynamic_info_update_timer_;
     bool minimize_to_tray_on_close_;
@@ -67,6 +76,10 @@ private:
     AboutDialog about_dialog_window_;
     ReportABugDialog report_a_bug_dialog_window_;
 
+    bool curr_gpu_power_control_unsupported_;
+    bool curr_gpu_clock_control_unsupported_;
+    bool curr_gpu_fan_control_unsupported_;
+
 protected:
     void closeEvent(QCloseEvent* event);
 
@@ -77,4 +90,6 @@ protected:
     void load_GPUs();
     NVMLpp::NVML_device* get_current_gpu();
     void set_current_gpu_for_controllers() noexcept;
+    void check_and_reconnect_signals_from_controllers();
+    void check_and_enable_groupbox_widgets();
 };

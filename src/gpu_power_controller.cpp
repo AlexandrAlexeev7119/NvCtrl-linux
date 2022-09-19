@@ -17,7 +17,8 @@ void GpuPowerController::set_power_limit(unsigned limit)
     const auto ret_code {QProcess::execute(PKEXEC_BIN, {NVIDIA_SMI_BIN, "-pl", QString::number(limit)})};
     if (ret_code != 0)
     {
-        emit error("Error: failed to apply power limit");
+        qCritical().nospace().noquote() << "Failed to apply power limit";
+        emit error();
     }
     qInfo().nospace().noquote() << "Power limit was set to: " << limit;
 }
@@ -33,5 +34,7 @@ void GpuPowerController::update_info()
         emit info_ready(power_rates_);
     }
     catch (const NVMLpp::errors::error_not_supported&)
-    { }
+    {
+        emit error();
+    }
 }
