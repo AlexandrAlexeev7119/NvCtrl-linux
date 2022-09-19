@@ -121,7 +121,15 @@ void MainWindow::on_GpuFanController_info_ready(const GpuFanController::fan_rate
 void MainWindow::on_GpuClockController_error()
 {
     ui->groupBox_clock_info->setDisabled(false);
-    ui->groupBox_clock_info->setToolTip("Clock control no supported, widget disabled");
+    ui->groupBox_clock_info->setToolTip("Clock control not supported, widget disabled");
+}
+
+
+
+void MainWindow::on_GpuFanController_error()
+{
+    ui->groupBox_fan_control->setEnabled(false);
+    ui->groupBox_fan_control->setToolTip("Fan control not supported, widget disabled");
 }
 
 
@@ -134,6 +142,7 @@ void MainWindow::connect_slots_and_signals()
     connect(&gpu_clock_controller_, &GpuClockController::info_ready, this, &MainWindow::on_GpuClockController_info_ready);
     connect(&gpu_fan_controller_, &GpuFanController::info_ready, this, &MainWindow::on_GpuFanController_info_ready);
     connect(&gpu_clock_controller_, &GpuClockController::error, this, &MainWindow::on_GpuClockController_error);
+    connect(&gpu_fan_controller_, &GpuFanController::error, this, &MainWindow::on_GpuFanController_error);
     connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
     connect(ui->horizontalSlider_change_power_limit, &QSlider::valueChanged, this, [this](int value)
     {
@@ -307,7 +316,8 @@ void MainWindow::on_pushButton_apply_power_limit_clicked()
 
 void MainWindow::on_pushButton_apply_fan_speed_clicked()
 {
-    gpu_fan_controller_.set_fan_speed(ui->horizontalSlider_set_fan_speed->value());
+    gpu_fan_controller_.set_fan_speed(ui->comboBox_select_GPU->currentIndex(),
+                                      ui->horizontalSlider_set_fan_speed->value());
 }
 
 

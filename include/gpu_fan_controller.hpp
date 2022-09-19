@@ -17,10 +17,11 @@ public:
 
 public slots:
     void update_info();
-    void set_fan_speed(unsigned fan_speed_level);
+    void set_fan_speed(unsigned device_index, unsigned fan_speed_level);
 
 signals:
     void info_ready(const GpuFanController::fan_rates&);
+    void error();
 
 private:
     NVMLpp::NVML_device* current_gpu_;
