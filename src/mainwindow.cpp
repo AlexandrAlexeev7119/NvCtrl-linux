@@ -123,6 +123,7 @@ void MainWindow::on_GpuFanController_info_ready(const GpuFanController::fan_rate
 
 void MainWindow::on_GpuPowerController_error()
 {
+    disconnect(&gpu_power_controller_, &GpuPowerController::error, this, &MainWindow::on_GpuPowerController_error);
     disconnect(&gpu_power_controller_, &GpuPowerController::info_ready, this, &MainWindow::on_GpuPowerController_info_ready);
     curr_gpu_power_control_unsupported_ = true;
     qWarning().noquote().nospace() << "Power control unsupported, signals disconnected";
