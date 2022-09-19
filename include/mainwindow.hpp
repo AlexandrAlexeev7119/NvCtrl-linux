@@ -39,6 +39,8 @@ private slots:
     void on_GpuPowerController_info_ready(const GpuPowerController::power_rates& power_rates);
     void on_GpuClockController_info_ready(const GpuClockController::clock_values& clock_values);
     void on_GpuFanController_info_ready(const GpuFanController::fan_rates& fan_rates);
+
+    void on_GpuPowerController_error();
     void on_GpuClockController_error();
     void on_GpuFanController_error();
 
@@ -74,10 +76,15 @@ private:
     AboutDialog about_dialog_window_;
     ReportABugDialog report_a_bug_dialog_window_;
 
+    bool curr_gpu_power_control_unsupported_;
+    bool curr_gpu_clock_control_unsupported_;
+    bool curr_gpu_fan_control_unsupported_;
+
 protected:
     void closeEvent(QCloseEvent* event);
 
     void connect_slots_and_signals();
+    void connect_controller_slots_and_signals();
     void setup_tray_menu();
     void load_and_validate_app_settings(QJsonObject app_settings);
     void set_static_info();
