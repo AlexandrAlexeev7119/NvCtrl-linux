@@ -141,8 +141,13 @@ void MainWindow::on_GpuClockController_error()
 
 void MainWindow::on_GpuFanController_error()
 {
+    ui->groupBox_fan_control->setEnabled(false);
+    ui->groupBox_fan_control->setToolTip("Unsupported for current GPU");
+    qWarning().noquote().nospace() << "Fan control unsupported, groupBox widget disabled";
+
     disconnect(&gpu_fan_controller_, &GpuFanController::info_ready, this, &MainWindow::on_GpuFanController_info_ready);
     curr_gpu_fan_control_unsupported_ = true;
+
     qWarning().noquote().nospace() << "Fan control unsupported, info_ready() signal disconnected";
 }
 
@@ -241,7 +246,7 @@ void MainWindow::set_static_info()
     catch (const NVMLpp::errors::error_not_supported&)
     {
         ui->groupBox_power_control->setEnabled(false);
-        ui->groupBox_power_control->setToolTip("Power control not supported, groupBox widget disabled");
+        ui->groupBox_power_control->setToolTip("Unsupported for current GPU");
         qWarning().noquote().nospace() << "Power control not supported, groupBox widget disabled";
     }
 
@@ -255,8 +260,8 @@ void MainWindow::set_static_info()
     catch (const NVMLpp::errors::error_not_supported&)
     {
         ui->groupBox_clock_info->setEnabled(false);
-        ui->groupBox_clock_info->setToolTip("Clock control no supported, groupBox widget disabled");
-        qWarning().noquote().nospace() << "Clock control no supported, groupBox widget disabled";
+        ui->groupBox_clock_info->setToolTip("Unsupported for current GPU");
+        qWarning().noquote().nospace() << "Clock control not supported, groupBox widget disabled";
     }
 
     qInfo().noquote().nospace() << "Static info has been set";
@@ -298,6 +303,54 @@ void MainWindow::set_current_gpu_for_controllers() noexcept
 
 
 
+void MainWindow::check_and_reconnect_info_ready_signals_from_controllers()
+{
+    if (curr_gpu_power_control_unsupported_)
+    {
+        connect(&gpu_power_controller_, &GpuPowerController::info_ready, this, &MainWindow::on_GpuPowerController_info_ready);
+        curr_gpu_power_control_unsupported_ = false;
+        qInfo().noquote().nospace() << "Reconnecting info_ready() signal for power control...";
+    }
+    if (curr_gpu_clock_control_unsupported_)
+    {
+        connect(&gpu_clock_controller_, &GpuClockController::info_ready, this, &MainWindow::on_GpuClockController_info_ready);
+        curr_gpu_clock_control_unsupported_ = false;
+        qInfo().noquote().nospace() << "Reconnecting info_ready() signal for clock control...";
+    }
+    if (curr_gpu_fan_control_unsupported_)
+    {
+        connect(&gpu_fan_controller_, &GpuFanController::info_ready, this, &MainWindow::on_GpuFanController_info_ready);
+        curr_gpu_fan_control_unsupported_ = false;
+        qInfo().noquote().nospace() << "Reconnecting info_ready() signal for fan control...";
+    }
+}
+
+
+
+void MainWindow::check_and_enable_groupbox_widgets()
+{
+    if (!ui->groupBox_power_control->isEnabled())
+    {
+        ui->groupBox_power_control->setEnabled(true);
+        ui->groupBox_power_control->setToolTip("");
+        qInfo().noquote().nospace() << "Enabling groupBox widget for power control...";
+    }
+    if (!ui->groupBox_clock_info->isEnabled())
+    {
+        ui->groupBox_clock_info->setEnabled(true);
+        ui->groupBox_clock_info->setToolTip("");
+        qInfo().noquote().nospace() << "Enabling groupBox widget for clock control...";
+    }
+    if (!ui->groupBox_fan_control->isEnabled())
+    {
+        ui->groupBox_fan_control->setEnabled(true);
+        ui->groupBox_fan_control->setToolTip("");
+        qInfo().noquote().nospace() << "Enabling groupBox widget for fan control...";
+    }
+}
+
+
+
 void MainWindow::closeEvent(QCloseEvent* event)
 {
     if (minimize_to_tray_on_close_)
@@ -321,27 +374,12 @@ void MainWindow::on_comboBox_select_GPU_activated(int index)
 {
     qInfo().noquote().nospace() << "GPU selected: " << ui->comboBox_select_GPU->currentText();
 
+
     set_current_gpu_for_controllers();
     set_static_info();
 
-    if (curr_gpu_power_control_unsupported_)
-    {
-        connect(&gpu_power_controller_, &GpuPowerController::info_ready, this, &MainWindow::on_GpuPowerController_info_ready);
-        curr_gpu_power_control_unsupported_ = false;
-        qInfo().noquote().nospace() << "Reconnecting info_ready() signal for power control...";
-    }
-    if (curr_gpu_clock_control_unsupported_)
-    {
-        connect(&gpu_clock_controller_, &GpuClockController::info_ready, this, &MainWindow::on_GpuClockController_info_ready);
-        curr_gpu_clock_control_unsupported_ = false;
-        qInfo().noquote().nospace() << "Reconnecting info_ready() signal for clock control...";
-    }
-    if (curr_gpu_fan_control_unsupported_)
-    {
-        connect(&gpu_fan_controller_, &GpuFanController::info_ready, this, &MainWindow::on_GpuFanController_info_ready);
-        curr_gpu_fan_control_unsupported_ = false;
-        qInfo().noquote().nospace() << "Reconnecting info_ready() signal for fan control...";
-    }
+    check_and_reconnect_info_ready_signals_from_controllers();
+    check_and_enable_groupbox_widgets();
 }
 
 

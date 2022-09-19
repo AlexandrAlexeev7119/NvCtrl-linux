@@ -84,11 +84,12 @@ protected:
     void closeEvent(QCloseEvent* event);
 
     void connect_slots_and_signals();
-    void connect_controller_slots_and_signals();
     void setup_tray_menu();
     void load_and_validate_app_settings(QJsonObject app_settings);
     void set_static_info();
     void load_GPUs();
     NVMLpp::NVML_device* get_current_gpu();
     void set_current_gpu_for_controllers() noexcept;
+    void check_and_reconnect_info_ready_signals_from_controllers();
+    void check_and_enable_groupbox_widgets();
 };
