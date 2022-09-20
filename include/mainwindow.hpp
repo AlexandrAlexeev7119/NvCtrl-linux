@@ -24,6 +24,8 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+    enum { FAN_PROFILE_AUTO, FAN_PROFILE_MANUAL };
+
 public:
     MainWindow(QJsonObject app_settings, QWidget* parent = nullptr);
     ~MainWindow();
@@ -45,8 +47,12 @@ private slots:
     void on_GpuFanController_error();
 
     void on_comboBox_select_GPU_activated(int index);
+    void on_comboBox_select_fan_profile_activated(int index);
+
     void on_pushButton_apply_power_limit_clicked();
     void on_pushButton_apply_fan_speed_clicked();
+    void on_pushButton_add_new_fan_profile_clicked();
+    void on_pushButton_edit_current_fan_profile_clicked();
 
     void on_actionUpdate_GPUs_list_triggered();
     void on_actionSettings_triggered();
@@ -91,4 +97,5 @@ protected:
     void set_current_gpu_for_controllers() noexcept;
     void check_and_reconnect_signals_from_controllers();
     void check_and_enable_groupbox_widgets();
+    void manual_fan_speed_control_widgets_enabled(bool value);
 };

@@ -357,6 +357,15 @@ void MainWindow::check_and_enable_groupbox_widgets()
 
 
 
+void MainWindow::manual_fan_speed_control_widgets_enabled(bool value)
+{
+    ui->horizontalSlider_set_fan_speed->setEnabled(value);
+    ui->label_set_fan_speed_slider_indicator->setEnabled(value);
+    ui->pushButton_apply_fan_speed->setEnabled(value);
+}
+
+
+
 void MainWindow::closeEvent(QCloseEvent* event)
 {
     if (minimize_to_tray_on_close_)
@@ -390,6 +399,30 @@ void MainWindow::on_comboBox_select_GPU_activated(int index)
 
 
 
+void MainWindow::on_comboBox_select_fan_profile_activated(int index)
+{
+    switch (index)
+    {
+    case FAN_PROFILE_AUTO:
+        gpu_fan_controller_.set_fan_control_state(ui->comboBox_select_GPU->currentIndex(), false);
+        manual_fan_speed_control_widgets_enabled(false);
+        ui->pushButton_edit_current_fan_profile->setEnabled(false);
+        break;
+    case FAN_PROFILE_MANUAL:
+        gpu_fan_controller_.set_fan_control_state(ui->comboBox_select_GPU->currentIndex(), true);
+        manual_fan_speed_control_widgets_enabled(true);
+        ui->pushButton_edit_current_fan_profile->setEnabled(false);
+        break;
+    default:
+        gpu_fan_controller_.set_fan_control_state(ui->comboBox_select_GPU->currentIndex(), true);
+        manual_fan_speed_control_widgets_enabled(false);
+        ui->pushButton_edit_current_fan_profile->setEnabled(true);
+    }
+    qInfo().noquote().nospace() << "Selected fan control profile: " << ui->comboBox_select_fan_profile->currentText();
+}
+
+
+
 void MainWindow::on_pushButton_apply_power_limit_clicked()
 {
     gpu_power_controller_.set_power_limit(ui->horizontalSlider_change_power_limit->value());
@@ -402,6 +435,16 @@ void MainWindow::on_pushButton_apply_fan_speed_clicked()
     gpu_fan_controller_.set_fan_speed(ui->comboBox_select_GPU->currentIndex(),
                                       ui->horizontalSlider_set_fan_speed->value());
 }
+
+
+
+void MainWindow::on_pushButton_add_new_fan_profile_clicked()
+{ }
+
+
+
+void MainWindow::on_pushButton_edit_current_fan_profile_clicked()
+{ }
 
 
 
