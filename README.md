@@ -2,8 +2,6 @@
 GreenWithEnvy re-implementation using only C, C++ and Qt
 no other shit such as python
 
-no other shit such as python
-
 ## UI preview
 ![UI 1](img/ui1.png)
 ![UI 2](img/ui2.png)
