@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(gwepp VERSION 1.2.0 LANGUAGES CXX)
+project(gwepp VERSION 1.2.2 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -37,6 +37,8 @@ include_directories(${INCLUDE_DIRECTORIES}
     ./lib/spdlog/include
     ./lib/XNvCtrlpp/include
 )
+
+add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets NVMLpp spdlog)
