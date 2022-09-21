@@ -5,8 +5,8 @@
 #include "gpu_fan_controller.hpp"
 
 static constexpr const char* NVIDIA_SETTINGS_BIN {"/usr/bin/nvidia-settings"};
-static const QString NVIDIA_SETTINGS_GPU_FAN_CONTROL_STATE {"[gpu:%1]/GPUFanControlState=1"};
-static const QString NVIDIA_SETTINGS_GPU_FAN_SPEED {"[fan:0]/GPUTargetFanSpeed=%1"};
+static constexpr const char* NVIDIA_SETTINGS_GPU_FAN_CONTROL_STATE {"[gpu:%1]/GPUFanControlState=%2"};
+static constexpr const char* NVIDIA_SETTINGS_GPU_FAN_SPEED {"[fan:0]/GPUTargetFanSpeed=%1"};
 
 
 
@@ -14,6 +14,8 @@ GpuFanController::GpuFanController(NVMLpp::NVML_device* nvml_device, QObject* pa
     : QObject {parent}
     , current_gpu_ {nvml_device}
 { }
+
+
 
 void GpuFanController::update_info()
 {
@@ -30,14 +32,37 @@ void GpuFanController::update_info()
     }
 }
 
+
+
 void GpuFanController::set_fan_speed(unsigned device_index, unsigned fan_speed_level)
 {
-    const auto enable_fan_control {NVIDIA_SETTINGS_GPU_FAN_CONTROL_STATE.arg(device_index)};
-    const auto set_fan_speed {NVIDIA_SETTINGS_GPU_FAN_SPEED.arg(fan_speed_level)};
+    const auto set_fan_speed {QString{NVIDIA_SETTINGS_GPU_FAN_SPEED}.arg(fan_speed_level)};
+    run_nvidia_settings(set_fan_speed);
+}
 
-    auto err_code {QProcess::execute(NVIDIA_SETTINGS_BIN, {"-a", enable_fan_control, "-a", set_fan_speed})};
-    if (err_code != 0)
+
+
+void GpuFanController::set_fan_control_state(unsigned device_index, bool value)
+{
+    const auto enable_fan_control {
+        QString{NVIDIA_SETTINGS_GPU_FAN_CONTROL_STATE}
+                .arg(device_index)
+                .arg(static_cast<int>(value))
+    };
+    run_nvidia_settings(enable_fan_control);
+}
+
+
+
+void GpuFanController::run_nvidia_settings(const QString& arg)
+{
+    auto err_code {QProcess::execute(NVIDIA_SETTINGS_BIN, {"-a", arg})};
+    if (err_code == 0)
     {
-        qCritical().nospace().noquote() << "Error to apply fan speed for gpu" << device_index;
+        qInfo().noquote().nospace() << "Option applied: " << arg << " for current gpu";
+    }
+    else
+    {
+        qCritical().nospace().noquote() << "Failed to apply " << arg << " for current gpu";
     }
 }
