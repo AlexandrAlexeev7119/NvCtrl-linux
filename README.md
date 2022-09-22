@@ -9,7 +9,10 @@ no other shit such as python
 
 ## Installation
 ### Arch GNU/Linux
-Download PKGBUILD file from latest release
+* Download PKGBUILD file from [latest release](https://github.com/AlexandrAlexeev7119/GWEpp/releases/latest/download/PKGBUILD)
+* Place PKGBUILD file to dedicated directory (for example: GWEpp)
+* run `makepkg -si`
+
 
 ### Building from sources
 ```
