@@ -218,7 +218,8 @@ void MainWindow::set_static_info()
     ui->lineEdit_GPU_arch->setText(QString::fromStdString(current_gpu->get_arch()));
     ui->lineEdit_GPU_VBIOS_ver->setText(QString::fromStdString(current_gpu->get_vbios_version()));
     ui->lineEdit_GPU_driver_ver->setText(QString::fromStdString(NVMLpp::Session::instance().get_system_driver_version()));
-    ui->lineEdit_GPU_bus_type->setText(QString::fromStdString(current_gpu->get_bus_type()) + " " + QString::fromStdString(current_gpu->get_pci_bus_id()));
+    ui->lineEdit_GPU_bus_type->setText(QString::fromStdString(current_gpu->get_bus_type()));
+    ui->lineEdit_GPU_bus_id->setText(QString::fromStdString(current_gpu->get_pci_bus_id()));
     ui->lineEdit_GPU_total_mem->setText(QString::number(current_gpu->get_total_memory() / 1024 / 1024) + " MiB");
 
     if (ui->actionShow_GPU_UUID->isChecked())
