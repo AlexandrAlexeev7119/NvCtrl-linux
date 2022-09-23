@@ -423,6 +423,25 @@ void MainWindow::on_comboBox_select_fan_profile_activated(int index)
 
 
 
+void MainWindow::on_comboBox_select_clock_offset_profile_activated(int index)
+{
+    switch (index)
+    {
+    case CLOCK_PROFILE_NONE:
+        ui->pushButton_edit_curr_clock_offset_profile->setEnabled(false);
+        ui->horizontalSlider_set_gpu_clock_offset->setEnabled(false);
+        ui->horizontalSlider_set_mem_clock_profile->setEnabled(false);
+        break;
+    case CLOCK_PROFILE_MANUAL:
+        ui->pushButton_edit_curr_clock_offset_profile->setEnabled(false);
+        ui->horizontalSlider_set_gpu_clock_offset->setEnabled(false);
+        ui->horizontalSlider_set_mem_clock_profile->setEnabled(false);
+        break;
+    }
+}
+
+
+
 void MainWindow::on_pushButton_apply_power_limit_clicked()
 {
     gpu_power_controller_.set_power_limit(ui->horizontalSlider_change_power_limit->value());

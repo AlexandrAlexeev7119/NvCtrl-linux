@@ -24,7 +24,9 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+
     enum { FAN_PROFILE_AUTO, FAN_PROFILE_MANUAL };
+    enum { CLOCK_PROFILE_NONE, CLOCK_PROFILE_MANUAL };
 
 public:
     MainWindow(QJsonObject app_settings, QWidget* parent = nullptr);
@@ -48,6 +50,7 @@ private slots:
 
     void on_comboBox_select_GPU_activated(int index);
     void on_comboBox_select_fan_profile_activated(int index);
+    void on_comboBox_select_clock_offset_profile_activated(int index);
 
     void on_pushButton_apply_power_limit_clicked();
     void on_pushButton_apply_fan_speed_clicked();
