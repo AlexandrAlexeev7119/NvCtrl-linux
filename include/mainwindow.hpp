@@ -56,6 +56,7 @@ private slots:
     void on_pushButton_apply_fan_speed_clicked();
     void on_pushButton_add_new_fan_profile_clicked();
     void on_pushButton_edit_current_fan_profile_clicked();
+    void on_pushButton_apply_clock_offset_clicked();
 
     void on_actionUpdate_GPUs_list_triggered();
     void on_actionSettings_triggered();
@@ -63,6 +64,7 @@ private slots:
     void on_actionAbout_triggered();
     void on_actionReport_a_bug_triggered();
     void on_actionShow_GPU_UUID_toggled(bool checked);
+
 
 private:
     Ui::MainWindow* ui;
@@ -101,4 +103,5 @@ protected:
     void check_and_reconnect_signals_from_controllers();
     void check_and_enable_groupbox_widgets();
     void manual_fan_speed_control_widgets_enabled(bool value);
+    void manual_clock_offset_control_widgets_enabled(bool value);
 };
