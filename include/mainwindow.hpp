@@ -16,6 +16,7 @@
 #include "settings_dialog.hpp"
 #include "about_dialog.hpp"
 #include "report_a_bug_dialog.hpp"
+#include "fan_profile_dialog.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -85,6 +86,7 @@ private:
     SettingsDialog settings_dialog_window_;
     AboutDialog about_dialog_window_;
     ReportABugDialog report_a_bug_dialog_window_;
+    FanProfileDialog fan_profile_dialog_window_;
 
     bool curr_gpu_power_control_unsupported_;
     bool curr_gpu_clock_control_unsupported_;

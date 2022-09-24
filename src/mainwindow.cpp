@@ -19,8 +19,9 @@ MainWindow::MainWindow(QJsonObject app_settings, QWidget* parent)
     , nvml_devices_list_ {}
     , settings_dialog_window_ {this}
     , about_dialog_window_ {this}
-    , tray_menu_ {this}
     , report_a_bug_dialog_window_ {this}
+    , fan_profile_dialog_window_ {this}
+    , tray_menu_ {this}
     , curr_gpu_power_control_unsupported_ {false}
     , curr_gpu_clock_control_unsupported_ {false}
     , curr_gpu_fan_control_unsupported_ {false}
@@ -472,7 +473,9 @@ void MainWindow::on_pushButton_apply_fan_speed_clicked()
 
 
 void MainWindow::on_pushButton_add_new_fan_profile_clicked()
-{ }
+{
+    fan_profile_dialog_window_.show();
+}
 
 
 
