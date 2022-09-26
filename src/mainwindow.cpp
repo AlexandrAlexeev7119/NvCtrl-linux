@@ -7,7 +7,7 @@
 #include "nvmlpp/nvmlpp_session.hpp"
 #include "nvmlpp/util/nvmlpp_errors.hpp"
 
-MainWindow::MainWindow(QJsonObject app_settings, QWidget* parent)
+MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
     : QMainWindow {parent}
     , ui {new Ui::MainWindow}
     , tray_icon_ {this}
@@ -74,13 +74,13 @@ void MainWindow::update_dynamic_info()
 
 
 
-void MainWindow::on_SettingsDialog_settings_applied(const QJsonObject& app_settings)
+void MainWindow::on_SettingsDialog_settings_applied(const nlohmann::json& app_settings)
 {
-    minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
-    update_freq_ms_ = app_settings["update_freq_ms"].toInt();
+    minimize_to_tray_on_close_ = app_settings.at("minimize_to_tray_on_close").get<bool>();
+    update_freq_ms_ = app_settings.at("update_freq_ms").get<unsigned>();
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
 
-    qInfo().noquote().nospace() << "New settings applied: " << app_settings;
+    qInfo().noquote().nospace() << "New settings applied: " << app_settings.dump().c_str();
 }
 
 
@@ -192,16 +192,16 @@ void MainWindow::setup_tray_menu()
 
 
 
-void MainWindow::load_and_validate_app_settings(QJsonObject app_settings)
+void MainWindow::load_and_validate_app_settings(nlohmann::json app_settings)
 {
-    minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
-    update_freq_ms_ = app_settings["update_freq_ms"].toInt();
+    minimize_to_tray_on_close_ = app_settings.at("minimize_to_tray_on_close").get<bool>();
+    update_freq_ms_ = app_settings.at("update_freq_ms").get<unsigned>();
 
     if (update_freq_ms_ < 500)
     {
         update_freq_ms_ = 500;
         qWarning().noquote().nospace() << "Wrong settings detected, fallback to default";
-        SettingsManager::instance().open_file(QIODevice::WriteOnly);
+        SettingsManager::instance().open_file(std::ios::out);
         SettingsManager::instance().write_settings(SettingsManager::default_settings);
         SettingsManager::instance().close_file();
     }

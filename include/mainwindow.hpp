@@ -6,6 +6,8 @@
 #include <QTimer>
 #include <QMenu>
 
+#include "nlohmann/json.hpp"
+
 #include "nvmlpp/nvmlpp_device.hpp"
 
 #include "gpu_utilizations_controller.hpp"
@@ -30,7 +32,7 @@ class MainWindow : public QMainWindow
     enum { CLOCK_PROFILE_NONE, CLOCK_PROFILE_MANUAL };
 
 public:
-    MainWindow(QJsonObject app_settings, QWidget* parent = nullptr);
+    MainWindow(nlohmann::json app_settings, QWidget* parent = nullptr);
     ~MainWindow();
 
     inline QSystemTrayIcon& get_tray_icon() noexcept { return tray_icon_; }
@@ -38,7 +40,7 @@ public:
 private slots:
     void toggle_tray();
     void update_dynamic_info();
-    void on_SettingsDialog_settings_applied(const QJsonObject& app_settings);
+    void on_SettingsDialog_settings_applied(const nlohmann::json& app_settings);
 
     void on_GpuUtilizationsController_info_ready(const GpuUtilizationsController::utilization_rates& utilization_rates);
     void on_GpuPowerController_info_ready(const GpuPowerController::power_rates& power_rates);
@@ -97,7 +99,7 @@ protected:
 
     void connect_slots_and_signals();
     void setup_tray_menu();
-    void load_and_validate_app_settings(QJsonObject app_settings);
+    void load_and_validate_app_settings(nlohmann::json app_settings);
     void set_static_info();
     void load_GPUs();
     NVMLpp::NVML_device* get_current_gpu();

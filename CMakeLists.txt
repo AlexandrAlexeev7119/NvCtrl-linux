@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(gwepp VERSION 1.2.5 LANGUAGES CXX)
+project(gwepp VERSION 1.3.0 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -35,7 +35,7 @@ include_directories(${INCLUDE_DIRECTORIES}
     ./include
     ./lib/NVMLpp/include
     ./lib/spdlog/include
-    ./lib/XNvCtrlpp/include
+    ./lib/nlohmann-json/include
 )
 
 add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")

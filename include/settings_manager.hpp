@@ -1,8 +1,12 @@
 #pragma once
 
+#include <memory>
+#include <fstream>
+
 #include <QObject>
 #include <QFile>
-#include <QJsonObject>
+
+#include "nlohmann/json.hpp"
 
 class SettingsManager : public QObject
 {
@@ -13,15 +17,15 @@ private:
     ~SettingsManager() = default;
 
 public:
-    static const QJsonObject default_settings;
+    static const nlohmann::json default_settings;
 
-    void set_file_name(const QString& filename);
-    QString get_file_name() const;
-    void open_file(QIODevice::OpenMode open_mode);
+    void set_file_name(std::string_view file_name);
+    std::string get_file_name() const;
+    void open_file(std::ios::openmode open_mode);
     void close_file();
 
-    void write_settings(const QJsonObject& settings);
-    QJsonObject read_settings();
+    void write_settings(const nlohmann::json& settings);
+    std::string read_settings();
 
     static SettingsManager& instance();
 
@@ -29,5 +33,6 @@ signals:
     void error(const QString&);
 
 private:
-    QFile settings_file_;
+    std::unique_ptr<std::fstream> ptr_settings_file_;
+    std::string file_name_;
 };

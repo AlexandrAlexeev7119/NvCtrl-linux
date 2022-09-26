@@ -39,11 +39,11 @@ int main(int argc, char** argv)
         std::exit(1);
     });
 
-    settings_manager.open_file(QIODevice::ReadOnly);
-    const auto app_settings{settings_manager.read_settings()};
+    settings_manager.open_file(std::ios::in);
+    const nlohmann::json app_settings{nlohmann::json::parse(settings_manager.read_settings())};
     settings_manager.close_file();
 
-    const bool minimize_to_tray_on_startup {app_settings["minimize_to_tray_on_startup"].toBool()};
+    const bool minimize_to_tray_on_startup {app_settings["minimize_to_tray_on_startup"].get<bool>()};
     MainWindow main_window {std::move(app_settings)};
 
     if (minimize_to_tray_on_startup)

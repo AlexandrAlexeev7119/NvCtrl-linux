@@ -1,7 +1,9 @@
 #pragma once
 
 #include <QDialog>
-#include <QJsonObject>
+#include <QDebug>
+
+#include "settings_manager.hpp"
 
 namespace Ui { class FanProfileDialog; }
 
@@ -14,7 +16,7 @@ public:
     ~FanProfileDialog();
 
 signals:
-    void new_profile_created(const QJsonObject&);
+    void new_profile_created(const nlohmann::json&);
 
 private slots:
     void on_pushButton_create_new_profile_clicked();
@@ -23,4 +25,3 @@ private slots:
 private:
     Ui::FanProfileDialog* ui;
 };
-

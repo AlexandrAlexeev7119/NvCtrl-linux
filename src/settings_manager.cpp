@@ -1,73 +1,78 @@
 #include <cstdlib>
+#include <iterator>
 
-#include <QJsonDocument>
+#include <QDebug>
 
 #include "settings_manager.hpp"
 
 static constexpr const char* DEFAULT_FILENAME{"/usr/share/gwepp/gwepp.json"};
 
-static QString get_filename_in_home_dir()
+static std::string get_filename_in_home_dir()
 {
-    const QString username {std::getenv("USER")};
+    const std::string username {std::getenv("USER")};
     return "/home/" + username + "/.config/gwepp/gwepp.json";
 }
 
 
 
-const QJsonObject SettingsManager::default_settings
+const nlohmann::json SettingsManager::default_settings
 {
-    {"update_freq_ms", 500},
-    {"minimize_to_tray_on_close", false},
-    {"minimize_to_tray_on_startup", false}
+    {
+        {"update_freq_ms", 500},
+        {"minimize_to_tray_on_close", false},
+        {"minimize_to_tray_on_startup", false}
+    }
 };
 
 
 
 SettingsManager::SettingsManager()
-    : settings_file_{}
+    : ptr_settings_file_ {std::make_unique<std::fstream>()}
+    , file_name_ {get_filename_in_home_dir()}
+{ }
+
+void SettingsManager::set_file_name(std::string_view file_name)
 {
-    settings_file_.setFileName(get_filename_in_home_dir());
+    file_name_ = file_name;
 }
 
-QString SettingsManager::get_file_name() const
-{ return settings_file_.fileName(); }
+std::string SettingsManager::get_file_name() const
+{
+    return file_name_;
+}
 
-void SettingsManager::open_file(QIODevice::OpenMode open_mode)
+void SettingsManager::open_file(std::ios::openmode open_mode)
 {
     // First of all, try to open settings file from /home/<user>/.config/gwepp/
-    if (!settings_file_.open(open_mode))
+    ptr_settings_file_->open(file_name_, open_mode);
+    if (!ptr_settings_file_->is_open())
     {
         // Otherwise try to open from default location /usr/share/gwepp/
-        settings_file_.setFileName(DEFAULT_FILENAME);
-        if (!settings_file_.open(open_mode))
+        file_name_ = DEFAULT_FILENAME;
+        ptr_settings_file_->open(file_name_, open_mode);
+        if (!ptr_settings_file_->is_open())
         {
-            emit error(settings_file_.errorString() + ": " + get_file_name());
+            emit error("Failed to open file: " + QString::fromStdString(get_file_name()));
         }
     }
 }
 
 void SettingsManager::close_file()
 {
-    if (settings_file_.isOpen())
-    {
-        settings_file_.close();
-    }
+    ptr_settings_file_->close();
 }
 
-void SettingsManager::write_settings(const QJsonObject& settings)
+void SettingsManager::write_settings(const nlohmann::json& settings)
 {
-    const QJsonDocument json_doc{settings};
-    const QByteArray json_data{json_doc.toJson(QJsonDocument::JsonFormat::Indented)};
-    settings_file_.write(json_data);
-    qInfo().nospace().noquote() << "Save settings to: " << get_file_name();
+    (*ptr_settings_file_) << settings;
+    qInfo().noquote().nospace() << "Save settings to: " << get_file_name().c_str();
 }
 
-QJsonObject SettingsManager::read_settings()
+std::string SettingsManager::read_settings()
 {
-    const QByteArray raw_data{settings_file_.readAll()};
-    const QJsonObject json_obj{QJsonDocument::fromJson(raw_data).object()};
-    qInfo().nospace().noquote() << "Read settings from: " << get_file_name();
-    return json_obj;
+    std::string raw_json {std::istream_iterator<char>{*ptr_settings_file_}, std::istream_iterator<char>{}};
+    qInfo().noquote().nospace() << "Read settings from: " << get_file_name().c_str();
+    return raw_json;
 }
 
 SettingsManager& SettingsManager::instance()
