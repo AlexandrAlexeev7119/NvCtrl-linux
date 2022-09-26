@@ -5,3 +5,6 @@
 [submodule "lib/spdlog"]
 	path = lib/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "lib/nlohmann-json"]
+	path = lib/nlohmann-json
+	url = https://github.com/nlohmann/json
