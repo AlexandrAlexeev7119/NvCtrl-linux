@@ -24,13 +24,14 @@ SettingsDialog::~SettingsDialog()
 
 void SettingsDialog::on_pushButton_apply_clicked()
 {
-    const nlohmann::json app_settings {
-        {
-            {"minimize_to_tray_on_startup", ui->checkBox_minimize_to_tray_on_startup->isChecked()},
-            {"minimize_to_tray_on_close", ui->checkBox_minimize_to_tray_on_close->isChecked()},
-            {"update_freq_ms", ui->spinBox_update_freq->value()},
-        }
-    };
+    settings_manager_.open_file(std::ios::in);
+    auto app_settings = nlohmann::json::parse(SettingsManager::instance().read_settings());
+    settings_manager_.close_file();
+
+    app_settings["minimize_to_tray_on_startup"] = ui->checkBox_minimize_to_tray_on_startup->isChecked();
+    app_settings["minimize_to_tray_on_close"] = ui->checkBox_minimize_to_tray_on_close->isChecked();
+    app_settings["update_freq_ms"] = ui->spinBox_update_freq->value();
+
     save_settings_to_file(app_settings);
     emit settings_applied(app_settings);
 }
@@ -56,7 +57,7 @@ void SettingsDialog::showEvent(QShowEvent* event_)
 void SettingsDialog::load_settings_from_file()
 {
     settings_manager_.open_file(std::ios::in);
-    const auto app_settings {nlohmann::json::parse(settings_manager_.read_settings())};
+    const auto app_settings = nlohmann::json::parse(settings_manager_.read_settings());
     settings_manager_.close_file();
 
     ui->checkBox_minimize_to_tray_on_startup->setChecked(app_settings["minimize_to_tray_on_startup"].get<bool>());

@@ -24,4 +24,6 @@ private slots:
 
 private:
     Ui::FanProfileDialog* ui;
+
+    void create_or_apped_fan_speed_profile(nlohmann::json& app_settings);
 };
