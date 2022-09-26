@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QDialog>
-#include <QJsonObject>
+
 #include "settings_manager.hpp"
 
 namespace Ui { class SettingsDialog; }
@@ -20,7 +20,7 @@ private slots:
     void on_SettingsManager_error(const QString& msg);
 
 signals:
-    void settings_applied(const QJsonObject&);
+    void settings_applied(const nlohmann::json&);
 
 private:
     Ui::SettingsDialog* ui;
@@ -29,5 +29,5 @@ private:
     void showEvent(QShowEvent* event_);
 
     void load_settings_from_file();
-    void save_settings_to_file(const QJsonObject& app_settings);
+    void save_settings_to_file(const nlohmann::json& app_settings);
 };

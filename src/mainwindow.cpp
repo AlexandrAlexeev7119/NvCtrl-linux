@@ -7,7 +7,7 @@
 #include "nvmlpp/nvmlpp_session.hpp"
 #include "nvmlpp/util/nvmlpp_errors.hpp"
 
-MainWindow::MainWindow(QJsonObject app_settings, QWidget* parent)
+MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
     : QMainWindow {parent}
     , ui {new Ui::MainWindow}
     , tray_icon_ {this}
@@ -19,8 +19,9 @@ MainWindow::MainWindow(QJsonObject app_settings, QWidget* parent)
     , nvml_devices_list_ {}
     , settings_dialog_window_ {this}
     , about_dialog_window_ {this}
-    , tray_menu_ {this}
     , report_a_bug_dialog_window_ {this}
+    , fan_profile_dialog_window_ {this}
+    , tray_menu_ {this}
     , curr_gpu_power_control_unsupported_ {false}
     , curr_gpu_clock_control_unsupported_ {false}
     , curr_gpu_fan_control_unsupported_ {false}
@@ -73,13 +74,13 @@ void MainWindow::update_dynamic_info()
 
 
 
-void MainWindow::on_SettingsDialog_settings_applied(const QJsonObject& app_settings)
+void MainWindow::on_SettingsDialog_settings_applied(const nlohmann::json& app_settings)
 {
-    minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
-    update_freq_ms_ = app_settings["update_freq_ms"].toInt();
+    minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].get<bool>();
+    update_freq_ms_ = app_settings["update_freq_ms"].get<unsigned>();
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
 
-    qInfo().noquote().nospace() << "New settings applied: " << app_settings;
+    qInfo().noquote().nospace() << "New settings applied: " << app_settings.dump().c_str();
 }
 
 
@@ -191,16 +192,16 @@ void MainWindow::setup_tray_menu()
 
 
 
-void MainWindow::load_and_validate_app_settings(QJsonObject app_settings)
+void MainWindow::load_and_validate_app_settings(nlohmann::json app_settings)
 {
-    minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].toBool();
-    update_freq_ms_ = app_settings["update_freq_ms"].toInt();
+    minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].get<bool>();
+    update_freq_ms_ = app_settings["update_freq_ms"].get<unsigned>();
 
     if (update_freq_ms_ < 500)
     {
         update_freq_ms_ = 500;
         qWarning().noquote().nospace() << "Wrong settings detected, fallback to default";
-        SettingsManager::instance().open_file(QIODevice::WriteOnly);
+        SettingsManager::instance().open_file(std::ios::out);
         SettingsManager::instance().write_settings(SettingsManager::default_settings);
         SettingsManager::instance().close_file();
     }
@@ -216,9 +217,11 @@ void MainWindow::set_static_info()
     const auto& current_gpu {get_current_gpu()};
     ui->lineEdit_GPU_name->setText(QString::fromStdString(current_gpu->get_name()));
     ui->lineEdit_GPU_arch->setText(QString::fromStdString(current_gpu->get_arch()));
+    ui->lineEdit_GPU_vendor->setText(QString::fromStdString(current_gpu->get_vendor()));
     ui->lineEdit_GPU_VBIOS_ver->setText(QString::fromStdString(current_gpu->get_vbios_version()));
     ui->lineEdit_GPU_driver_ver->setText(QString::fromStdString(NVMLpp::Session::instance().get_system_driver_version()));
-    ui->lineEdit_GPU_bus_type->setText(QString::fromStdString(current_gpu->get_bus_type()) + " " + QString::fromStdString(current_gpu->get_pci_bus_id()));
+    ui->lineEdit_GPU_bus_type->setText(QString::fromStdString(current_gpu->get_bus_type()));
+    ui->lineEdit_GPU_bus_id->setText(QString::fromStdString(current_gpu->get_pci_bus_id()));
     ui->lineEdit_GPU_total_mem->setText(QString::number(current_gpu->get_total_memory() / 1024 / 1024) + " MiB");
 
     if (ui->actionShow_GPU_UUID->isChecked())
@@ -366,6 +369,16 @@ void MainWindow::manual_fan_speed_control_widgets_enabled(bool value)
 
 
 
+void MainWindow::manual_clock_offset_control_widgets_enabled(bool value)
+{
+    ui->horizontalSlider_set_gpu_clock_offset->setEnabled(value);
+    ui->horizontalSlider_set_mem_clock_profile->setEnabled(value);
+    ui->pushButton_apply_clock_offset->setEnabled(value);
+
+}
+
+
+
 void MainWindow::closeEvent(QCloseEvent* event)
 {
     if (minimize_to_tray_on_close_)
@@ -423,6 +436,27 @@ void MainWindow::on_comboBox_select_fan_profile_activated(int index)
 
 
 
+void MainWindow::on_comboBox_select_clock_offset_profile_activated(int index)
+{
+    switch (index)
+    {
+    case CLOCK_PROFILE_NONE:
+        ui->pushButton_edit_curr_clock_offset_profile->setEnabled(false);
+        manual_clock_offset_control_widgets_enabled(false);
+        break;
+    case CLOCK_PROFILE_MANUAL:
+        ui->pushButton_edit_curr_clock_offset_profile->setEnabled(false);
+        manual_clock_offset_control_widgets_enabled(true);
+        break;
+    default:
+        ui->pushButton_edit_curr_clock_offset_profile->setEnabled(true);
+        manual_clock_offset_control_widgets_enabled(false);
+        break;
+    }
+}
+
+
+
 void MainWindow::on_pushButton_apply_power_limit_clicked()
 {
     gpu_power_controller_.set_power_limit(ui->horizontalSlider_change_power_limit->value());
@@ -439,11 +473,18 @@ void MainWindow::on_pushButton_apply_fan_speed_clicked()
 
 
 void MainWindow::on_pushButton_add_new_fan_profile_clicked()
-{ }
+{
+    fan_profile_dialog_window_.show();
+}
 
 
 
 void MainWindow::on_pushButton_edit_current_fan_profile_clicked()
+{ }
+
+
+
+void MainWindow::on_pushButton_apply_clock_offset_clicked()
 { }
 
 

@@ -6,6 +6,8 @@
 #include <QTimer>
 #include <QMenu>
 
+#include "nlohmann/json.hpp"
+
 #include "nvmlpp/nvmlpp_device.hpp"
 
 #include "gpu_utilizations_controller.hpp"
@@ -16,6 +18,7 @@
 #include "settings_dialog.hpp"
 #include "about_dialog.hpp"
 #include "report_a_bug_dialog.hpp"
+#include "fan_profile_dialog.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,10 +27,12 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+
     enum { FAN_PROFILE_AUTO, FAN_PROFILE_MANUAL };
+    enum { CLOCK_PROFILE_NONE, CLOCK_PROFILE_MANUAL };
 
 public:
-    MainWindow(QJsonObject app_settings, QWidget* parent = nullptr);
+    MainWindow(nlohmann::json app_settings, QWidget* parent = nullptr);
     ~MainWindow();
 
     inline QSystemTrayIcon& get_tray_icon() noexcept { return tray_icon_; }
@@ -35,7 +40,7 @@ public:
 private slots:
     void toggle_tray();
     void update_dynamic_info();
-    void on_SettingsDialog_settings_applied(const QJsonObject& app_settings);
+    void on_SettingsDialog_settings_applied(const nlohmann::json& app_settings);
 
     void on_GpuUtilizationsController_info_ready(const GpuUtilizationsController::utilization_rates& utilization_rates);
     void on_GpuPowerController_info_ready(const GpuPowerController::power_rates& power_rates);
@@ -48,11 +53,13 @@ private slots:
 
     void on_comboBox_select_GPU_activated(int index);
     void on_comboBox_select_fan_profile_activated(int index);
+    void on_comboBox_select_clock_offset_profile_activated(int index);
 
     void on_pushButton_apply_power_limit_clicked();
     void on_pushButton_apply_fan_speed_clicked();
     void on_pushButton_add_new_fan_profile_clicked();
     void on_pushButton_edit_current_fan_profile_clicked();
+    void on_pushButton_apply_clock_offset_clicked();
 
     void on_actionUpdate_GPUs_list_triggered();
     void on_actionSettings_triggered();
@@ -60,6 +67,7 @@ private slots:
     void on_actionAbout_triggered();
     void on_actionReport_a_bug_triggered();
     void on_actionShow_GPU_UUID_toggled(bool checked);
+
 
 private:
     Ui::MainWindow* ui;
@@ -80,6 +88,7 @@ private:
     SettingsDialog settings_dialog_window_;
     AboutDialog about_dialog_window_;
     ReportABugDialog report_a_bug_dialog_window_;
+    FanProfileDialog fan_profile_dialog_window_;
 
     bool curr_gpu_power_control_unsupported_;
     bool curr_gpu_clock_control_unsupported_;
@@ -90,7 +99,7 @@ protected:
 
     void connect_slots_and_signals();
     void setup_tray_menu();
-    void load_and_validate_app_settings(QJsonObject app_settings);
+    void load_and_validate_app_settings(nlohmann::json app_settings);
     void set_static_info();
     void load_GPUs();
     NVMLpp::NVML_device* get_current_gpu();
@@ -98,4 +107,5 @@ protected:
     void check_and_reconnect_signals_from_controllers();
     void check_and_enable_groupbox_widgets();
     void manual_fan_speed_control_widgets_enabled(bool value);
+    void manual_clock_offset_control_widgets_enabled(bool value);
 };
