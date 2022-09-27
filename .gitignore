@@ -1,7 +1,3 @@
 build*
-*.tar.zst
 *.user*
-GWEpp/
-pkg/
-src/
 
