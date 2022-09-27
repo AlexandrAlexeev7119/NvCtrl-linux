@@ -78,7 +78,7 @@
            <item row="4" column="0">
             <widget class="QLabel" name="label_GPU_decoder_usage">
              <property name="text">
-              <string>Decoder usage</string>
+              <string>Decoder</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -112,7 +112,7 @@
            <item row="3" column="0">
             <widget class="QLabel" name="label_GPU_mem_usage">
              <property name="text">
-              <string>Memory usage</string>
+              <string>Memory</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -122,7 +122,7 @@
            <item row="4" column="3">
             <widget class="QLabel" name="label_GPU_encoder_usage">
              <property name="text">
-              <string>Encoder usage</string>
+              <string>Encoder </string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -139,7 +139,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_GPU_usage">
              <property name="text">
-              <string>GPU usage</string>
+              <string>GPU</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

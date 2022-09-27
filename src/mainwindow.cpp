@@ -85,6 +85,13 @@ void MainWindow::on_SettingsDialog_settings_applied(const nlohmann::json& app_se
 
 
 
+void MainWindow::on_FanProfileDialog_new_profile_created(const nlohmann::json& app_settings)
+{
+    ui->comboBox_select_fan_profile->addItem(QString::fromStdString(app_settings.back()["name"].get<std::string>()));
+}
+
+
+
 void MainWindow::on_GpuUtilizationsController_info_ready(const GpuUtilizationsController::utilization_rates& utilization_rates)
 {
     ui->progressBar_GPU_usage->setValue(utilization_rates.gpu);
@@ -196,14 +203,26 @@ void MainWindow::load_and_validate_app_settings(nlohmann::json app_settings)
 {
     minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].get<bool>();
     update_freq_ms_ = app_settings["update_freq_ms"].get<unsigned>();
+    auto& fan_speed_profiles = app_settings["fan_speed_profiles"];
 
     if (update_freq_ms_ < 500)
     {
         update_freq_ms_ = 500;
-        qWarning().noquote().nospace() << "Wrong settings detected, fallback to default";
+        app_settings["update_freq_ms"] = update_freq_ms_;
+
+        qWarning().noquote().nospace() << "Wrong update_freq_ms_ detected, fallback to default (" << update_freq_ms_ << ")";
+
         SettingsManager::instance().open_file(std::ios::out);
-        SettingsManager::instance().write_settings(SettingsManager::default_settings);
+        SettingsManager::instance().write_settings(app_settings);
         SettingsManager::instance().close_file();
+    }
+
+    if (!fan_speed_profiles.is_null())
+    {
+        for (auto& fan_speed_profile : fan_speed_profiles)
+        {
+            ui->comboBox_select_fan_profile->addItem(QString::fromStdString(fan_speed_profile["name"].get<std::string>()));
+        }
     }
 
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
@@ -430,7 +449,9 @@ void MainWindow::on_comboBox_select_fan_profile_activated(int index)
         gpu_fan_controller_.set_fan_control_state(ui->comboBox_select_GPU->currentIndex(), true);
         manual_fan_speed_control_widgets_enabled(false);
         ui->pushButton_edit_current_fan_profile->setEnabled(true);
+        break;
     }
+
     qInfo().noquote().nospace() << "Selected fan control profile: " << ui->comboBox_select_fan_profile->currentText();
 }
 
