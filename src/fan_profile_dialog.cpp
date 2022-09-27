@@ -23,7 +23,7 @@ void FanProfileDialog::on_pushButton_create_new_profile_clicked()
     SettingsManager::instance().close_file();
 
     create_or_apped_fan_speed_profile(app_settings);
-    emit new_profile_created(app_settings);
+    emit new_profile_created(app_settings["fan_speed_profiles"]);
     qInfo().noquote().nospace() << "New fan profile created: " << ui->lineEdit_profile_name->text();
 
     SettingsManager::instance().open_file(std::ios::out);
@@ -42,7 +42,9 @@ void FanProfileDialog::on_pushButton_close_clicked()
 
 void FanProfileDialog::create_or_apped_fan_speed_profile(nlohmann::json& app_settings)
 {
-    if (app_settings["fan_speed_profiles"].is_null())
+    auto& fan_speed_profiles = app_settings["fan_speed_profiles"];
+
+    if (fan_speed_profiles.is_null())
     {
         const nlohmann::json::array_t new_array {
             {
@@ -55,7 +57,6 @@ void FanProfileDialog::create_or_apped_fan_speed_profile(nlohmann::json& app_set
     }
     else
     {
-        auto fan_speed_profiles = app_settings["fan_speed_profiles"];
         fan_speed_profiles.emplace_back(nlohmann::json::object_t {
                                             {"name", ui->lineEdit_profile_name->text().toStdString()},
                                             {"fan_speed", ui->horizontalSlider_fan_speed->value()}

@@ -40,7 +40,9 @@ public:
 private slots:
     void toggle_tray();
     void update_dynamic_info();
+
     void on_SettingsDialog_settings_applied(const nlohmann::json& app_settings);
+    void on_FanProfileDialog_new_profile_created(const nlohmann::json& app_settings);
 
     void on_GpuUtilizationsController_info_ready(const GpuUtilizationsController::utilization_rates& utilization_rates);
     void on_GpuPowerController_info_ready(const GpuPowerController::power_rates& power_rates);
@@ -67,7 +69,6 @@ private slots:
     void on_actionAbout_triggered();
     void on_actionReport_a_bug_triggered();
     void on_actionShow_GPU_UUID_toggled(bool checked);
-
 
 private:
     Ui::MainWindow* ui;
