@@ -242,6 +242,8 @@ void MainWindow::set_static_info()
     ui->lineEdit_GPU_bus_type->setText(QString::fromStdString(current_gpu->get_bus_type()));
     ui->lineEdit_GPU_bus_id->setText(QString::fromStdString(current_gpu->get_pci_bus_id()));
     ui->lineEdit_GPU_total_mem->setText(QString::number(current_gpu->get_total_memory() / 1024 / 1024) + " MiB");
+    ui->lineEdit_GPU_slowdown_temp->setText(QString::number(current_gpu->get_slowdown_temperature()) + "°C");
+    ui->lineEdit_GPU_shutdown_temp->setText(QString::number(current_gpu->get_shutdown_temperature()) + "°C");
 
     if (ui->actionShow_GPU_UUID->isChecked())
     {
