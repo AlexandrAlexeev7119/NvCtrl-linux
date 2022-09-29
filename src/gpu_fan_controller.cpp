@@ -34,7 +34,7 @@ void GpuFanController::update_info()
 
 
 
-void GpuFanController::set_fan_speed(unsigned device_index, unsigned fan_speed_level)
+void GpuFanController::set_fan_speed(unsigned fan_speed_level)
 {
     const auto set_fan_speed {QString{NVIDIA_SETTINGS_GPU_FAN_SPEED}.arg(fan_speed_level)};
     run_nvidia_settings(set_fan_speed);
@@ -42,11 +42,11 @@ void GpuFanController::set_fan_speed(unsigned device_index, unsigned fan_speed_l
 
 
 
-void GpuFanController::set_fan_control_state(unsigned device_index, bool value)
+void GpuFanController::set_fan_control_state(bool value)
 {
     const auto enable_fan_control {
         QString{NVIDIA_SETTINGS_GPU_FAN_CONTROL_STATE}
-                .arg(device_index)
+                .arg(current_gpu_->get_index())
                 .arg(static_cast<int>(value))
     };
     run_nvidia_settings(enable_fan_control);

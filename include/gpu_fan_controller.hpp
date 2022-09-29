@@ -17,8 +17,8 @@ public:
 
 public slots:
     void update_info();
-    void set_fan_speed(unsigned device_index, unsigned fan_speed_level);
-    void set_fan_control_state(unsigned device_index, bool value);
+    void set_fan_speed(unsigned fan_speed_level);
+    void set_fan_control_state(bool value);
 
 signals:
     void info_ready(const GpuFanController::fan_rates&);

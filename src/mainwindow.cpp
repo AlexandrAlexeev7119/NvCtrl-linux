@@ -16,7 +16,8 @@ MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
     , gpu_clock_controller_ {}
     , gpu_fan_controller_ {}
     , dynamic_info_update_timer_ {}
-    , nvml_devices_list_ {}
+    , nvmlpp_session_ {NVMLpp::Session::instance()}
+    , current_gpu_ {NVMLpp::NVML_device::from_index(0)}
     , settings_dialog_window_ {this}
     , about_dialog_window_ {this}
     , report_a_bug_dialog_window_ {this}
@@ -29,11 +30,13 @@ MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
     ui->setupUi(this);
     setMinimumSize(size());
 
+    app_settings_ = std::move(app_settings);
+
     connect_slots_and_signals();
     setup_tray_menu();
-    load_and_validate_app_settings(std::move(app_settings));
-    load_GPUs();
+    load_and_validate_app_settings();
 
+    set_current_gpu_for_controllers();
     set_static_info();
     update_dynamic_info();
 
@@ -199,21 +202,21 @@ void MainWindow::setup_tray_menu()
 
 
 
-void MainWindow::load_and_validate_app_settings(nlohmann::json app_settings)
+void MainWindow::load_and_validate_app_settings()
 {
-    minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].get<bool>();
-    update_freq_ms_ = app_settings["update_freq_ms"].get<unsigned>();
-    auto& fan_speed_profiles = app_settings["fan_speed_profiles"];
+    minimize_to_tray_on_close_ = app_settings_["minimize_to_tray_on_close"].get<bool>();
+    update_freq_ms_ = app_settings_["update_freq_ms"].get<unsigned>();
+    auto& fan_speed_profiles = app_settings_["fan_speed_profiles"];
 
     if (update_freq_ms_ < 500)
     {
         update_freq_ms_ = 500;
-        app_settings["update_freq_ms"] = update_freq_ms_;
+        app_settings_["update_freq_ms"] = update_freq_ms_;
 
         qWarning().noquote().nospace() << "Wrong update_freq_ms_ detected, fallback to default (" << update_freq_ms_ << ")";
 
         SettingsManager::instance().open_file(std::ios::out);
-        SettingsManager::instance().write_settings(app_settings);
+        SettingsManager::instance().write_settings(app_settings_);
         SettingsManager::instance().close_file();
     }
 
@@ -233,22 +236,21 @@ void MainWindow::load_and_validate_app_settings(nlohmann::json app_settings)
 
 void MainWindow::set_static_info()
 {
-    const auto& current_gpu {get_current_gpu()};
-    ui->lineEdit_GPU_name->setText(QString::fromStdString(current_gpu->get_name()));
-    ui->lineEdit_GPU_arch->setText(QString::fromStdString(current_gpu->get_arch()));
-    ui->lineEdit_GPU_vendor->setText(QString::fromStdString(current_gpu->get_vendor()));
-    ui->lineEdit_GPU_subvendor->setText(QString::fromStdString(current_gpu->get_subvendor()));
-    ui->lineEdit_GPU_VBIOS_ver->setText(QString::fromStdString(current_gpu->get_vbios_version()));
-    ui->lineEdit_GPU_driver_ver->setText(QString::fromStdString(NVMLpp::Session::instance().get_system_driver_version()));
-    ui->lineEdit_GPU_bus_type->setText(QString::fromStdString(current_gpu->get_bus_type()));
-    ui->lineEdit_GPU_bus_id->setText(QString::fromStdString(current_gpu->get_pci_bus_id()));
-    ui->lineEdit_GPU_total_mem->setText(QString::number(current_gpu->get_total_memory() / 1024 / 1024) + " MiB");
-    ui->lineEdit_GPU_slowdown_temp->setText(QString::number(current_gpu->get_slowdown_temperature()) + "°C");
-    ui->lineEdit_GPU_shutdown_temp->setText(QString::number(current_gpu->get_shutdown_temperature()) + "°C");
+    ui->lineEdit_GPU_name->setText(QString::fromStdString(current_gpu_.get_name()));
+    ui->lineEdit_GPU_arch->setText(QString::fromStdString(current_gpu_.get_arch()));
+    ui->lineEdit_GPU_vendor->setText(QString::fromStdString(current_gpu_.get_vendor()));
+    ui->lineEdit_GPU_subvendor->setText(QString::fromStdString(current_gpu_.get_subvendor()));
+    ui->lineEdit_GPU_VBIOS_ver->setText(QString::fromStdString(current_gpu_.get_vbios_version()));
+    ui->lineEdit_GPU_driver_ver->setText(QString::fromStdString(nvmlpp_session_.get_system_driver_version()));
+    ui->lineEdit_GPU_bus_type->setText(QString::fromStdString(current_gpu_.get_bus_type()));
+    ui->lineEdit_GPU_bus_id->setText(QString::fromStdString(current_gpu_.get_pci_bus_id()));
+    ui->lineEdit_GPU_total_mem->setText(QString::number(current_gpu_.get_total_memory() / 1024 / 1024) + " MiB");
+    ui->lineEdit_GPU_slowdown_temp->setText(QString::number(current_gpu_.get_slowdown_temperature()) + "°C");
+    ui->lineEdit_GPU_shutdown_temp->setText(QString::number(current_gpu_.get_shutdown_temperature()) + "°C");
 
     if (ui->actionShow_GPU_UUID->isChecked())
     {
-        ui->lineEdit_GPU_uuid->setText(QString::fromStdString(current_gpu->get_uuid()));
+        ui->lineEdit_GPU_uuid->setText(QString::fromStdString(current_gpu_.get_uuid()));
     }
     else
     {
@@ -258,12 +260,12 @@ void MainWindow::set_static_info()
 
     try
     {
-        const unsigned min_power_limit {current_gpu->get_min_power_limit() / 1000};
-        const unsigned max_power_limit {current_gpu->get_max_power_limit() / 1000};
-        const unsigned current_power_limit {current_gpu->get_current_power_limit() / 1000};
+        const unsigned min_power_limit {current_gpu_.get_min_power_limit() / 1000};
+        const unsigned max_power_limit {current_gpu_.get_max_power_limit() / 1000};
+        const unsigned current_power_limit {current_gpu_.get_current_power_limit() / 1000};
 
-        ui->lineEdit_default_power_limit->setText(QString::number(current_gpu->get_default_power_limit() / 1000) + " W");
-        ui->lineEdit_enforced_power_limit->setText(QString::number(current_gpu->get_enforced_power_limit() / 1000) + " W");
+        ui->lineEdit_default_power_limit->setText(QString::number(current_gpu_.get_default_power_limit() / 1000) + " W");
+        ui->lineEdit_enforced_power_limit->setText(QString::number(current_gpu_.get_enforced_power_limit() / 1000) + " W");
         ui->label_power_limit_slider_indicator->setText(QString::number(current_power_limit));
         ui->lineEdit_min_power_limit->setText(QString::number(min_power_limit) + " W");
         ui->lineEdit_max_power_limit->setText(QString::number(max_power_limit) + " W");
@@ -280,10 +282,10 @@ void MainWindow::set_static_info()
 
     try
     {
-        ui->lineEdit_graphics_clock_max->setText(QString::number(current_gpu->get_max_clock_graphics()) + " MHz");
-        ui->lineEdit_video_clock_max->setText(QString::number(current_gpu->get_max_clock_video()) + " MHz");
-        ui->lineEdit_sm_clock_max->setText(QString::number(current_gpu->get_max_clock_sm()) + " MHz");
-        ui->lineEdit_memory_clock_max->setText(QString::number(current_gpu->get_max_clock_memory()) + " MHz");
+        ui->lineEdit_graphics_clock_max->setText(QString::number(current_gpu_.get_max_clock_graphics()) + " MHz");
+        ui->lineEdit_video_clock_max->setText(QString::number(current_gpu_.get_max_clock_video()) + " MHz");
+        ui->lineEdit_sm_clock_max->setText(QString::number(current_gpu_.get_max_clock_sm()) + " MHz");
+        ui->lineEdit_memory_clock_max->setText(QString::number(current_gpu_.get_max_clock_memory()) + " MHz");
     }
     catch (const NVMLpp::errors::error_not_supported&)
     {
@@ -297,36 +299,12 @@ void MainWindow::set_static_info()
 
 
 
-void MainWindow::load_GPUs()
-{
-    nvml_devices_list_ = NVMLpp::Session::instance().get_devices();
-    for (const auto& gpu : nvml_devices_list_)
-    {
-        ui->comboBox_select_GPU->addItem(QString::fromStdString(gpu.get_name()));
-    }
-
-    set_current_gpu_for_controllers();
-
-    qInfo().noquote().nospace() << "Total GPUs found: " << nvml_devices_list_.size();
-}
-
-
-
-NVMLpp::NVML_device* MainWindow::get_current_gpu()
-{
-    const int current_device_index {ui->comboBox_select_GPU->currentIndex()};
-    return &nvml_devices_list_.at(current_device_index);
-}
-
-
-
 void MainWindow::set_current_gpu_for_controllers() noexcept
 {
-    const auto current_gpu {get_current_gpu()};
-    gpu_utilizations_controller_.set_device(current_gpu);
-    gpu_power_controller_.set_device(current_gpu);
-    gpu_clock_controller_.set_device(current_gpu);
-    gpu_fan_controller_.set_device(current_gpu);
+    gpu_utilizations_controller_.set_device(&current_gpu_);
+    gpu_power_controller_.set_device(&current_gpu_);
+    gpu_clock_controller_.set_device(&current_gpu_);
+    gpu_fan_controller_.set_device(&current_gpu_);
 }
 
 
@@ -396,7 +374,6 @@ void MainWindow::manual_clock_offset_control_widgets_enabled(bool value)
     ui->horizontalSlider_set_gpu_clock_offset->setEnabled(value);
     ui->horizontalSlider_set_mem_clock_profile->setEnabled(value);
     ui->pushButton_apply_clock_offset->setEnabled(value);
-
 }
 
 
@@ -420,36 +397,22 @@ void MainWindow::closeEvent(QCloseEvent* event)
 
 
 
-void MainWindow::on_comboBox_select_GPU_activated(int index)
-{
-    qInfo().noquote().nospace() << "GPU selected: " << ui->comboBox_select_GPU->currentText();
-
-    set_current_gpu_for_controllers();
-
-    check_and_reconnect_signals_from_controllers();
-    check_and_enable_groupbox_widgets();
-
-    set_static_info();
-}
-
-
-
 void MainWindow::on_comboBox_select_fan_profile_activated(int index)
 {
     switch (index)
     {
     case FAN_PROFILE_AUTO:
-        gpu_fan_controller_.set_fan_control_state(ui->comboBox_select_GPU->currentIndex(), false);
+        gpu_fan_controller_.set_fan_control_state(false);
         manual_fan_speed_control_widgets_enabled(false);
         ui->pushButton_edit_current_fan_profile->setEnabled(false);
         break;
     case FAN_PROFILE_MANUAL:
-        gpu_fan_controller_.set_fan_control_state(ui->comboBox_select_GPU->currentIndex(), true);
+        gpu_fan_controller_.set_fan_control_state(true);
         manual_fan_speed_control_widgets_enabled(true);
         ui->pushButton_edit_current_fan_profile->setEnabled(false);
         break;
     default:
-        gpu_fan_controller_.set_fan_control_state(ui->comboBox_select_GPU->currentIndex(), true);
+        gpu_fan_controller_.set_fan_control_state(true);
         manual_fan_speed_control_widgets_enabled(false);
         ui->pushButton_edit_current_fan_profile->setEnabled(true);
         break;
@@ -490,8 +453,7 @@ void MainWindow::on_pushButton_apply_power_limit_clicked()
 
 void MainWindow::on_pushButton_apply_fan_speed_clicked()
 {
-    gpu_fan_controller_.set_fan_speed(ui->comboBox_select_GPU->currentIndex(),
-                                      ui->horizontalSlider_set_fan_speed->value());
+    gpu_fan_controller_.set_fan_speed(ui->horizontalSlider_set_fan_speed->value());
 }
 
 
@@ -510,16 +472,6 @@ void MainWindow::on_pushButton_edit_current_fan_profile_clicked()
 
 void MainWindow::on_pushButton_apply_clock_offset_clicked()
 { }
-
-
-
-void MainWindow::on_actionUpdate_GPUs_list_triggered()
-{
-    qInfo().noquote().noquote() << "Updating GPUs list:";
-    nvml_devices_list_.clear();
-    ui->comboBox_select_GPU->clear();
-    load_GPUs();
-}
 
 
 
@@ -556,8 +508,7 @@ void MainWindow::on_actionShow_GPU_UUID_toggled(bool checked)
 {
     if (checked)
     {
-        const auto& current_gpu {get_current_gpu()};
-        ui->lineEdit_GPU_uuid->setText(QString::fromStdString(current_gpu->get_uuid()));
+        ui->lineEdit_GPU_uuid->setText(QString::fromStdString(current_gpu_.get_uuid()));
         ui->lineEdit_GPU_uuid->setToolTip("");
     }
     else

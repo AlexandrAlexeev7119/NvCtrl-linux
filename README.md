@@ -16,7 +16,7 @@ no other shit such as python
 
 ### Building from sources
 ```
-$ git clone --recurse-submodules https://codeberg.org/AlexCr4ckPentest/GWEpp
+$ git clone --recurse-submodules https://notabug.org/AlexCr4ckPentest/GWEpp
 $ cd GWEpp
 $ mkdir build && cd build
 $ cmake ..
