@@ -21,7 +21,7 @@ public:
 
 public slots:
     void update_info();
-    void set_clock_offsets(unsigned gpu_id, unsigned gpu_clock_offset, unsigned memory_clock_offset);
+    void set_clock_offsets(unsigned gpu_clock_offset, unsigned memory_clock_offset);
 
 signals:
     void info_ready(const GpuClockController::clock_values&);

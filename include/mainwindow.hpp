@@ -8,6 +8,7 @@
 
 #include "nlohmann/json.hpp"
 
+#include "nvmlpp/nvmlpp_session.hpp"
 #include "nvmlpp/nvmlpp_device.hpp"
 
 #include "gpu_utilizations_controller.hpp"
@@ -53,7 +54,6 @@ private slots:
     void on_GpuClockController_error();
     void on_GpuFanController_error();
 
-    void on_comboBox_select_GPU_activated(int index);
     void on_comboBox_select_fan_profile_activated(int index);
     void on_comboBox_select_clock_offset_profile_activated(int index);
 
@@ -63,7 +63,6 @@ private slots:
     void on_pushButton_edit_current_fan_profile_clicked();
     void on_pushButton_apply_clock_offset_clicked();
 
-    void on_actionUpdate_GPUs_list_triggered();
     void on_actionSettings_triggered();
     void on_actionQuit_triggered();
     void on_actionAbout_triggered();
@@ -73,6 +72,7 @@ private slots:
 private:
     Ui::MainWindow* ui;
     QSystemTrayIcon tray_icon_;
+    nlohmann::json app_settings_;
     QMenu tray_menu_;
 
     GpuUtilizationsController gpu_utilizations_controller_;
@@ -84,7 +84,8 @@ private:
     bool minimize_to_tray_on_close_;
     int update_freq_ms_;
 
-    std::vector<NVMLpp::NVML_device> nvml_devices_list_;
+    NVMLpp::Session& nvmlpp_session_;
+    NVMLpp::NVML_device current_gpu_;
 
     SettingsDialog settings_dialog_window_;
     AboutDialog about_dialog_window_;
@@ -100,10 +101,8 @@ protected:
 
     void connect_slots_and_signals();
     void setup_tray_menu();
-    void load_and_validate_app_settings(nlohmann::json app_settings);
+    void load_and_validate_app_settings();
     void set_static_info();
-    void load_GPUs();
-    NVMLpp::NVML_device* get_current_gpu();
     void set_current_gpu_for_controllers() noexcept;
     void check_and_reconnect_signals_from_controllers();
     void check_and_enable_groupbox_widgets();

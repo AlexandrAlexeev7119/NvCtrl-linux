@@ -34,10 +34,10 @@ void GpuClockController::update_info()
     }
 }
 
-void GpuClockController::set_clock_offsets(unsigned gpu_id, unsigned gpu_clock_offset, unsigned memory_clock_offset)
+void GpuClockController::set_clock_offsets(unsigned gpu_clock_offset, unsigned memory_clock_offset)
 {
-    run_nvidia_settings(QString{NVIDIA_SETTINGS_GPU_CLOCK_OFFSET}.arg(gpu_id).arg(gpu_clock_offset));
-    run_nvidia_settings(QString{NVIDIA_SETTINGS_GPU_CLOCK_OFFSET}.arg(gpu_id).arg(memory_clock_offset));
+    run_nvidia_settings(QString{NVIDIA_SETTINGS_GPU_CLOCK_OFFSET}.arg(current_gpu_->get_index()).arg(gpu_clock_offset));
+    run_nvidia_settings(QString{NVIDIA_SETTINGS_GPU_CLOCK_OFFSET}.arg(current_gpu_->get_index()).arg(memory_clock_offset));
 }
 
 void GpuClockController::run_nvidia_settings(const QString& arg)
