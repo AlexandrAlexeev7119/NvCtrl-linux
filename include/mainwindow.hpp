@@ -104,8 +104,6 @@ protected:
     void load_and_validate_app_settings();
     void set_static_info();
     void set_current_gpu_for_controllers() noexcept;
-    void check_and_reconnect_signals_from_controllers();
-    void check_and_enable_groupbox_widgets();
     void manual_fan_speed_control_widgets_enabled(bool value);
     void manual_clock_offset_control_widgets_enabled(bool value);
 };

@@ -309,57 +309,6 @@ void MainWindow::set_current_gpu_for_controllers() noexcept
 
 
 
-void MainWindow::check_and_reconnect_signals_from_controllers()
-{
-    if (curr_gpu_power_control_unsupported_)
-    {
-        connect(&gpu_power_controller_, &GpuPowerController::info_ready, this, &MainWindow::on_GpuPowerController_info_ready);
-        connect(&gpu_power_controller_, &GpuPowerController::error, this, &MainWindow::on_GpuPowerController_error);
-        curr_gpu_power_control_unsupported_ = false;
-        qInfo().noquote().nospace() << "Reconnecting signals for power control...";
-    }
-    if (curr_gpu_clock_control_unsupported_)
-    {
-        connect(&gpu_clock_controller_, &GpuClockController::info_ready, this, &MainWindow::on_GpuClockController_info_ready);
-        connect(&gpu_clock_controller_, &GpuClockController::error, this, &MainWindow::on_GpuClockController_error);
-        curr_gpu_clock_control_unsupported_ = false;
-        qInfo().noquote().nospace() << "Reconnecting signals for clock control...";
-    }
-    if (curr_gpu_fan_control_unsupported_)
-    {
-        connect(&gpu_fan_controller_, &GpuFanController::info_ready, this, &MainWindow::on_GpuFanController_info_ready);
-        connect(&gpu_fan_controller_, &GpuFanController::error, this, &MainWindow::on_GpuFanController_error);
-        curr_gpu_fan_control_unsupported_ = false;
-        qInfo().noquote().nospace() << "Reconnecting signals for fan control...";
-    }
-}
-
-
-
-void MainWindow::check_and_enable_groupbox_widgets()
-{
-    if (!ui->groupBox_power_control->isEnabled())
-    {
-        ui->groupBox_power_control->setEnabled(true);
-        ui->groupBox_power_control->setToolTip("");
-        qInfo().noquote().nospace() << "Enabling groupBox widget for power control...";
-    }
-    if (!ui->groupBox_clock_info->isEnabled())
-    {
-        ui->groupBox_clock_info->setEnabled(true);
-        ui->groupBox_clock_info->setToolTip("");
-        qInfo().noquote().nospace() << "Enabling groupBox widget for clock control...";
-    }
-    if (!ui->groupBox_fan_control->isEnabled())
-    {
-        ui->groupBox_fan_control->setEnabled(true);
-        ui->groupBox_fan_control->setToolTip("");
-        qInfo().noquote().nospace() << "Enabling groupBox widget for fan control...";
-    }
-}
-
-
-
 void MainWindow::manual_fan_speed_control_widgets_enabled(bool value)
 {
     ui->horizontalSlider_set_fan_speed->setEnabled(value);
