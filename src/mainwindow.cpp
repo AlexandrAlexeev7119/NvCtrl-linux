@@ -365,6 +365,12 @@ void MainWindow::on_comboBox_select_fan_profile_activated(int index)
         gpu_fan_controller_.set_fan_control_state(true);
         manual_fan_speed_control_widgets_enabled(false);
         ui->pushButton_edit_current_fan_profile->setEnabled(true);
+        {
+            auto& fan_profiles  = app_settings_["fan_speed_profiles"];
+            const unsigned profile_index_in_array {static_cast<unsigned>(index - 2)};
+            const unsigned fan_speed_level {fan_profiles[profile_index_in_array]["fan_speed"].get<unsigned>()};
+            gpu_fan_controller_.set_fan_speed(fan_speed_level);
+        }
         break;
     }
 
