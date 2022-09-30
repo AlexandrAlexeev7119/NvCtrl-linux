@@ -18,6 +18,7 @@ public:
         unsigned encoder;
         unsigned decoder;
         unsigned pstate;
+        unsigned gpu_core_temp;
     };
 
     GpuUtilizationsController(const NVMLpp::NVML_device* nvml_device = nullptr, QObject* parrent = nullptr);

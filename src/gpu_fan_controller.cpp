@@ -22,7 +22,7 @@ void GpuFanController::update_info()
     try
     {
         fan_rates fan_rates_ {
-            .speed = current_gpu_->get_current_fan_speed_level()
+            .fan_speed_level = current_gpu_->get_current_fan_speed_level()
         };
         emit info_ready(fan_rates_);
     }
