@@ -6,34 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>350</width>
-    <height>195</height>
+    <width>355</width>
+    <height>212</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>GWEpp: About</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="5" column="0" colspan="3">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="0" colspan="4">
-    <widget class="QLabel" name="label_about_program">
+   <item row="2" column="0" colspan="3">
+    <widget class="QLabel" name="label_copyright">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;GWEpp - GreenWithEnvy plus plus&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;A program for control Nvidia GPU on GNU/Linux&lt;br/&gt;Re-implementation of original GWE which is written in Python&lt;br/&gt;But GWEpp uses only Qt, C++ and NVML directly&lt;br/&gt;and without extra dependencies&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright © 2022 AlexCr4ckPentest&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
      </property>
     </widget>
    </item>
@@ -50,16 +37,41 @@
       <string>v0.0.0</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="3">
-    <widget class="QLabel" name="label_copyright">
+   <item row="0" column="0" rowspan="2" colspan="4">
+    <widget class="QLabel" name="label_about_program">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright © 2022 AlexCr4ckPentest&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;GWEpp - GreenWithEnvy plus plus&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;A program for control Nvidia GPU on GNU/Linux&lt;br/&gt;Re-implementation of original GWE which is written in Python&lt;br/&gt;But GWEpp uses only Qt, C++ and NVML directly&lt;br/&gt;and without extra dependencies&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::RichText</enum>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
+   </item>
+   <item row="5" column="0" colspan="3">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
