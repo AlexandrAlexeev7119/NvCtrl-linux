@@ -9,7 +9,7 @@ class GpuFanController : public QObject
 public:
     struct fan_rates
     {
-        unsigned speed;
+        unsigned fan_speed_level;
     };
 
     GpuFanController(NVMLpp::NVML_device* nvml_device = nullptr, QObject* parent = nullptr);

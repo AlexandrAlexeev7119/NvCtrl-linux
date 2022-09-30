@@ -103,6 +103,7 @@ void MainWindow::on_GpuUtilizationsController_info_ready(const GpuUtilizationsCo
     ui->progressBar_GPU_decoder_usage->setValue(utilization_rates.decoder);
     ui->lineEdit_GPU_mem_usage->setText(QString::number(utilization_rates.mem_used / 1024 / 1024) + " MiB");
     ui->lineEdit_current_pstate->setText("Pstate: " + QString::number(utilization_rates.pstate));
+    ui->label_current_gpu_core_temp_value->setText(QString::number(utilization_rates.gpu_core_temp) + "°C");
 }
 
 
@@ -127,7 +128,7 @@ void MainWindow::on_GpuClockController_info_ready(const GpuClockController::cloc
 
 void MainWindow::on_GpuFanController_info_ready(const GpuFanController::fan_rates& fan_rates)
 {
-    ui->label_current_fan_speed->setText(QString::number(fan_rates.speed) + "%");
+    ui->label_current_fan_speed_level_value->setText(QString::number(fan_rates.fan_speed_level) + "%");
 }
 
 
