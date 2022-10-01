@@ -17,8 +17,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-add_subdirectory(lib/NVMLpp/)
-add_subdirectory(lib/spdlog/)
+add_subdirectory(lib/NVMLpp)
+add_subdirectory(lib/spdlog)
 
 file(GLOB_RECURSE SRC src/*.cpp)
 file(GLOB_RECURSE HDR include/*.hpp)
