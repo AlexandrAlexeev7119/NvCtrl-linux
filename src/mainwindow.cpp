@@ -22,6 +22,7 @@ MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
     , about_dialog_window_ {this}
     , report_a_bug_dialog_window_ {this}
     , fan_profile_dialog_window_ {this}
+    , edit_fan_profile_dialog_window_ {this}
     , tray_menu_ {this}
     , curr_gpu_power_control_unsupported_ {false}
     , curr_gpu_clock_control_unsupported_ {false}
@@ -88,9 +89,17 @@ void MainWindow::on_SettingsDialog_settings_applied(const nlohmann::json& app_se
 
 
 
-void MainWindow::on_FanProfileDialog_new_profile_created(const nlohmann::json& app_settings)
+void MainWindow::on_FanProfileDialog_new_profile_created(const nlohmann::json& curr_fan_profile)
 {
-    ui->comboBox_select_fan_profile->addItem(QString::fromStdString(app_settings.back()["name"].get<std::string>()));
+    ui->comboBox_select_fan_profile->addItem(QString::fromStdString(curr_fan_profile.back()["name"].get<std::string>()));
+}
+
+
+
+void MainWindow::on_EditFanProfileDialog_current_fan_profile_changed(const nlohmann::json& curr_fan_profile)
+{
+    const unsigned fan_speed {curr_fan_profile["fan_speed"].get<unsigned>()};
+    gpu_fan_controller_.set_fan_speed(fan_speed);
 }
 
 
@@ -422,7 +431,11 @@ void MainWindow::on_pushButton_add_new_fan_profile_clicked()
 
 
 void MainWindow::on_pushButton_edit_current_fan_profile_clicked()
-{ }
+{
+    const unsigned curr_fan_profile_index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex() - 2)};
+    edit_fan_profile_dialog_window_.set_current_fan_profile_index(curr_fan_profile_index);
+    edit_fan_profile_dialog_window_.show();
+}
 
 
 

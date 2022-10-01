@@ -20,6 +20,7 @@
 #include "about_dialog.hpp"
 #include "report_a_bug_dialog.hpp"
 #include "fan_profile_dialog.hpp"
+#include "edit_fan_profile_dialog.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -43,7 +44,8 @@ private slots:
     void update_dynamic_info();
 
     void on_SettingsDialog_settings_applied(const nlohmann::json& app_settings);
-    void on_FanProfileDialog_new_profile_created(const nlohmann::json& app_settings);
+    void on_FanProfileDialog_new_profile_created(const nlohmann::json& curr_fan_profile);
+    void on_EditFanProfileDialog_current_fan_profile_changed(const nlohmann::json& curr_fan_profile);
 
     void on_GpuUtilizationsController_info_ready(const GpuUtilizationsController::utilization_rates& utilization_rates);
     void on_GpuPowerController_info_ready(const GpuPowerController::power_rates& power_rates);
@@ -91,6 +93,7 @@ private:
     AboutDialog about_dialog_window_;
     ReportABugDialog report_a_bug_dialog_window_;
     FanProfileDialog fan_profile_dialog_window_;
+    EditFanProfileDialog edit_fan_profile_dialog_window_;
 
     bool curr_gpu_power_control_unsupported_;
     bool curr_gpu_clock_control_unsupported_;
