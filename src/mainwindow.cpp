@@ -324,7 +324,6 @@ void MainWindow::manual_fan_speed_control_widgets_enabled(bool value)
 {
     ui->horizontalSlider_set_fan_speed->setEnabled(value);
     ui->label_set_fan_speed_slider_indicator->setEnabled(value);
-    ui->pushButton_apply_fan_speed->setEnabled(value);
 }
 
 
@@ -375,13 +374,6 @@ void MainWindow::on_comboBox_select_fan_profile_activated(int index)
         gpu_fan_controller_.set_fan_control_state(true);
         manual_fan_speed_control_widgets_enabled(false);
         ui->pushButton_edit_current_fan_profile->setEnabled(true);
-        {
-            const unsigned profile_index_in_array {static_cast<unsigned>(index - 2)};
-            const auto& fan_profiles  = app_settings_["fan_speed_profiles"];
-            const auto& current_fan_profile = fan_profiles[profile_index_in_array];
-            const unsigned fan_speed_level {current_fan_profile["fan_speed"].get<unsigned>()};
-            gpu_fan_controller_.set_fan_speed(fan_speed_level);
-        }
         break;
     }
 
@@ -420,7 +412,25 @@ void MainWindow::on_pushButton_apply_power_limit_clicked()
 
 void MainWindow::on_pushButton_apply_fan_speed_clicked()
 {
-    gpu_fan_controller_.set_fan_speed(ui->horizontalSlider_set_fan_speed->value());
+    const unsigned index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex())};
+
+    switch (index)
+    {
+    case CLOCK_PROFILE_NONE:
+        break;
+    case CLOCK_PROFILE_MANUAL:
+        gpu_fan_controller_.set_fan_speed(ui->horizontalSlider_set_fan_speed->value());
+        break;
+    default:
+        {
+            const unsigned profile_index_in_array {static_cast<unsigned>(index - 2)};
+            const auto& fan_profiles  = app_settings_["fan_speed_profiles"];
+            const auto& current_fan_profile = fan_profiles[profile_index_in_array];
+            const unsigned fan_speed_level {current_fan_profile["fan_speed"].get<unsigned>()};
+            gpu_fan_controller_.set_fan_speed(fan_speed_level);
+        }
+        break;
+    }
 }
 
 
