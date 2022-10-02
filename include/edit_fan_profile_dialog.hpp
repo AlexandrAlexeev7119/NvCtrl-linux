@@ -13,8 +13,10 @@ class EditFanProfileDialog : public QDialog
 
 public:
     explicit EditFanProfileDialog(QWidget* parent = nullptr);
-    void set_current_fan_profile_index(unsigned index) noexcept;
     ~EditFanProfileDialog();
+
+    void load_app_settins(nlohmann::json* app_settings) noexcept;
+    void set_current_fan_profile_index(unsigned index) noexcept;
 
 signals:
     void current_fan_profile_changed(const nlohmann::json&);
@@ -26,7 +28,7 @@ private slots:
 private:
     Ui::EditFanProfileDialog* ui;
     unsigned current_fan_profile_index_;
-    nlohmann::json app_settings_;
+    nlohmann::json* ptr_app_settings_;
 
     void showEvent(QShowEvent* event_);
 };

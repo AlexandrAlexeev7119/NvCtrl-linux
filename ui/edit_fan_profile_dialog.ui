@@ -14,23 +14,6 @@
    <string>GWEpp: Edit fan profile</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_fan_speed_level_slider_indicator">
-     <property name="text">
-      <string>0%</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="3">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="1">
     <widget class="QSlider" name="horizontalSlider_fan_speed_level">
      <property name="maximum">
@@ -47,6 +30,23 @@
      </property>
     </widget>
    </item>
+   <item row="2" column="0" colspan="3">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_fan_speed_level_slider_indicator">
+     <property name="text">
+      <string>0%</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0" colspan="3">
     <widget class="QLabel" name="label_current_profile_name">
      <property name="font">
@@ -55,7 +55,7 @@
       </font>
      </property>
      <property name="text">
-      <string>TextLabel</string>
+      <string>Current profile:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

@@ -196,7 +196,8 @@ void MainWindow::connect_slots_and_signals()
     {
         ui->label_power_limit_slider_indicator->setText(QString::number(value));
     });
-    connect(ui->horizontalSlider_set_fan_speed, &QSlider::valueChanged, this, [this](int value) {
+    connect(ui->horizontalSlider_set_fan_speed, &QSlider::valueChanged, this, [this](int value)
+    {
         ui->label_set_fan_speed_slider_indicator->setText(QString::number(value) + "%");
     });
 }
@@ -216,7 +217,7 @@ void MainWindow::load_and_validate_app_settings()
 {
     minimize_to_tray_on_close_ = app_settings_["minimize_to_tray_on_close"].get<bool>();
     update_freq_ms_ = app_settings_["update_freq_ms"].get<unsigned>();
-    auto& fan_speed_profiles = app_settings_["fan_speed_profiles"];
+    const auto& fan_speed_profiles = app_settings_["fan_speed_profiles"];
 
     if (update_freq_ms_ < 500)
     {
@@ -232,7 +233,7 @@ void MainWindow::load_and_validate_app_settings()
 
     if (!fan_speed_profiles.is_null())
     {
-        for (auto& fan_speed_profile : fan_speed_profiles)
+        for (const auto& fan_speed_profile : fan_speed_profiles)
         {
             ui->comboBox_select_fan_profile->addItem(QString::fromStdString(fan_speed_profile["name"].get<std::string>()));
         }
@@ -375,9 +376,10 @@ void MainWindow::on_comboBox_select_fan_profile_activated(int index)
         manual_fan_speed_control_widgets_enabled(false);
         ui->pushButton_edit_current_fan_profile->setEnabled(true);
         {
-            auto& fan_profiles  = app_settings_["fan_speed_profiles"];
             const unsigned profile_index_in_array {static_cast<unsigned>(index - 2)};
-            const unsigned fan_speed_level {fan_profiles[profile_index_in_array]["fan_speed"].get<unsigned>()};
+            const auto& fan_profiles  = app_settings_["fan_speed_profiles"];
+            const auto& current_fan_profile = fan_profiles[profile_index_in_array];
+            const unsigned fan_speed_level {current_fan_profile["fan_speed"].get<unsigned>()};
             gpu_fan_controller_.set_fan_speed(fan_speed_level);
         }
         break;
@@ -425,6 +427,7 @@ void MainWindow::on_pushButton_apply_fan_speed_clicked()
 
 void MainWindow::on_pushButton_add_new_fan_profile_clicked()
 {
+    fan_profile_dialog_window_.load_app_settings(&app_settings_);
     fan_profile_dialog_window_.show();
 }
 
@@ -433,6 +436,7 @@ void MainWindow::on_pushButton_add_new_fan_profile_clicked()
 void MainWindow::on_pushButton_edit_current_fan_profile_clicked()
 {
     const unsigned curr_fan_profile_index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex() - 2)};
+    edit_fan_profile_dialog_window_.load_app_settins(&app_settings_);
     edit_fan_profile_dialog_window_.set_current_fan_profile_index(curr_fan_profile_index);
     edit_fan_profile_dialog_window_.show();
 }

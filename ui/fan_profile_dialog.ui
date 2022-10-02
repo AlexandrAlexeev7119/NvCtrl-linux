@@ -14,19 +14,6 @@
    <string>GWEpp: New fan profile</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="3" colspan="3">
-    <widget class="QSlider" name="horizontalSlider_fan_speed">
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="tickPosition">
-      <enum>QSlider::TicksBelow</enum>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="3" colspan="3">
     <widget class="QLineEdit" name="lineEdit_profile_name"/>
    </item>
@@ -37,6 +24,19 @@
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3" colspan="3">
+    <widget class="QSlider" name="horizontalSlider_fan_speed">
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="tickPosition">
+      <enum>QSlider::TicksBelow</enum>
      </property>
     </widget>
    </item>
@@ -51,16 +51,16 @@
     </widget>
    </item>
    <item row="3" column="5">
-    <widget class="QPushButton" name="pushButton_create_new_profile">
+    <widget class="QPushButton" name="pushButton_close">
      <property name="text">
-      <string>Create new</string>
+      <string>Close</string>
      </property>
     </widget>
    </item>
    <item row="3" column="4">
-    <widget class="QPushButton" name="pushButton_close">
+    <widget class="QPushButton" name="pushButton_create_new_profile">
      <property name="text">
-      <string>Close</string>
+      <string>Create new</string>
      </property>
     </widget>
    </item>
