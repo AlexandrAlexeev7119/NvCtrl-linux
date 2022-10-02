@@ -577,7 +577,7 @@
            <item row="9" column="5">
             <widget class="QPushButton" name="pushButton_apply_fan_speed">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="text">
               <string>Apply</string>

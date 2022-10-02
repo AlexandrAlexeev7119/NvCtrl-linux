@@ -15,6 +15,8 @@ public:
     explicit FanProfileDialog(QWidget* parent = nullptr);
     ~FanProfileDialog();
 
+    void load_app_settings(nlohmann::json* app_settings) noexcept;
+
 signals:
     void new_profile_created(const nlohmann::json&);
 
@@ -24,6 +26,5 @@ private slots:
 
 private:
     Ui::FanProfileDialog* ui;
-
-    void create_or_apped_fan_speed_profile(nlohmann::json& app_settings);
+    nlohmann::json* ptr_app_settings_;
 };
