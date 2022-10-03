@@ -98,8 +98,8 @@ void MainWindow::on_FanProfileDialog_new_profile_created(const nlohmann::json& c
 
 void MainWindow::on_EditFanProfileDialog_current_fan_profile_changed(const nlohmann::json& curr_fan_profile)
 {
-    const unsigned fan_speed {curr_fan_profile["fan_speed"].get<unsigned>()};
-    gpu_fan_controller_.set_fan_speed(fan_speed);
+    ui->comboBox_select_fan_profile->removeItem(ui->comboBox_select_fan_profile->currentIndex());
+    ui->comboBox_select_fan_profile->addItem(QString::fromStdString(curr_fan_profile["name"].get<std::string>()));
 }
 
 

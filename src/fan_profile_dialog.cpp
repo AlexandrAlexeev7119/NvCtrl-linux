@@ -7,6 +7,9 @@ FanProfileDialog::FanProfileDialog(QWidget* parent)
     , ptr_app_settings_ {}
 {
     ui->setupUi(this);
+    setMinimumSize(size());
+    setMaximumSize(size() * 1.5);
+
     connect(ui->horizontalSlider_fan_speed, &QSlider::valueChanged, this, [this](int value)
     {
         ui->label_fan_speed_slider_indicator->setText(QString::number(value) + "%");
