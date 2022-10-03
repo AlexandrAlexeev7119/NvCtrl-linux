@@ -98,8 +98,9 @@ void MainWindow::on_FanProfileDialog_new_profile_created(const nlohmann::json& c
 
 void MainWindow::on_EditFanProfileDialog_current_fan_profile_changed(const nlohmann::json& curr_fan_profile)
 {
-    ui->comboBox_select_fan_profile->removeItem(ui->comboBox_select_fan_profile->currentIndex());
-    ui->comboBox_select_fan_profile->addItem(QString::fromStdString(curr_fan_profile["name"].get<std::string>()));
+    const unsigned index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex())};
+    ui->comboBox_select_fan_profile->removeItem(index);
+    ui->comboBox_select_fan_profile->insertItem(index, QString::fromStdString(curr_fan_profile["name"].get<std::string>()));
 }
 
 
