@@ -9,6 +9,9 @@ EditFanProfileDialog::EditFanProfileDialog(QWidget* parent)
     , ptr_app_settings_ {}
 {
     ui->setupUi(this);
+    setMinimumSize(size());
+    setMaximumSize(size() * 1.5);
+
     connect(ui->horizontalSlider_fan_speed_level, &QSlider::valueChanged, this, [this](int value)
     {
         ui->label_fan_speed_level_slider_indicator->setText(QString::number(value) + "%");
@@ -44,6 +47,7 @@ void EditFanProfileDialog::on_buttonBox_accepted()
 
     auto& current_fan_profile = app_settings_ref["fan_speed_profiles"][current_fan_profile_index_];
     current_fan_profile["fan_speed"] = ui->horizontalSlider_fan_speed_level->value();
+    current_fan_profile["name"] = ui->lineEdit_current_profile_name->text().toStdString();
 
     emit current_fan_profile_changed(current_fan_profile);
 
@@ -65,7 +69,7 @@ void EditFanProfileDialog::showEvent(QShowEvent* event_)
 {
     auto& current_fan_profile = ptr_app_settings_->at("fan_speed_profiles")[current_fan_profile_index_];
 
-    ui->label_current_profile_name->setText(QString::fromStdString(current_fan_profile["name"].get<std::string>()));
+    ui->lineEdit_current_profile_name->setText(QString::fromStdString(current_fan_profile["name"].get<std::string>()));
     ui->horizontalSlider_fan_speed_level->setValue(current_fan_profile["fan_speed"].get<unsigned>());
 
     event_->accept();
