@@ -44,16 +44,26 @@ void EditFanProfileDialog::load_app_settins(nlohmann::json* app_settings) noexce
 void EditFanProfileDialog::on_buttonBox_accepted()
 {
     auto& app_settings_ref {*ptr_app_settings_};
-
     auto& current_fan_profile = app_settings_ref["fan_speed_profiles"][current_fan_profile_index_];
-    current_fan_profile["fan_speed"] = ui->horizontalSlider_fan_speed_level->value();
-    current_fan_profile["name"] = ui->lineEdit_current_profile_name->text().toStdString();
 
-    emit current_fan_profile_changed(current_fan_profile);
+    if (ui->checkBox_remove_current_profile->isChecked())
+    {
+        auto& fan_profiles = app_settings_ref["fan_speed_profiles"];
+        fan_profiles.erase(current_fan_profile_index_);
+        emit current_fan_profile_removed();
+    }
+    else
+    {
+        current_fan_profile["fan_speed"] = ui->horizontalSlider_fan_speed_level->value();
+        current_fan_profile["name"] = ui->lineEdit_current_profile_name->text().toStdString();
+        emit current_fan_profile_changed(current_fan_profile);
+    }
 
     SettingsManager::instance().open_file(std::ios::out);
     SettingsManager::instance().write_settings(app_settings_ref);
     SettingsManager::instance().close_file();
+
+    close();
 }
 
 
@@ -72,5 +82,15 @@ void EditFanProfileDialog::showEvent(QShowEvent* event_)
     ui->lineEdit_current_profile_name->setText(QString::fromStdString(current_fan_profile["name"].get<std::string>()));
     ui->horizontalSlider_fan_speed_level->setValue(current_fan_profile["fan_speed"].get<unsigned>());
 
+    event_->accept();
+}
+
+
+
+void EditFanProfileDialog::closeEvent(QCloseEvent* event_)
+{
+    ui->lineEdit_current_profile_name->clear();
+    ui->horizontalSlider_fan_speed_level->setValue(0);
+    ui->checkBox_remove_current_profile->setChecked(false);
     event_->accept();
 }

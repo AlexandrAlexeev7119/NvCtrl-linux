@@ -20,6 +20,7 @@ public:
 
 signals:
     void current_fan_profile_changed(const nlohmann::json&);
+    void current_fan_profile_removed();
 
 private slots:
     void on_buttonBox_accepted();
@@ -31,5 +32,6 @@ private:
     nlohmann::json* ptr_app_settings_;
 
     void showEvent(QShowEvent* event_);
+    void closeEvent(QCloseEvent* event_);
 };
 
