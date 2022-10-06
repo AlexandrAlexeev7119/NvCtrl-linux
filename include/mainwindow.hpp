@@ -46,6 +46,7 @@ private slots:
     void on_SettingsDialog_settings_applied(const nlohmann::json& app_settings);
     void on_FanProfileDialog_new_profile_created(const nlohmann::json& curr_fan_profile);
     void on_EditFanProfileDialog_current_fan_profile_changed(const nlohmann::json& curr_fan_profile);
+    void on_EditFanProfileDialog_current_fan_profile_removed();
 
     void on_GpuUtilizationsController_info_ready(const GpuUtilizationsController::utilization_rates& utilization_rates);
     void on_GpuPowerController_info_ready(const GpuPowerController::power_rates& power_rates);

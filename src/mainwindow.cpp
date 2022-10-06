@@ -105,6 +105,15 @@ void MainWindow::on_EditFanProfileDialog_current_fan_profile_changed(const nlohm
 
 
 
+void MainWindow::on_EditFanProfileDialog_current_fan_profile_removed()
+{
+    const unsigned index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex())};
+    qInfo().noquote().nospace() << "Fan profile removed: " << ui->comboBox_select_fan_profile->currentText();
+    ui->comboBox_select_fan_profile->removeItem(index);
+}
+
+
+
 void MainWindow::on_GpuUtilizationsController_info_ready(const GpuUtilizationsController::utilization_rates& utilization_rates)
 {
     ui->progressBar_GPU_usage->setValue(utilization_rates.gpu);
@@ -417,8 +426,7 @@ void MainWindow::on_pushButton_apply_fan_speed_clicked()
 
     switch (index)
     {
-    case CLOCK_PROFILE_NONE:
-        break;
+    case CLOCK_PROFILE_NONE: break;
     case CLOCK_PROFILE_MANUAL:
         gpu_fan_controller_.set_fan_speed(ui->horizontalSlider_set_fan_speed->value());
         break;
