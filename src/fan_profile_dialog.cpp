@@ -1,3 +1,5 @@
+#include <QMessageBox>
+
 #include "fan_profile_dialog.hpp"
 #include "ui_fan_profile_dialog.h"
 
@@ -34,38 +36,45 @@ void FanProfileDialog::load_app_settings(nlohmann::json* app_settings) noexcept
 
 void FanProfileDialog::on_pushButton_create_new_profile_clicked()
 {
-    auto& app_settins_ref {*ptr_app_settings_};
-    auto& fan_speed_profiles = app_settins_ref["fan_speed_profiles"];
-
-    if (fan_speed_profiles.is_null())
+    if (ui->lineEdit_profile_name->text().isEmpty())
     {
-        const nlohmann::json::array_t new_array {
-            {
-                {"name", ui->lineEdit_profile_name->text().toStdString()},
-                {"fan_speed", ui->horizontalSlider_fan_speed->value()}
-            }
-        };
-        app_settins_ref["fan_speed_profiles"] = new_array;
-        qDebug().noquote().nospace() << "fan_speed_profiles is null, create a new JSON array";
+        QMessageBox::warning(this, "Warning", "Empty name is not allowed");
     }
     else
     {
-        fan_speed_profiles.emplace_back(nlohmann::json::object_t {
-                                            {"name", ui->lineEdit_profile_name->text().toStdString()},
-                                            {"fan_speed", ui->horizontalSlider_fan_speed->value()}
-                                        });
-        app_settins_ref["fan_speed_profiles"] = fan_speed_profiles;
-        qDebug().noquote().nospace() << "fan_speed_profiles exists, add new element";
+        auto& app_settins_ref {*ptr_app_settings_};
+        auto& fan_speed_profiles = app_settins_ref["fan_speed_profiles"];
+
+        if (fan_speed_profiles.is_null())
+        {
+            const nlohmann::json::array_t new_array {
+                {
+                    {"name", ui->lineEdit_profile_name->text().toStdString()},
+                    {"fan_speed", ui->horizontalSlider_fan_speed->value()}
+                }
+            };
+            app_settins_ref["fan_speed_profiles"] = new_array;
+            qDebug().noquote().nospace() << "fan_speed_profiles is null, create a new JSON array";
+        }
+        else
+        {
+            fan_speed_profiles.emplace_back(nlohmann::json::object_t {
+                                                {"name", ui->lineEdit_profile_name->text().toStdString()},
+                                                {"fan_speed", ui->horizontalSlider_fan_speed->value()}
+                                            });
+            app_settins_ref["fan_speed_profiles"] = fan_speed_profiles;
+            qDebug().noquote().nospace() << "fan_speed_profiles exists, add new element";
+        }
+
+        emit new_profile_created(ptr_app_settings_->at("fan_speed_profiles"));
+        qInfo().noquote().nospace() << "New fan profile created: " << ui->lineEdit_profile_name->text();
+
+        SettingsManager::instance().open_file(std::ios::out);
+        SettingsManager::instance().write_settings(app_settins_ref);
+        SettingsManager::instance().close_file();
+
+        on_pushButton_close_clicked();
     }
-
-    emit new_profile_created(ptr_app_settings_->at("fan_speed_profiles"));
-    qInfo().noquote().nospace() << "New fan profile created: " << ui->lineEdit_profile_name->text();
-
-    SettingsManager::instance().open_file(std::ios::out);
-    SettingsManager::instance().write_settings(app_settins_ref);
-    SettingsManager::instance().close_file();
-
-    on_pushButton_close_clicked();
 }
 
 
