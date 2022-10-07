@@ -122,7 +122,7 @@ void MainWindow::on_GpuUtilizationsController_info_ready(const GpuUtilizationsCo
     ui->progressBar_GPU_decoder_usage->setValue(utilization_rates.decoder);
     ui->lineEdit_GPU_mem_usage->setText(QString::number(utilization_rates.mem_used / 1024 / 1024) + " MiB");
     ui->lineEdit_current_pstate->setText("Pstate: " + QString::number(utilization_rates.pstate));
-    ui->label_current_gpu_core_temp_value->setText(QString::number(utilization_rates.gpu_core_temp) + "°C");
+    ui->label_current_gpu_core_temp_value->setText(QString::number(utilization_rates.gpu_core_temp) + " °C");
 }
 
 
@@ -266,8 +266,8 @@ void MainWindow::set_static_info()
     ui->lineEdit_GPU_bus_type->setText(QString::fromStdString(current_gpu_.get_bus_type()));
     ui->lineEdit_GPU_bus_id->setText(QString::fromStdString(current_gpu_.get_pci_bus_id()));
     ui->lineEdit_GPU_total_mem->setText(QString::number(current_gpu_.get_total_memory() / 1024 / 1024) + " MiB");
-    ui->lineEdit_GPU_slowdown_temp->setText(QString::number(current_gpu_.get_slowdown_temperature()) + "°C");
-    ui->lineEdit_GPU_shutdown_temp->setText(QString::number(current_gpu_.get_shutdown_temperature()) + "°C");
+    ui->lineEdit_GPU_slowdown_temp->setText(QString::number(current_gpu_.get_slowdown_temperature()) + " °C");
+    ui->lineEdit_GPU_shutdown_temp->setText(QString::number(current_gpu_.get_shutdown_temperature()) + " °C");
 
     if (ui->actionShow_GPU_UUID->isChecked())
     {
