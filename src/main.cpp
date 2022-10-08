@@ -21,10 +21,10 @@ static void qt_msg_handler(QtMsgType msg_type, const QMessageLogContext& context
 
 int main(int argc, char** argv)
 {
-#ifndef NDEBUG
-    spdlog::set_level(spdlog::level::debug);
-#else
+#ifdef NDEBUG
     spdlog::set_level(spdlog::level::info);
+#else
+    spdlog::set_level(spdlog::level::debug);
 #endif
     qInstallMessageHandler(qt_msg_handler);
 
