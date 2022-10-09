@@ -2,6 +2,7 @@
 
 #include <QDialog>
 
+#include "nlohmann/json.hpp"
 #include "settings_manager.hpp"
 
 namespace Ui { class SettingsDialog; }
@@ -13,21 +14,19 @@ public:
     explicit SettingsDialog(QWidget* parent = nullptr);
     ~SettingsDialog();
 
+    void load_app_settins(nlohmann::json* app_settings) noexcept;
+
 private slots:
     void on_pushButton_apply_clicked();
     void on_pushButton_close_clicked();
-
-    void on_SettingsManager_error(const QString& msg);
 
 signals:
     void settings_applied(const nlohmann::json&);
 
 private:
     Ui::SettingsDialog* ui;
-    SettingsManager& settings_manager_;
+    nlohmann::json* ptr_app_settings_;
 
     void showEvent(QShowEvent* event_);
-
-    void load_settings_from_file();
     void save_settings_to_file(const nlohmann::json& app_settings);
 };

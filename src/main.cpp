@@ -12,7 +12,7 @@ static void qt_msg_handler(QtMsgType msg_type, const QMessageLogContext& context
     switch (msg_type)
     {
     case QtMsgType::QtCriticalMsg:  spdlog::critical(message.toStdString()); break;
-    case QtMsgType::QtDebugMsg:     spdlog::debug("[{}:{}]: {}", context.file, context.line, message.toStdString()); break;
+    case QtMsgType::QtDebugMsg:     spdlog::debug("[{}:{}:{}]: {}", context.file, context.line, context.function, message.toStdString()); break;
     case QtMsgType::QtFatalMsg:     spdlog::critical(message.toStdString()); break;
     case QtMsgType::QtInfoMsg:      spdlog::info(message.toStdString()); break;
     case QtMsgType::QtWarningMsg:   spdlog::warn(message.toStdString()); break;
@@ -21,10 +21,10 @@ static void qt_msg_handler(QtMsgType msg_type, const QMessageLogContext& context
 
 int main(int argc, char** argv)
 {
-#ifndef NDEBUG
-    spdlog::set_level(spdlog::level::debug);
-#else
+#ifdef NDEBUG
     spdlog::set_level(spdlog::level::info);
+#else
+    spdlog::set_level(spdlog::level::debug);
 #endif
     qInstallMessageHandler(qt_msg_handler);
 

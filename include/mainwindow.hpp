@@ -53,6 +53,7 @@ private slots:
     void on_GpuClockController_info_ready(const GpuClockController::clock_values& clock_values);
     void on_GpuFanController_info_ready(const GpuFanController::fan_rates& fan_rates);
 
+    void on_GpuUtilizationsController_encoder_decoder_unsupported();
     void on_GpuPowerController_error();
     void on_GpuClockController_error();
     void on_GpuFanController_error();

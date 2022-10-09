@@ -29,7 +29,7 @@ public slots:
 
 signals:
     void info_ready(const GpuUtilizationsController::utilization_rates&);
-    void error(const QString&);
+    void encoder_decoder_unsupported();
 
 private:
     const NVMLpp::NVML_device* current_gpu_;
