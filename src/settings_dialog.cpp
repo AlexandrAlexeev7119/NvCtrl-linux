@@ -1,5 +1,4 @@
 #include <QShowEvent>
-#include <QMessageBox>
 #include <QDebug>
 
 #include "settings_dialog.hpp"
@@ -8,25 +7,32 @@
 SettingsDialog::SettingsDialog(QWidget* parent)
     : QDialog {parent}
     , ui {new Ui::SettingsDialog}
-    , settings_manager_ {SettingsManager::instance()}
+    , ptr_app_settings_ {}
 {
     ui->setupUi(this);
     setMinimumSize(size());
     setMaximumSize(size());
-
-    connect(&settings_manager_, &SettingsManager::error, this, &SettingsDialog::on_SettingsManager_error);
 }
+
+
 
 SettingsDialog::~SettingsDialog()
 {
     delete ui;
 }
 
+
+
+void SettingsDialog::load_app_settins(nlohmann::json* app_settings) noexcept
+{
+    ptr_app_settings_ = app_settings;
+}
+
+
+
 void SettingsDialog::on_pushButton_apply_clicked()
 {
-    settings_manager_.open_file(std::ios::in);
-    auto app_settings = nlohmann::json::parse(SettingsManager::instance().read_settings());
-    settings_manager_.close_file();
+    auto& app_settings {*ptr_app_settings_};
 
     app_settings["minimize_to_tray_on_startup"] = ui->checkBox_minimize_to_tray_on_startup->isChecked();
     app_settings["minimize_to_tray_on_close"] = ui->checkBox_minimize_to_tray_on_close->isChecked();
@@ -36,42 +42,34 @@ void SettingsDialog::on_pushButton_apply_clicked()
     emit settings_applied(app_settings);
 }
 
+
+
 void SettingsDialog::on_pushButton_close_clicked()
 {
     close();
 }
 
-void SettingsDialog::on_SettingsManager_error(const QString& msg)
-{
-    QMessageBox::critical(this, "Error", msg);
-    qCritical().noquote().nospace() << msg;
-    close();
-}
+
 
 void SettingsDialog::showEvent(QShowEvent* event_)
 {
-    load_settings_from_file();
-    event_->accept();
-}
-
-void SettingsDialog::load_settings_from_file()
-{
-    settings_manager_.open_file(std::ios::in);
-    const auto app_settings = nlohmann::json::parse(settings_manager_.read_settings());
-    settings_manager_.close_file();
+    const auto& app_settings {*ptr_app_settings_};
 
     ui->checkBox_minimize_to_tray_on_startup->setChecked(app_settings["minimize_to_tray_on_startup"].get<bool>());
     ui->checkBox_minimize_to_tray_on_close->setChecked(app_settings["minimize_to_tray_on_close"].get<unsigned>());
     ui->spinBox_update_freq->setValue(app_settings["update_freq_ms"].get<unsigned>());
 
     qInfo().noquote().nospace() << "Settings on form loaded";
+
+    event_->accept();
 }
+
+
 
 void SettingsDialog::save_settings_to_file(const nlohmann::json& app_settings)
 {
-    settings_manager_.open_file(std::ios::out);
-    settings_manager_.write_settings(app_settings);
-    settings_manager_.close_file();
-
+    SettingsManager::instance().open_file(std::ios::out);
+    SettingsManager::instance().write_settings(app_settings);
+    SettingsManager::instance().close_file();
     qInfo().noquote().nospace() << "Settings saved to file";
 }
