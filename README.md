@@ -1,6 +1,7 @@
 # GWEpp
-GreenWithEnvy re-implementation using only C, C++ and Qt
-no other shit such as python
+GreenWithEnvy re-implementation using only C++ and Qt
+
+no other extra dependencies such as Python
 
 ## UI preview
 ![UI 1](img/ui1.png)
