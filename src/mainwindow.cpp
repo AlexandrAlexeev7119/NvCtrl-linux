@@ -152,6 +152,19 @@ void MainWindow::on_GpuFanController_info_ready(const GpuFanController::fan_rate
 
 
 
+void MainWindow::on_GpuUtilizationsController_encoder_decoder_unsupported()
+{
+    if (ui->progressBar_GPU_encoder_usage->isEnabled() &&
+            ui->progressBar_GPU_decoder_usage->isEnabled())
+    {
+        ui->progressBar_GPU_encoder_usage->setEnabled(false);
+        ui->progressBar_GPU_decoder_usage->setEnabled(false);
+        qWarning().noquote().nospace() << "Encoder and decoder utilization rates unsupported, disabling widgets";
+    }
+}
+
+
+
 void MainWindow::on_GpuPowerController_error()
 {
     disconnect(&gpu_power_controller_, &GpuPowerController::error, this, &MainWindow::on_GpuPowerController_error);
@@ -196,6 +209,7 @@ void MainWindow::connect_slots_and_signals()
     connect(&gpu_clock_controller_, &GpuClockController::info_ready, this, &MainWindow::on_GpuClockController_info_ready);
     connect(&gpu_fan_controller_, &GpuFanController::info_ready, this, &MainWindow::on_GpuFanController_info_ready);
 
+    connect(&gpu_utilizations_controller_, &GpuUtilizationsController::encoder_decoder_unsupported, this, &MainWindow::on_GpuUtilizationsController_encoder_decoder_unsupported);
     connect(&gpu_power_controller_, &GpuPowerController::error, this, &MainWindow::on_GpuPowerController_error);
     connect(&gpu_clock_controller_, &GpuClockController::error, this, &MainWindow::on_GpuClockController_error);
     connect(&gpu_fan_controller_, &GpuFanController::error, this, &MainWindow::on_GpuFanController_error);
@@ -469,6 +483,7 @@ void MainWindow::on_pushButton_apply_clock_offset_clicked()
 
 void MainWindow::on_actionSettings_triggered()
 {
+    settings_dialog_window_.load_app_settins(&app_settings_);
     settings_dialog_window_.show();
 }
 
