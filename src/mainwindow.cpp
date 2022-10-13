@@ -24,9 +24,6 @@ MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
     , fan_profile_dialog_window_ {this}
     , edit_fan_profile_dialog_window_ {this}
     , tray_menu_ {this}
-    , curr_gpu_power_control_unsupported_ {false}
-    , curr_gpu_clock_control_unsupported_ {false}
-    , curr_gpu_fan_control_unsupported_ {false}
 {
     ui->setupUi(this);
     setMinimumSize(size());
@@ -169,7 +166,6 @@ void MainWindow::on_GpuPowerController_error()
 {
     disconnect(&gpu_power_controller_, &GpuPowerController::error, this, &MainWindow::on_GpuPowerController_error);
     disconnect(&gpu_power_controller_, &GpuPowerController::info_ready, this, &MainWindow::on_GpuPowerController_info_ready);
-    curr_gpu_power_control_unsupported_ = true;
     qWarning().noquote().nospace() << "Power control unsupported, signals disconnected";
 }
 
@@ -179,7 +175,6 @@ void MainWindow::on_GpuClockController_error()
 {
     disconnect(&gpu_clock_controller_, &GpuClockController::error, this, &MainWindow::on_GpuClockController_error);
     disconnect(&gpu_clock_controller_, &GpuClockController::info_ready, this, &MainWindow::on_GpuClockController_info_ready);
-    curr_gpu_fan_control_unsupported_ = true;
     qWarning().noquote().nospace() << "Clock control unsupported, signals disconnected";
 }
 
@@ -193,7 +188,6 @@ void MainWindow::on_GpuFanController_error()
 
     disconnect(&gpu_fan_controller_, &GpuFanController::error, this, &MainWindow::on_GpuFanController_error);
     disconnect(&gpu_fan_controller_, &GpuFanController::info_ready, this, &MainWindow::on_GpuFanController_info_ready);
-    curr_gpu_fan_control_unsupported_ = true;
 
     qWarning().noquote().nospace() << "Fan control unsupported, signals disconnected";
 }

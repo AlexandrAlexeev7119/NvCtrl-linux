@@ -2,12 +2,11 @@
 #include <QDebug>
 
 #include "nvmlpp/util/nvmlpp_errors.hpp"
-
 #include "gpu_clock_controller.hpp"
 
-static constexpr const char* NVIDIA_SETTINGS_BIN {"/usr/bin/nvidia-settings"};
-static constexpr const char* NVIDIA_SETTINGS_GPU_CLOCK_OFFSET {"[gpu:%1]/GPUGraphicsClockOffset[3]=%2"};
-static constexpr const char* NVIDIA_SETTINGS_MEM_CLOCK_OFFSET {"[gpu:%1]/GPUMemoryTransferRateOffset[3]=%2"};
+constexpr const char* NVIDIA_SETTINGS_BIN {"/usr/bin/nvidia-settings"};
+constexpr const char* NVIDIA_SETTINGS_GPU_CLOCK_OFFSET {"[gpu:%1]/GPUGraphicsClockOffset[3]=%2"};
+constexpr const char* NVIDIA_SETTINGS_MEM_CLOCK_OFFSET {"[gpu:%1]/GPUMemoryTransferRateOffset[3]=%2"};
 
 
 
@@ -15,6 +14,8 @@ GpuClockController::GpuClockController(const NVMLpp::NVML_device* nvml_device, Q
     : QObject {parrent}
     , current_gpu_ {nvml_device}
 { }
+
+
 
 void GpuClockController::update_info()
 {
@@ -34,11 +35,15 @@ void GpuClockController::update_info()
     }
 }
 
+
+
 void GpuClockController::set_clock_offsets(unsigned gpu_clock_offset, unsigned memory_clock_offset)
 {
     run_nvidia_settings(QString{NVIDIA_SETTINGS_GPU_CLOCK_OFFSET}.arg(current_gpu_->get_index()).arg(gpu_clock_offset));
     run_nvidia_settings(QString{NVIDIA_SETTINGS_GPU_CLOCK_OFFSET}.arg(current_gpu_->get_index()).arg(memory_clock_offset));
 }
+
+
 
 void GpuClockController::run_nvidia_settings(const QString& arg)
 {

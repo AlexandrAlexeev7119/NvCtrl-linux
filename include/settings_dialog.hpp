@@ -18,7 +18,7 @@ public:
 
 private slots:
     void on_pushButton_apply_clicked();
-    void on_pushButton_close_clicked();
+    void on_pushButton_cancel_clicked();
 
 signals:
     void settings_applied(const nlohmann::json&);
