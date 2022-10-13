@@ -44,7 +44,7 @@ void SettingsDialog::on_pushButton_apply_clicked()
 
 
 
-void SettingsDialog::on_pushButton_close_clicked()
+void SettingsDialog::on_pushButton_cancel_clicked()
 {
     close();
 }

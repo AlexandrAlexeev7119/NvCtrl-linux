@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>294</width>
-    <height>173</height>
+    <width>334</width>
+    <height>175</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -64,10 +64,10 @@
      </item>
     </layout>
    </item>
-   <item row="3" column="1">
-    <widget class="QPushButton" name="pushButton_close">
+   <item row="3" column="3">
+    <widget class="QPushButton" name="pushButton_cancel">
      <property name="text">
-      <string>Close</string>
+      <string>Cancel</string>
      </property>
     </widget>
    </item>
@@ -82,10 +82,10 @@
  </widget>
  <tabstops>
   <tabstop>pushButton_apply</tabstop>
-  <tabstop>pushButton_close</tabstop>
-  <tabstop>spinBox_update_freq</tabstop>
-  <tabstop>checkBox_minimize_to_tray_on_close</tabstop>
+  <tabstop>pushButton_cancel</tabstop>
   <tabstop>checkBox_minimize_to_tray_on_startup</tabstop>
+  <tabstop>checkBox_minimize_to_tray_on_close</tabstop>
+  <tabstop>spinBox_update_freq</tabstop>
  </tabstops>
  <resources/>
  <connections/>
