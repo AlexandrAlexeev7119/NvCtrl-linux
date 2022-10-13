@@ -97,10 +97,6 @@ private:
     FanProfileDialog fan_profile_dialog_window_;
     EditFanProfileDialog edit_fan_profile_dialog_window_;
 
-    bool curr_gpu_power_control_unsupported_;
-    bool curr_gpu_clock_control_unsupported_;
-    bool curr_gpu_fan_control_unsupported_;
-
 protected:
     void closeEvent(QCloseEvent* event);
 
