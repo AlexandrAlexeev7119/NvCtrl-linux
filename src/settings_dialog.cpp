@@ -40,6 +40,8 @@ void SettingsDialog::on_pushButton_apply_clicked()
 
     save_settings_to_file(app_settings);
     emit settings_applied(app_settings);
+
+    on_pushButton_cancel_clicked();
 }
 
 

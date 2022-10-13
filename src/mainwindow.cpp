@@ -81,7 +81,7 @@ void MainWindow::on_SettingsDialog_settings_applied(const nlohmann::json& app_se
     update_freq_ms_ = app_settings["update_freq_ms"].get<unsigned>();
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
 
-    qInfo().noquote().nospace() << "New settings applied: " << app_settings.dump().c_str();
+    qInfo().noquote().nospace() << "New settings applied";
 }
 
 
