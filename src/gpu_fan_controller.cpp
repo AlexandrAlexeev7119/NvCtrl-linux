@@ -4,9 +4,9 @@
 #include "nvmlpp/util/nvmlpp_errors.hpp"
 #include "gpu_fan_controller.hpp"
 
-static constexpr const char* NVIDIA_SETTINGS_BIN {"/usr/bin/nvidia-settings"};
-static constexpr const char* NVIDIA_SETTINGS_GPU_FAN_CONTROL_STATE {"[gpu:%1]/GPUFanControlState=%2"};
-static constexpr const char* NVIDIA_SETTINGS_GPU_FAN_SPEED {"[fan:0]/GPUTargetFanSpeed=%1"};
+constexpr const char* NVIDIA_SETTINGS_BIN {"/usr/bin/nvidia-settings"};
+constexpr const char* NVIDIA_SETTINGS_GPU_FAN_CONTROL_STATE {"[gpu:%1]/GPUFanControlState=%2"};
+constexpr const char* NVIDIA_SETTINGS_GPU_FAN_SPEED {"[fan:0]/GPUTargetFanSpeed=%1"};
 
 
 
