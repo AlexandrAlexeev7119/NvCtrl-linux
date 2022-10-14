@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QDialog>
+#include <QProcess>
 
 namespace Ui { class ReportABugDialog; }
 
@@ -17,4 +18,7 @@ private slots:
 
 private:
     Ui::ReportABugDialog* ui;
+    QProcess external_process_;
+
+    void showEvent(QShowEvent* event_);
 };
