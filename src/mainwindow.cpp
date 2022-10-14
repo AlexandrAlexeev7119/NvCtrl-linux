@@ -82,13 +82,16 @@ void MainWindow::on_SettingsDialog_settings_applied(const nlohmann::json& app_se
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
 
     qInfo().noquote().nospace() << "New settings applied";
+    ui->statusBar->showMessage("New settings applied", 2000);
 }
 
 
 
 void MainWindow::on_FanProfileDialog_new_profile_created(const nlohmann::json& curr_fan_profile)
 {
-    ui->comboBox_select_fan_profile->addItem(QString::fromStdString(curr_fan_profile.back()["name"].get<std::string>()));
+    const QString new_fan_profile {QString::fromStdString(curr_fan_profile.back()["name"].get<std::string>())};
+    ui->comboBox_select_fan_profile->addItem(new_fan_profile);
+    ui->statusBar->showMessage("New fan profile created: " + new_fan_profile);
 }
 
 
@@ -106,6 +109,8 @@ void MainWindow::on_EditFanProfileDialog_current_fan_profile_removed()
 {
     const unsigned index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex())};
     qInfo().noquote().nospace() << "Fan profile removed: " << ui->comboBox_select_fan_profile->currentText();
+    ui->statusBar->showMessage("Fan profile removed: " + ui->comboBox_select_fan_profile->currentText(), 2000);
+
     ui->comboBox_select_fan_profile->removeItem(index);
 }
 
@@ -448,6 +453,8 @@ void MainWindow::on_pushButton_apply_fan_speed_clicked()
         }
         break;
     }
+
+    ui->statusBar->showMessage("Fan profile applied: " + ui->comboBox_select_fan_profile->currentText(), 2000);
 }
 
 
