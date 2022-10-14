@@ -54,6 +54,7 @@ void MainWindow::toggle_tray()
 {
     if (isHidden())
     {
+        tray_icon_.hide();
         showNormal();
     }
     else
@@ -91,7 +92,7 @@ void MainWindow::on_FanProfileDialog_new_profile_created(const nlohmann::json& c
 {
     const QString new_fan_profile {QString::fromStdString(curr_fan_profile.back()["name"].get<std::string>())};
     ui->comboBox_select_fan_profile->addItem(new_fan_profile);
-    ui->statusBar->showMessage("New fan profile created: " + new_fan_profile);
+    ui->statusBar->showMessage("New fan profile created: " + new_fan_profile, 2000);
 }
 
 
