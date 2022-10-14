@@ -232,6 +232,8 @@ void MainWindow::setup_tray_menu()
     tray_menu_.addAction("Show/Hide app window", this, &MainWindow::toggle_tray);
     tray_menu_.addAction("Exit", this, &MainWindow::on_actionQuit_triggered);
     tray_icon_.setContextMenu(&tray_menu_);
+
+    tray_icon_.setIcon(QIcon{"/usr/share/icons/gwepp/gwepp128.png"});
 }
 
 
