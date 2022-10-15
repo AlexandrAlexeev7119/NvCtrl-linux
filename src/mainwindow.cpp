@@ -432,6 +432,7 @@ void MainWindow::on_comboBox_select_clock_offset_profile_activated(int index)
 void MainWindow::on_pushButton_apply_power_limit_clicked()
 {
     gpu_power_controller_.set_power_limit(ui->horizontalSlider_change_power_limit->value());
+    ui->statusBar->showMessage("Power limit applied: " + QString::number(ui->horizontalSlider_change_power_limit->value()) + "W", 2000);
 }
 
 
