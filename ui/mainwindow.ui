@@ -18,7 +18,7 @@
     <item row="0" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab_info">
        <attribute name="title">
@@ -864,6 +864,16 @@
            <set>Qt::AlignCenter</set>
           </property>
           <layout class="QGridLayout" name="gridLayout_8">
+           <item row="1" column="2">
+            <widget class="QPushButton" name="pushButton_edit_curr_clock_offset_profile">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Edit current</string>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="2">
             <widget class="QPushButton" name="pushButton_add_new_clock_offset_profile">
              <property name="text">
@@ -871,22 +881,38 @@
              </property>
             </widget>
            </item>
+           <item row="0" column="0" colspan="2">
+            <widget class="QComboBox" name="comboBox_select_clock_offset_profile">
+             <item>
+              <property name="text">
+               <string>None (default)</string>
+              </property>
+             </item>
+            </widget>
+           </item>
            <item row="2" column="1">
-            <widget class="QSlider" name="horizontalSlider_set_gpu_clock_offset">
-             <property name="enabled">
-              <bool>false</bool>
+            <widget class="QLineEdit" name="lineEdit_current_gpu_clock_offset">
+             <property name="text">
+              <string>0 MHz</string>
              </property>
-             <property name="minimum">
-              <number>-200</number>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
-             <property name="maximum">
-              <number>200</number>
+             <property name="readOnly">
+              <bool>true</bool>
              </property>
-             <property name="pageStep">
-              <number>5</number>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLineEdit" name="lineEdit_current_mem_clock_offset">
+             <property name="text">
+              <string>0 MHz</string>
              </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -900,46 +926,23 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="0" colspan="2">
-            <widget class="QComboBox" name="comboBox_select_clock_offset_profile">
-             <item>
-              <property name="text">
-               <string>None (default)</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Manual</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QPushButton" name="pushButton_edit_curr_clock_offset_profile">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label">
              <property name="text">
-              <string>Edit current</string>
+              <string>GPU clock offset:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
-           <item row="4" column="1">
-            <widget class="QSlider" name="horizontalSlider_set_mem_clock_profile">
-             <property name="enabled">
-              <bool>false</bool>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>Memory clock offset:</string>
              </property>
-             <property name="minimum">
-              <number>-200</number>
-             </property>
-             <property name="maximum">
-              <number>200</number>
-             </property>
-             <property name="pageStep">
-              <number>5</number>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>

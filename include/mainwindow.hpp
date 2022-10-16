@@ -31,7 +31,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
     enum { FAN_PROFILE_AUTO, FAN_PROFILE_MANUAL };
-    enum { CLOCK_PROFILE_NONE, CLOCK_PROFILE_MANUAL };
+    enum { CLOCK_PROFILE_NONE };
 
 public:
     MainWindow(nlohmann::json app_settings, QWidget* parent = nullptr);

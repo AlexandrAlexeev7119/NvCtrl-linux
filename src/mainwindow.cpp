@@ -354,15 +354,6 @@ void MainWindow::manual_fan_speed_control_widgets_enabled(bool value)
 
 
 
-void MainWindow::manual_clock_offset_control_widgets_enabled(bool value)
-{
-    ui->horizontalSlider_set_gpu_clock_offset->setEnabled(value);
-    ui->horizontalSlider_set_mem_clock_profile->setEnabled(value);
-    ui->pushButton_apply_clock_offset->setEnabled(value);
-}
-
-
-
 void MainWindow::closeEvent(QCloseEvent* event)
 {
     if (minimize_to_tray_on_close_)
@@ -410,20 +401,13 @@ void MainWindow::on_comboBox_select_fan_profile_activated(int index)
 
 void MainWindow::on_comboBox_select_clock_offset_profile_activated(int index)
 {
-    switch (index)
+    if (index == CLOCK_PROFILE_NONE)
     {
-    case CLOCK_PROFILE_NONE:
         ui->pushButton_edit_curr_clock_offset_profile->setEnabled(false);
-        manual_clock_offset_control_widgets_enabled(false);
-        break;
-    case CLOCK_PROFILE_MANUAL:
-        ui->pushButton_edit_curr_clock_offset_profile->setEnabled(false);
-        manual_clock_offset_control_widgets_enabled(true);
-        break;
-    default:
+    }
+    else
+    {
         ui->pushButton_edit_curr_clock_offset_profile->setEnabled(true);
-        manual_clock_offset_control_widgets_enabled(false);
-        break;
     }
 }
 
@@ -443,8 +427,8 @@ void MainWindow::on_pushButton_apply_fan_speed_clicked()
 
     switch (index)
     {
-    case CLOCK_PROFILE_NONE: break;
-    case CLOCK_PROFILE_MANUAL:
+    case FAN_PROFILE_AUTO: break;
+    case FAN_PROFILE_MANUAL:
         gpu_fan_controller_.set_fan_speed(ui->horizontalSlider_set_fan_speed->value());
         break;
     default:
