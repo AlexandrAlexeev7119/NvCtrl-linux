@@ -23,6 +23,7 @@ MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
     , report_a_bug_dialog_window_ {this}
     , fan_profile_dialog_window_ {this}
     , edit_fan_profile_dialog_window_ {this}
+    , clock_profile_dialog_window_ {this}
     , tray_menu_ {this}
 {
     ui->setupUi(this);
@@ -113,6 +114,13 @@ void MainWindow::on_EditFanProfileDialog_current_fan_profile_removed()
     ui->statusBar->showMessage("Fan profile removed: " + ui->comboBox_select_fan_profile->currentText(), 2000);
 
     ui->comboBox_select_fan_profile->removeItem(index);
+}
+
+
+
+void MainWindow::on_ClockProfileDialog_new_profile_created(const nlohmann::json& curr_clock_profile)
+{
+    qDebug().noquote().nospace() << QString::fromStdString(curr_clock_profile.dump());
 }
 
 
@@ -465,8 +473,17 @@ void MainWindow::on_pushButton_edit_current_fan_profile_clicked()
 
 
 
+void MainWindow::on_pushButton_add_new_clock_offset_profile_clicked()
+{
+    clock_profile_dialog_window_.load_app_settings(&app_settings_);
+    clock_profile_dialog_window_.show();
+}
+
+
+
 void MainWindow::on_pushButton_apply_clock_offset_clicked()
-{ }
+{
+}
 
 
 
