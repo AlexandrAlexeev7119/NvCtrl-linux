@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QDialog>
-#include <QDebug>
 
 #include "settings_manager.hpp"
 
