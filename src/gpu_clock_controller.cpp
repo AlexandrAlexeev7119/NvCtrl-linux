@@ -40,7 +40,7 @@ void GpuClockController::update_info()
 void GpuClockController::set_clock_offsets(unsigned gpu_clock_offset, unsigned memory_clock_offset)
 {
     run_nvidia_settings(QString{NVIDIA_SETTINGS_GPU_CLOCK_OFFSET}.arg(current_gpu_->get_index()).arg(gpu_clock_offset));
-    run_nvidia_settings(QString{NVIDIA_SETTINGS_GPU_CLOCK_OFFSET}.arg(current_gpu_->get_index()).arg(memory_clock_offset));
+    run_nvidia_settings(QString{NVIDIA_SETTINGS_MEM_CLOCK_OFFSET}.arg(current_gpu_->get_index()).arg(memory_clock_offset));
 }
 
 
