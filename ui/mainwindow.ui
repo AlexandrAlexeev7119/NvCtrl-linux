@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>583</width>
-    <height>531</height>
+    <width>595</width>
+    <height>540</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -433,11 +433,17 @@
            </item>
            <item row="2" column="2" colspan="4">
             <widget class="QSlider" name="horizontalSlider_change_power_limit">
+             <property name="pageStep">
+              <number>5</number>
+             </property>
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
              <property name="tickPosition">
               <enum>QSlider::TicksBelow</enum>
+             </property>
+             <property name="tickInterval">
+              <number>5</number>
              </property>
             </widget>
            </item>
@@ -620,6 +626,9 @@
              </property>
              <property name="tickPosition">
               <enum>QSlider::TicksBelow</enum>
+             </property>
+             <property name="tickInterval">
+              <number>5</number>
              </property>
             </widget>
            </item>
@@ -949,7 +958,7 @@
            <item row="10" column="3">
             <widget class="QPushButton" name="pushButton_apply_clock_offset">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="text">
               <string>Apply</string>
@@ -970,7 +979,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>583</width>
+     <width>595</width>
      <height>22</height>
     </rect>
    </property>

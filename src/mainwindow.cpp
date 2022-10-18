@@ -1,4 +1,5 @@
 #include <QMessageBox>
+#include <QDebug>
 
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
@@ -120,7 +121,11 @@ void MainWindow::on_EditFanProfileDialog_current_fan_profile_removed()
 
 void MainWindow::on_ClockProfileDialog_new_profile_created(const nlohmann::json& curr_clock_profile)
 {
-    qDebug().noquote().nospace() << QString::fromStdString(curr_clock_profile.dump());
+    const auto& new_clock_profile_ref = curr_clock_profile.back();
+    const QString new_clock_profile_name {QString::fromStdString(new_clock_profile_ref["name"].get<std::string>())};
+
+    ui->comboBox_select_clock_offset_profile->addItem(new_clock_profile_name);
+    ui->statusBar->showMessage("New clock profile created: " + new_clock_profile_name, 2000);
 }
 
 
@@ -252,6 +257,7 @@ void MainWindow::load_and_validate_app_settings()
     minimize_to_tray_on_close_ = app_settings_["minimize_to_tray_on_close"].get<bool>();
     update_freq_ms_ = app_settings_["update_freq_ms"].get<unsigned>();
     const auto& fan_speed_profiles = app_settings_["fan_speed_profiles"];
+    const auto& clock_offset_profiles = app_settings_["clock_offset_profiles"];
 
     if (update_freq_ms_ < 500)
     {
@@ -265,11 +271,19 @@ void MainWindow::load_and_validate_app_settings()
         SettingsManager::instance().close_file();
     }
 
-    if (!fan_speed_profiles.is_null())
+    if (!fan_speed_profiles.is_null() && !fan_speed_profiles.empty())
     {
         for (const auto& fan_speed_profile : fan_speed_profiles)
         {
             ui->comboBox_select_fan_profile->addItem(QString::fromStdString(fan_speed_profile["name"].get<std::string>()));
+        }
+    }
+
+    if (!clock_offset_profiles.is_null() && !clock_offset_profiles.empty())
+    {
+        for (const auto& clock_offset_profile : clock_offset_profiles)
+        {
+            ui->comboBox_select_clock_offset_profile->addItem(QString::fromStdString(clock_offset_profile["name"].get<std::string>()));
         }
     }
 
@@ -412,11 +426,19 @@ void MainWindow::on_comboBox_select_clock_offset_profile_activated(int index)
     if (index == CLOCK_PROFILE_NONE)
     {
         ui->pushButton_edit_curr_clock_offset_profile->setEnabled(false);
+        ui->lineEdit_current_gpu_clock_offset->setText("0 MHz");
+        ui->lineEdit_current_mem_clock_offset->setText("0 MHz");
     }
     else
     {
         ui->pushButton_edit_curr_clock_offset_profile->setEnabled(true);
+        const unsigned custom_profile_index {static_cast<unsigned>(index - 1)};
+        const auto& current_clock_profile = app_settings_["clock_offset_profiles"][custom_profile_index];
+        ui->lineEdit_current_gpu_clock_offset->setText(QString::number(current_clock_profile["gpu_clock_offset"].get<int>()) + " MHz");
+        ui->lineEdit_current_mem_clock_offset->setText(QString::number(current_clock_profile["mem_clock_offset"].get<int>()) + " MHz");
     }
+
+    qInfo().noquote().nospace() << "Selected fan control profile: " << ui->comboBox_select_clock_offset_profile->currentText();
 }
 
 
@@ -441,9 +463,9 @@ void MainWindow::on_pushButton_apply_fan_speed_clicked()
         break;
     default:
         {
-            const unsigned profile_index_in_array {static_cast<unsigned>(index - 2)};
+            const unsigned custom_profile_index {static_cast<unsigned>(index - 2)};
             const auto& fan_profiles  = app_settings_["fan_speed_profiles"];
-            const auto& current_fan_profile = fan_profiles[profile_index_in_array];
+            const auto& current_fan_profile = fan_profiles[custom_profile_index];
             const unsigned fan_speed_level {current_fan_profile["fan_speed"].get<unsigned>()};
             gpu_fan_controller_.set_fan_speed(fan_speed_level);
         }
@@ -482,7 +504,21 @@ void MainWindow::on_pushButton_add_new_clock_offset_profile_clicked()
 
 
 void MainWindow::on_pushButton_apply_clock_offset_clicked()
-{
+{    
+    if (ui->comboBox_select_clock_offset_profile->currentIndex() == CLOCK_PROFILE_NONE)
+    {
+        gpu_clock_controller_.set_clock_offsets(0, 0);
+    }
+    else
+    {
+        const unsigned custom_profile_index {static_cast<unsigned>(ui->comboBox_select_clock_offset_profile->currentIndex() - 1)};
+        const auto& current_clock_profile = app_settings_["clock_offset_profiles"][custom_profile_index];
+        const int gpu_clock_offset {current_clock_profile["gpu_clock_offset"].get<int>()};
+        const int mem_clock_offset {current_clock_profile["mem_clock_offset"].get<int>()};
+        gpu_clock_controller_.set_clock_offsets(gpu_clock_offset, mem_clock_offset);
+    }
+
+    ui->statusBar->showMessage("Clock profile applied: " + ui->comboBox_select_clock_offset_profile->currentText(), 2000);
 }
 
 

@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QMessageBox>
+#include <QDebug>
 
 #include "spdlog/spdlog.h"
 

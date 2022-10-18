@@ -14,22 +14,12 @@ ClockProfileDialog::ClockProfileDialog(QWidget* parent)
 
     connect(ui->horizontalSlider_gpu_clock_offset, &QSlider::valueChanged, this, [this](int value)
     {
-        QString text {QString::number(value) + " MHz"};
-        if (value > 0)
-        {
-            text.prepend('+');
-        }
-        ui->label_gpu_clock_offset_indicator->setText(text);
+        ui->label_gpu_clock_offset_indicator->setText(QString::number(value) + " MHz");
     });
 
     connect(ui->horizontalSlider_mem_clock_offset, &QSlider::valueChanged, this, [this](int value)
     {
-        QString text {QString::number(value) + " MHz"};
-        if (value > 0)
-        {
-            text.prepend('+');
-        }
-        ui->label_mem_clock_offset_indicator->setText(text);
+        ui->label_mem_clock_offset_indicator->setText(QString::number(value) + " MHz");
     });
 }
 
