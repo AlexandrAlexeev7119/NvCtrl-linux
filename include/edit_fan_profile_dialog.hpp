@@ -3,7 +3,6 @@
 #include <QDialog>
 
 #include "nlohmann/json.hpp"
-#include "settings_manager.hpp"
 
 namespace Ui { class EditFanProfileDialog; }
 
@@ -15,7 +14,7 @@ public:
     explicit EditFanProfileDialog(QWidget* parent = nullptr);
     ~EditFanProfileDialog();
 
-    void load_app_settins(nlohmann::json* app_settings) noexcept;
+    void load_app_settings(nlohmann::json* app_settings) noexcept;
     void set_current_fan_profile_index(unsigned index) noexcept;
 
 signals:
@@ -25,6 +24,7 @@ signals:
 private slots:
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();
+    void on_pushButton_remove_current_profile_clicked();
 
 private:
     Ui::EditFanProfileDialog* ui;
@@ -32,6 +32,5 @@ private:
     nlohmann::json* ptr_app_settings_;
 
     void showEvent(QShowEvent* event_);
-    void closeEvent(QCloseEvent* event_);
+    void write_new_settings(const nlohmann::json& app_settings);
 };
-

@@ -16,7 +16,6 @@ ClockProfileDialog::ClockProfileDialog(QWidget* parent)
     {
         ui->label_gpu_clock_offset_indicator->setText(QString::number(value) + " MHz");
     });
-
     connect(ui->horizontalSlider_mem_clock_offset, &QSlider::valueChanged, this, [this](int value)
     {
         ui->label_mem_clock_offset_indicator->setText(QString::number(value) + " MHz");
@@ -39,7 +38,7 @@ void ClockProfileDialog::load_app_settings(nlohmann::json* app_settings) noexcep
 
 
 
-void ClockProfileDialog::on_pushButton_create_new_profile_clicked()
+void ClockProfileDialog::on_buttonBox_accepted()
 {
     if (ui->lineEdit_profile_name->text().isEmpty())
     {
@@ -79,13 +78,13 @@ void ClockProfileDialog::on_pushButton_create_new_profile_clicked()
         SettingsManager::instance().write_settings(app_settings_ref);
         SettingsManager::instance().close_file();
 
-        on_pushButton_close_clicked();
+        on_buttonBox_rejected();
     }
 }
 
 
 
-void ClockProfileDialog::on_pushButton_close_clicked()
+void ClockProfileDialog::on_buttonBox_rejected()
 {
     ui->lineEdit_profile_name->clear();
     ui->horizontalSlider_gpu_clock_offset->setValue(0);
