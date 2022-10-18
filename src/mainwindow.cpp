@@ -25,6 +25,7 @@ MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
     , fan_profile_dialog_window_ {this}
     , edit_fan_profile_dialog_window_ {this}
     , clock_profile_dialog_window_ {this}
+    , edit_clock_offset_profile_dialog_window_ {this}
     , tray_menu_ {this}
 {
     ui->setupUi(this);
@@ -126,6 +127,29 @@ void MainWindow::on_ClockProfileDialog_new_profile_created(const nlohmann::json&
 
     ui->comboBox_select_clock_offset_profile->addItem(new_clock_profile_name);
     ui->statusBar->showMessage("New clock profile created: " + new_clock_profile_name, 2000);
+}
+
+
+
+void MainWindow::on_EditClockOffsetProfileDialog_current_clock_offset_profile_changed(const nlohmann::json& curr_clock_profile)
+{
+    const unsigned index {static_cast<unsigned>(ui->comboBox_select_clock_offset_profile->currentIndex())};
+    ui->comboBox_select_clock_offset_profile->removeItem(index);
+
+    ui->comboBox_select_clock_offset_profile->insertItem(index, QString::fromStdString(curr_clock_profile["name"].get<std::string>()));
+    ui->lineEdit_current_gpu_clock_offset->setText(QString::number(curr_clock_profile["gpu_clock_offset"].get<int>()) + " MHz");
+    ui->lineEdit_current_mem_clock_offset->setText(QString::number(curr_clock_profile["mem_clock_offset"].get<int>()) + " MHz");
+}
+
+
+
+void MainWindow::on_EditClockOffsetProfileDialog_current_clock_offset_profile_removed()
+{
+    const unsigned index {static_cast<unsigned>(ui->comboBox_select_clock_offset_profile->currentIndex())};
+    qInfo().noquote().nospace() << "Clock profile removed: " << ui->comboBox_select_clock_offset_profile->currentText();
+    ui->statusBar->showMessage("Clock profile removed: " + ui->comboBox_select_clock_offset_profile->currentText(), 2000);
+
+    ui->comboBox_select_clock_offset_profile->removeItem(index);
 }
 
 
@@ -488,7 +512,7 @@ void MainWindow::on_pushButton_add_new_fan_profile_clicked()
 void MainWindow::on_pushButton_edit_current_fan_profile_clicked()
 {
     const unsigned curr_fan_profile_index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex() - 2)};
-    edit_fan_profile_dialog_window_.load_app_settins(&app_settings_);
+    edit_fan_profile_dialog_window_.load_app_settings(&app_settings_);
     edit_fan_profile_dialog_window_.set_current_fan_profile_index(curr_fan_profile_index);
     edit_fan_profile_dialog_window_.show();
 }
@@ -519,6 +543,15 @@ void MainWindow::on_pushButton_apply_clock_offset_clicked()
     }
 
     ui->statusBar->showMessage("Clock profile applied: " + ui->comboBox_select_clock_offset_profile->currentText(), 2000);
+}
+
+
+
+void MainWindow::on_pushButton_edit_curr_clock_offset_profile_clicked()
+{
+    edit_clock_offset_profile_dialog_window_.load_app_settings(&app_settings_);
+    edit_clock_offset_profile_dialog_window_.set_current_clock_offset_profile_index(ui->comboBox_select_clock_offset_profile->currentIndex() - 1);
+    edit_clock_offset_profile_dialog_window_.show();
 }
 
 

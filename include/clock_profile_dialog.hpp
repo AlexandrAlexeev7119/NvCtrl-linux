@@ -20,8 +20,8 @@ signals:
     void new_profile_created(const nlohmann::json&);
 
 private slots:
-    void on_pushButton_create_new_profile_clicked();
-    void on_pushButton_close_clicked();
+    void on_buttonBox_accepted();
+    void on_buttonBox_rejected();
 
 private:
     Ui::ClockProfileDialog* ui;
