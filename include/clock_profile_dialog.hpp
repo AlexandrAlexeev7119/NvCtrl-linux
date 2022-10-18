@@ -4,15 +4,15 @@
 
 #include "settings_manager.hpp"
 
-namespace Ui { class FanProfileDialog; }
+namespace Ui { class ClockProfileDialog; }
 
-class FanProfileDialog : public QDialog
+class ClockProfileDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit FanProfileDialog(QWidget* parent = nullptr);
-    ~FanProfileDialog();
+    explicit ClockProfileDialog(QWidget* parent = nullptr);
+    ~ClockProfileDialog();
 
     void load_app_settings(nlohmann::json* app_settings) noexcept;
 
@@ -24,6 +24,7 @@ private slots:
     void on_pushButton_close_clicked();
 
 private:
-    Ui::FanProfileDialog* ui;
+    Ui::ClockProfileDialog* ui;
     nlohmann::json* ptr_app_settings_;
 };
+

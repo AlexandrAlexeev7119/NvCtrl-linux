@@ -21,6 +21,7 @@
 #include "report_a_bug_dialog.hpp"
 #include "fan_profile_dialog.hpp"
 #include "edit_fan_profile_dialog.hpp"
+#include "clock_profile_dialog.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,9 +30,8 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
     enum { FAN_PROFILE_AUTO, FAN_PROFILE_MANUAL };
-    enum { CLOCK_PROFILE_NONE, CLOCK_PROFILE_MANUAL };
+    enum { CLOCK_PROFILE_NONE };
 
 public:
     MainWindow(nlohmann::json app_settings, QWidget* parent = nullptr);
@@ -47,6 +47,7 @@ private slots:
     void on_FanProfileDialog_new_profile_created(const nlohmann::json& curr_fan_profile);
     void on_EditFanProfileDialog_current_fan_profile_changed(const nlohmann::json& curr_fan_profile);
     void on_EditFanProfileDialog_current_fan_profile_removed();
+    void on_ClockProfileDialog_new_profile_created(const nlohmann::json& curr_clock_profile);
 
     void on_GpuUtilizationsController_info_ready(const GpuUtilizationsController::utilization_rates& utilization_rates);
     void on_GpuPowerController_info_ready(const GpuPowerController::power_rates& power_rates);
@@ -65,6 +66,7 @@ private slots:
     void on_pushButton_apply_fan_speed_clicked();
     void on_pushButton_add_new_fan_profile_clicked();
     void on_pushButton_edit_current_fan_profile_clicked();
+    void on_pushButton_add_new_clock_offset_profile_clicked();
     void on_pushButton_apply_clock_offset_clicked();
 
     void on_actionSettings_triggered();
@@ -72,6 +74,7 @@ private slots:
     void on_actionAbout_triggered();
     void on_actionReport_a_bug_triggered();
     void on_actionShow_GPU_UUID_toggled(bool checked);
+
 
 private:
     Ui::MainWindow* ui;
@@ -96,6 +99,7 @@ private:
     ReportABugDialog report_a_bug_dialog_window_;
     FanProfileDialog fan_profile_dialog_window_;
     EditFanProfileDialog edit_fan_profile_dialog_window_;
+    ClockProfileDialog clock_profile_dialog_window_;
 
 protected:
     void closeEvent(QCloseEvent* event);
