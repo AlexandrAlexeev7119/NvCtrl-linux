@@ -24,7 +24,7 @@
     <item row="0" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_info">
        <attribute name="title">
@@ -747,23 +747,23 @@
            <set>Qt::AlignCenter</set>
           </property>
           <layout class="QGridLayout" name="gridLayout_5">
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_sm_clock">
-             <property name="text">
-              <string>SM</string>
-             </property>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="lineEdit_graphics_clock_current">
              <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_graphics_clock">
-             <property name="text">
-              <string>Graphics</string>
-             </property>
+           <item row="0" column="2">
+            <widget class="QLineEdit" name="lineEdit_graphics_clock_max">
              <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -777,6 +777,16 @@
              </property>
             </widget>
            </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_sm_clock">
+             <property name="text">
+              <string>SM</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
            <item row="3" column="1">
             <widget class="QLineEdit" name="lineEdit_memory_clock_current">
              <property name="alignment">
@@ -787,13 +797,13 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="2">
-            <widget class="QLineEdit" name="lineEdit_sm_clock_max">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_graphics_clock">
+             <property name="text">
+              <string>Graphics</string>
              </property>
-             <property name="readOnly">
-              <bool>true</bool>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -807,8 +817,8 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="2">
-            <widget class="QLineEdit" name="lineEdit_memory_clock_max">
+           <item row="1" column="2">
+            <widget class="QLineEdit" name="lineEdit_video_clock_max">
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -837,8 +847,8 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="2">
-            <widget class="QLineEdit" name="lineEdit_graphics_clock_max">
+           <item row="3" column="2">
+            <widget class="QLineEdit" name="lineEdit_memory_clock_max">
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -847,8 +857,8 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="2">
-            <widget class="QLineEdit" name="lineEdit_video_clock_max">
+           <item row="2" column="2">
+            <widget class="QLineEdit" name="lineEdit_sm_clock_max">
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -857,15 +867,8 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="lineEdit_graphics_clock_current">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
+           <item row="4" column="1">
+            <widget class="QComboBox" name="comboBox"/>
            </item>
           </layout>
          </widget>
