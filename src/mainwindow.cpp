@@ -268,7 +268,8 @@ void MainWindow::connect_slots_and_signals()
 void MainWindow::setup_tray_menu()
 {
     tray_menu_.addAction("Show/Hide app window", this, &MainWindow::toggle_tray);
-    tray_menu_.addAction("Exit", this, &MainWindow::on_actionQuit_triggered);
+    tray_menu_.addSeparator();
+    tray_menu_.addAction("Quit", this, &MainWindow::on_actionQuit_triggered);
     tray_icon_.setContextMenu(&tray_menu_);
 
     tray_icon_.setIcon(QIcon{"/usr/share/icons/gwepp/gwepp128.png"});
@@ -365,10 +366,7 @@ void MainWindow::set_static_info()
 
     try
     {
-        ui->lineEdit_graphics_clock_max->setText(QString::number(current_gpu_.get_max_clock_graphics()) + " MHz");
-        ui->lineEdit_video_clock_max->setText(QString::number(current_gpu_.get_max_clock_video()) + " MHz");
-        ui->lineEdit_sm_clock_max->setText(QString::number(current_gpu_.get_max_clock_sm()) + " MHz");
-        ui->lineEdit_memory_clock_max->setText(QString::number(current_gpu_.get_max_clock_memory()) + " MHz");
+        set_max_clock_values();
     }
     catch (const NVMLpp::errors::error_not_supported&)
     {
@@ -396,6 +394,16 @@ void MainWindow::manual_fan_speed_control_widgets_enabled(bool value)
 {
     ui->horizontalSlider_set_fan_speed->setEnabled(value);
     ui->label_set_fan_speed_slider_indicator->setEnabled(value);
+}
+
+
+
+void MainWindow::set_max_clock_values(int gpu_clock_offset, int mem_clock_offset) const
+{
+    ui->lineEdit_graphics_clock_max->setText(QString::number(current_gpu_.get_max_clock_graphics() + gpu_clock_offset) + " MHz");
+    ui->lineEdit_video_clock_max->setText(QString::number(current_gpu_.get_max_clock_video() + gpu_clock_offset) + " MHz");
+    ui->lineEdit_sm_clock_max->setText(QString::number(current_gpu_.get_max_clock_sm() + gpu_clock_offset) + " MHz");
+    ui->lineEdit_memory_clock_max->setText(QString::number(current_gpu_.get_max_clock_memory() + mem_clock_offset) + " MHz");
 }
 
 
@@ -532,6 +540,7 @@ void MainWindow::on_pushButton_apply_clock_offset_clicked()
     if (ui->comboBox_select_clock_offset_profile->currentIndex() == CLOCK_PROFILE_NONE)
     {
         gpu_clock_controller_.set_clock_offsets(0, 0);
+        set_max_clock_values();
     }
     else
     {
@@ -540,6 +549,7 @@ void MainWindow::on_pushButton_apply_clock_offset_clicked()
         const int gpu_clock_offset {current_clock_profile["gpu_clock_offset"].get<int>()};
         const int mem_clock_offset {current_clock_profile["mem_clock_offset"].get<int>()};
         gpu_clock_controller_.set_clock_offsets(gpu_clock_offset, mem_clock_offset);
+        set_max_clock_values(gpu_clock_offset, mem_clock_offset);
     }
 
     ui->statusBar->showMessage("Clock profile applied: " + ui->comboBox_select_clock_offset_profile->currentText(), 2000);

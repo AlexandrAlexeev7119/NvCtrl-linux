@@ -115,4 +115,5 @@ protected:
     void set_static_info();
     void set_current_gpu_for_controllers() noexcept;
     void manual_fan_speed_control_widgets_enabled(bool value);
+    void set_max_clock_values(int gpu_clock_offset = 0, int mem_clock_offset = 0) const;
 };
