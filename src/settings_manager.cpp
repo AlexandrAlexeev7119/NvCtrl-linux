@@ -20,7 +20,10 @@ const nlohmann::json SettingsManager::default_settings
     {
         {"update_freq_ms", 500},
         {"minimize_to_tray_on_close", false},
-        {"minimize_to_tray_on_startup", false}
+        {"minimize_to_tray_on_startup", false},
+        {"last_fan_and_clock_offset_profiles_saved", false},
+        {"fan_speed_profiles", nullptr},
+        {"clock_offset_profiles", nullptr},
     }
 };
 
