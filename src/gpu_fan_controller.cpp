@@ -10,9 +10,9 @@ constexpr const char* NVIDIA_SETTINGS_GPU_FAN_SPEED {"[fan:0]/GPUTargetFanSpeed=
 
 
 
-GpuFanController::GpuFanController(NVMLpp::NVML_device* nvml_device, QObject* parent)
+GpuFanController::GpuFanController(QObject* parent)
     : QObject {parent}
-    , current_gpu_ {nvml_device}
+    , current_gpu_ {nullptr}
 { }
 
 

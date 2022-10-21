@@ -18,12 +18,12 @@ static std::string get_filename_in_home_dir()
 const nlohmann::json SettingsManager::default_settings
 {
     {
-        {"update_freq_ms", 500},
+        {"update_freq_ms", 1000},
         {"minimize_to_tray_on_close", false},
         {"minimize_to_tray_on_startup", false},
         {"last_fan_and_clock_offset_profiles_saved", false},
-        {"fan_speed_profiles", nullptr},
-        {"clock_offset_profiles", nullptr},
+        {"fan_speed_profiles", nlohmann::json::array_t { {{"name", "Auto (VBIOS controlled) (default)"}} } },
+        {"clock_offset_profiles", nlohmann::json::array_t { {{"name", "None (default)"}} } }
     }
 };
 
@@ -68,14 +68,14 @@ void SettingsManager::close_file()
 void SettingsManager::write_settings(const nlohmann::json& settings)
 {
     (*ptr_settings_file_) << settings;
-    qInfo().noquote().nospace() << "Save settings to: " << get_file_name().c_str();
+    qDebug().noquote().nospace() << "Save settings to: " << get_file_name().c_str();
 }
 
 std::string SettingsManager::read_settings()
 {
-    std::string raw_json {std::istream_iterator<char>{*ptr_settings_file_},
-                          std::istream_iterator<char>{}};
-    qInfo().noquote().nospace() << "Read settings from: " << get_file_name().c_str();
+    std::string raw_json {};
+    std::getline(*ptr_settings_file_, raw_json);
+    qDebug().noquote().nospace() << "Read settings from: " << get_file_name().c_str();
     return raw_json;
 }
 
