@@ -1,3 +1,5 @@
+#include <future>
+
 #include <QMessageBox>
 #include <QDebug>
 
@@ -11,14 +13,18 @@
 MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
     : QMainWindow {parent}
     , ui {new Ui::MainWindow}
+    , tray_menu_ {this}
     , tray_icon_ {this}
-    , gpu_utilizations_controller_ {}
-    , gpu_power_controller_ {}
-    , gpu_clock_controller_ {}
-    , gpu_fan_controller_ {}
     , dynamic_info_update_timer_ {}
+
     , nvmlpp_session_ {NVMLpp::Session::instance()}
     , current_gpu_ {NVMLpp::NVML_device::from_index(0)}
+
+    , gpu_utilizations_controller_ {this}
+    , gpu_power_controller_ {this}
+    , gpu_clock_controller_ {this}
+    , gpu_fan_controller_ {this}
+
     , settings_dialog_window_ {this}
     , about_dialog_window_ {this}
     , report_a_bug_dialog_window_ {this}
@@ -26,7 +32,6 @@ MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
     , edit_fan_profile_dialog_window_ {this}
     , clock_profile_dialog_window_ {this}
     , edit_clock_offset_profile_dialog_window_ {this}
-    , tray_menu_ {this}
 {
     ui->setupUi(this);
     setMinimumSize(size());
@@ -163,7 +168,7 @@ void MainWindow::on_GpuUtilizationsController_info_ready(const GpuUtilizationsCo
     ui->progressBar_GPU_decoder_usage->setValue(utilization_rates.decoder);
     ui->lineEdit_GPU_mem_usage->setText(QString::number(utilization_rates.mem_used / 1024 / 1024) + " MiB");
     ui->lineEdit_current_pstate->setText("Pstate: " + QString::number(utilization_rates.pstate));
-    ui->label_current_gpu_core_temp_value->setText(QString::number(utilization_rates.gpu_core_temp) + " °C");
+    ui->lineEdit_current_gpu_core_temp->setText(QString::number(utilization_rates.gpu_core_temp) + " °C");
 }
 
 
@@ -188,7 +193,7 @@ void MainWindow::on_GpuClockController_info_ready(const GpuClockController::cloc
 
 void MainWindow::on_GpuFanController_info_ready(const GpuFanController::fan_rates& fan_rates)
 {
-    ui->label_current_fan_speed_level_value->setText(QString::number(fan_rates.fan_speed_level) + "%");
+    ui->lineEdit_current_fan_speed_level->setText(QString::number(fan_rates.fan_speed_level) + "%");
 }
 
 
@@ -241,6 +246,10 @@ void MainWindow::on_GpuFanController_error()
 void MainWindow::connect_slots_and_signals()
 {
     connect(&tray_icon_, &QSystemTrayIcon::activated, this, &MainWindow::toggle_tray);
+    connect(ui->horizontalSlider_change_power_limit, &QSlider::valueChanged, [this](int value)
+    {
+        ui->label_power_limit_slider_indicator->setText(QString::number(value));
+    });
 
     connect(&gpu_utilizations_controller_, &GpuUtilizationsController::info_ready, this, &MainWindow::on_GpuUtilizationsController_info_ready);
     connect(&gpu_power_controller_, &GpuPowerController::info_ready, this, &::MainWindow::on_GpuPowerController_info_ready);
@@ -253,15 +262,6 @@ void MainWindow::connect_slots_and_signals()
     connect(&gpu_fan_controller_, &GpuFanController::error, this, &MainWindow::on_GpuFanController_error);
 
     connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
-
-    connect(ui->horizontalSlider_change_power_limit, &QSlider::valueChanged, this, [this](int value)
-    {
-        ui->label_power_limit_slider_indicator->setText(QString::number(value));
-    });
-    connect(ui->horizontalSlider_set_fan_speed, &QSlider::valueChanged, this, [this](int value)
-    {
-        ui->label_set_fan_speed_slider_indicator->setText(QString::number(value) + "%");
-    });
 }
 
 
@@ -297,6 +297,7 @@ void MainWindow::load_and_validate_app_settings()
     }
 
     load_fan_and_clock_offset_profiles();
+
     if (last_fan_and_clock_offset_profiles_saved_)
     {
         restore_last_fan_and_clock_offset_profiles();
@@ -310,52 +311,46 @@ void MainWindow::load_and_validate_app_settings()
 
 void MainWindow::load_fan_and_clock_offset_profiles()
 {
-    const auto& fan_speed_profiles = app_settings_["fan_speed_profiles"];
-    const auto& clock_offset_profiles = app_settings_["clock_offset_profiles"];
-
-    if (!fan_speed_profiles.is_null() && !fan_speed_profiles.empty())
-    {
-        for (const auto& fan_speed_profile : fan_speed_profiles)
+    auto load_fan_profiles_future {std::async(std::launch::async, [this]()
         {
-            ui->comboBox_select_fan_profile->addItem(QString::fromStdString(fan_speed_profile["name"].get<std::string>()));
-        }
-        qDebug().noquote().nospace() << "Total fan profiles loaded: " << fan_speed_profiles.size();
-    }
+            const auto& fan_speed_profiles = app_settings_["fan_speed_profiles"];
+            for (const auto& fan_speed_profile : fan_speed_profiles)
+            {
+                ui->comboBox_select_fan_profile->addItem(QString::fromStdString(
+                                                             fan_speed_profile["name"].get<std::string>()
+                                                         ));
+            }
+            qDebug().noquote().nospace() << "Total fan profiles loaded: " << fan_speed_profiles.size();
+        })};
 
-    if (!clock_offset_profiles.is_null() && !clock_offset_profiles.empty())
-    {
-        for (const auto& clock_offset_profile : clock_offset_profiles)
+    auto load_clock_offset_profiles_future {std::async(std::launch::async, [this]()
         {
-            ui->comboBox_select_clock_offset_profile->addItem(QString::fromStdString(clock_offset_profile["name"].get<std::string>()));
-        }
-        qDebug().noquote().nospace() << "Total clock offset profiles loaded: " << clock_offset_profiles.size();
-    }
+            const auto& clock_offset_profiles = app_settings_["clock_offset_profiles"];
+            for (const auto& clock_offset_profile : clock_offset_profiles)
+            {
+                ui->comboBox_select_clock_offset_profile->addItem(QString::fromStdString(
+                                                                      clock_offset_profile["name"].get<std::string>()
+                                                                  ));
+            }
+            qDebug().noquote().nospace() << "Total clock offset profiles loaded: " << clock_offset_profiles.size();
+        })};
 }
 
 
 
 void MainWindow::restore_last_fan_and_clock_offset_profiles()
 {
-    const auto& fan_speed_profiles = app_settings_["fan_speed_profiles"];
-    const auto& clock_offset_profiles = app_settings_["clock_offset_profiles"];
+    const unsigned last_fan_profile_index {app_settings_["last_fan_profile_index"].get<unsigned>()};
+    const unsigned last_clock_offset_profile_index {app_settings_["last_clock_offset_profile_index"].get<unsigned>()};
+    const auto& last_fan_profile = app_settings_["fan_speed_profiles"][last_fan_profile_index];
+    const auto& last_clock_offset_profile = app_settings_["clock_offset_profiles"][last_clock_offset_profile_index];
 
-    if (!fan_speed_profiles.is_null())
-    {
-        const unsigned last_fan_profile_index {app_settings_["last_fan_profile_index"].get<unsigned>()};
-        const auto& last_fan_profile = fan_speed_profiles[last_fan_profile_index];
-        ui->comboBox_select_fan_profile->setCurrentIndex(last_fan_profile_index);
-        on_comboBox_select_fan_profile_activated(last_fan_profile_index);
-        on_pushButton_apply_fan_speed_clicked();
-    }
-
-    if (!clock_offset_profiles.is_null())
-    {
-        const unsigned last_clock_offset_profile_index {app_settings_["last_clock_offset_profile_index"].get<unsigned>()};
-        const auto& last_clock_offset_profile = clock_offset_profiles[last_clock_offset_profile_index];
-        ui->comboBox_select_clock_offset_profile->setCurrentIndex(last_clock_offset_profile_index);
-        on_comboBox_select_clock_offset_profile_activated(last_clock_offset_profile_index);
-        on_pushButton_apply_clock_offset_clicked();
-    }
+    ui->comboBox_select_fan_profile->setCurrentIndex(last_fan_profile_index);
+    ui->comboBox_select_clock_offset_profile->setCurrentIndex(last_clock_offset_profile_index);
+    on_comboBox_select_fan_profile_activated(last_fan_profile_index);
+    on_comboBox_select_clock_offset_profile_activated(last_clock_offset_profile_index);
+    on_pushButton_apply_fan_speed_clicked();
+    on_pushButton_apply_clock_offset_clicked();
 }
 
 
@@ -432,14 +427,6 @@ void MainWindow::set_current_gpu_for_controllers() noexcept
 
 
 
-void MainWindow::manual_fan_speed_control_widgets_enabled(bool value)
-{
-    ui->horizontalSlider_set_fan_speed->setEnabled(value);
-    ui->label_set_fan_speed_slider_indicator->setEnabled(value);
-}
-
-
-
 void MainWindow::set_max_clock_values(int gpu_clock_offset, int mem_clock_offset) const
 {
     ui->lineEdit_graphics_clock_max->setText(QString::number(current_gpu_.get_max_clock_graphics() + gpu_clock_offset) + " MHz");
@@ -466,14 +453,10 @@ void MainWindow::closeEvent(QCloseEvent* event)
         {
             app_settings_["last_fan_profile_index"] = ui->comboBox_select_fan_profile->currentIndex();
             app_settings_["last_clock_offset_profile_index"] = ui->comboBox_select_clock_offset_profile->currentIndex();
-
             SettingsManager::instance().open_file(std::ios::out);
             SettingsManager::instance().write_settings(app_settings_);
             SettingsManager::instance().close_file();
-
-            qInfo().noquote().nospace() << "Profiles are saved";
         }
-
         qInfo().noquote().nospace() << "Close event accepted, MainWindow closed";
         event->accept();
     }
@@ -483,23 +466,15 @@ void MainWindow::closeEvent(QCloseEvent* event)
 
 void MainWindow::on_comboBox_select_fan_profile_activated(int index)
 {
-    switch (index)
+    if (index > FAN_PROFILE_AUTO)
     {
-    case FAN_PROFILE_AUTO:
-        gpu_fan_controller_.set_fan_control_state(false);
-        manual_fan_speed_control_widgets_enabled(false);
-        ui->pushButton_edit_current_fan_profile->setEnabled(false);
-        break;
-    case FAN_PROFILE_MANUAL:
         gpu_fan_controller_.set_fan_control_state(true);
-        manual_fan_speed_control_widgets_enabled(true);
-        ui->pushButton_edit_current_fan_profile->setEnabled(false);
-        break;
-    default:
-        gpu_fan_controller_.set_fan_control_state(true);
-        manual_fan_speed_control_widgets_enabled(false);
         ui->pushButton_edit_current_fan_profile->setEnabled(true);
-        break;
+    }
+    else
+    {
+        gpu_fan_controller_.set_fan_control_state(false);
+        ui->pushButton_edit_current_fan_profile->setEnabled(false);
     }
 
     qInfo().noquote().nospace() << "Selected fan control profile: " << ui->comboBox_select_fan_profile->currentText();
@@ -509,19 +484,18 @@ void MainWindow::on_comboBox_select_fan_profile_activated(int index)
 
 void MainWindow::on_comboBox_select_clock_offset_profile_activated(int index)
 {
-    if (index == CLOCK_PROFILE_NONE)
+    if (index > CLOCK_PROFILE_NONE)
+    {
+        ui->pushButton_edit_curr_clock_offset_profile->setEnabled(true);
+        const auto& current_clock_profile = app_settings_["clock_offset_profiles"][index];
+        ui->lineEdit_current_gpu_clock_offset->setText(QString::number(current_clock_profile["gpu_clock_offset"].get<int>()) + " MHz");
+        ui->lineEdit_current_mem_clock_offset->setText(QString::number(current_clock_profile["mem_clock_offset"].get<int>()) + " MHz");
+    }
+    else
     {
         ui->pushButton_edit_curr_clock_offset_profile->setEnabled(false);
         ui->lineEdit_current_gpu_clock_offset->setText("0 MHz");
         ui->lineEdit_current_mem_clock_offset->setText("0 MHz");
-    }
-    else
-    {
-        ui->pushButton_edit_curr_clock_offset_profile->setEnabled(true);
-        const unsigned custom_profile_index {static_cast<unsigned>(index - 1)};
-        const auto& current_clock_profile = app_settings_["clock_offset_profiles"][custom_profile_index];
-        ui->lineEdit_current_gpu_clock_offset->setText(QString::number(current_clock_profile["gpu_clock_offset"].get<int>()) + " MHz");
-        ui->lineEdit_current_mem_clock_offset->setText(QString::number(current_clock_profile["mem_clock_offset"].get<int>()) + " MHz");
     }
 
     qInfo().noquote().nospace() << "Selected clock offset profile: " << ui->comboBox_select_clock_offset_profile->currentText();
@@ -540,21 +514,11 @@ void MainWindow::on_pushButton_apply_power_limit_clicked()
 void MainWindow::on_pushButton_apply_fan_speed_clicked()
 {
     const unsigned index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex())};
-
-    switch (index)
+    if (index > FAN_PROFILE_AUTO)
     {
-    case FAN_PROFILE_AUTO: break;
-    case FAN_PROFILE_MANUAL:
-        gpu_fan_controller_.set_fan_speed(ui->horizontalSlider_set_fan_speed->value());
-        break;
-    default:
-        {
-            const unsigned custom_profile_index {static_cast<unsigned>(index - 2)};
-            const auto& current_fan_profile = app_settings_["fan_speed_profiles"][custom_profile_index];
-            const unsigned fan_speed_level {current_fan_profile["fan_speed"].get<unsigned>()};
-            gpu_fan_controller_.set_fan_speed(fan_speed_level);
-        }
-        break;
+        const auto& current_fan_profile = app_settings_["fan_speed_profiles"][index];
+        const unsigned fan_speed_level {current_fan_profile["fan_speed"].get<unsigned>()};
+        gpu_fan_controller_.set_fan_speed(fan_speed_level);
     }
 
     ui->statusBar->showMessage("Fan profile applied: " + ui->comboBox_select_fan_profile->currentText(), 2000);
@@ -572,9 +536,9 @@ void MainWindow::on_pushButton_add_new_fan_profile_clicked()
 
 void MainWindow::on_pushButton_edit_current_fan_profile_clicked()
 {
-    const unsigned curr_fan_profile_index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex() - 2)};
+    const unsigned current_fan_profile_index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex())};
     edit_fan_profile_dialog_window_.load_app_settings(&app_settings_);
-    edit_fan_profile_dialog_window_.set_current_fan_profile_index(curr_fan_profile_index);
+    edit_fan_profile_dialog_window_.set_current_fan_profile_index(current_fan_profile_index);
     edit_fan_profile_dialog_window_.show();
 }
 
@@ -590,19 +554,20 @@ void MainWindow::on_pushButton_add_new_clock_offset_profile_clicked()
 
 void MainWindow::on_pushButton_apply_clock_offset_clicked()
 {
-    if (ui->comboBox_select_clock_offset_profile->currentIndex() == CLOCK_PROFILE_NONE)
+    const unsigned index {static_cast<unsigned>(ui->comboBox_select_clock_offset_profile->currentIndex())};
+    if (index > CLOCK_PROFILE_NONE)
     {
-        gpu_clock_controller_.set_clock_offsets(0, 0);
-        set_max_clock_values();
+        const auto& current_clock_profile = app_settings_["clock_offset_profiles"][index];
+        const int gpu_clock_offset {current_clock_profile["gpu_clock_offset"].get<int>()};
+        const int mem_clock_offset {current_clock_profile["mem_clock_offset"].get<int>()};
+
+        gpu_clock_controller_.set_clock_offsets(gpu_clock_offset, mem_clock_offset);
+        set_max_clock_values(gpu_clock_offset, mem_clock_offset);
     }
     else
     {
-        const unsigned custom_profile_index {static_cast<unsigned>(ui->comboBox_select_clock_offset_profile->currentIndex() - 1)};
-        const auto& current_clock_profile = app_settings_["clock_offset_profiles"][custom_profile_index];
-        const int gpu_clock_offset {current_clock_profile["gpu_clock_offset"].get<int>()};
-        const int mem_clock_offset {current_clock_profile["mem_clock_offset"].get<int>()};
-        gpu_clock_controller_.set_clock_offsets(gpu_clock_offset, mem_clock_offset);
-        set_max_clock_values(gpu_clock_offset, mem_clock_offset);
+        gpu_clock_controller_.set_clock_offsets(0, 0);
+        set_max_clock_values();
     }
 
     ui->statusBar->showMessage("Clock profile applied: " + ui->comboBox_select_clock_offset_profile->currentText(), 2000);
@@ -610,10 +575,11 @@ void MainWindow::on_pushButton_apply_clock_offset_clicked()
 
 
 
-void MainWindow::on_pushButton_edit_curr_clock_offset_profile_clicked()
+void MainWindow::on_pushButton_edit_current_clock_offset_profile_clicked()
 {
+    const unsigned current_clock_offset_profile_index {static_cast<unsigned>(ui->comboBox_select_clock_offset_profile->currentIndex())};
     edit_clock_offset_profile_dialog_window_.load_app_settings(&app_settings_);
-    edit_clock_offset_profile_dialog_window_.set_current_clock_offset_profile_index(ui->comboBox_select_clock_offset_profile->currentIndex() - 1);
+    edit_clock_offset_profile_dialog_window_.set_current_clock_offset_profile_index(current_clock_offset_profile_index);
     edit_clock_offset_profile_dialog_window_.show();
 }
 

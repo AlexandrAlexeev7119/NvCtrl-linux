@@ -31,14 +31,14 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-    enum { FAN_PROFILE_AUTO, FAN_PROFILE_MANUAL };
+    enum { FAN_PROFILE_AUTO };
     enum { CLOCK_PROFILE_NONE };
 
 public:
     MainWindow(nlohmann::json app_settings, QWidget* parent = nullptr);
     ~MainWindow();
 
-    inline QSystemTrayIcon& get_tray_icon() noexcept { return tray_icon_; }
+    QSystemTrayIcon& get_tray_icon() noexcept { return tray_icon_; }
 
 private slots:
     void toggle_tray();
@@ -71,7 +71,7 @@ private slots:
     void on_pushButton_edit_current_fan_profile_clicked();
     void on_pushButton_add_new_clock_offset_profile_clicked();
     void on_pushButton_apply_clock_offset_clicked();
-    void on_pushButton_edit_curr_clock_offset_profile_clicked();
+    void on_pushButton_edit_current_clock_offset_profile_clicked();
 
     void on_actionSettings_triggered();
     void on_actionQuit_triggered();
@@ -79,25 +79,24 @@ private slots:
     void on_actionReport_a_bug_triggered();
     void on_actionShow_GPU_UUID_toggled(bool checked);
 
-
 private:
     Ui::MainWindow* ui;
-    QSystemTrayIcon tray_icon_;
-    nlohmann::json app_settings_;
     QMenu tray_menu_;
+    QSystemTrayIcon tray_icon_;
+    QTimer dynamic_info_update_timer_;
+
+    bool minimize_to_tray_on_close_;
+    bool last_fan_and_clock_offset_profiles_saved_;
+    int update_freq_ms_;
+
+    nlohmann::json app_settings_;
+    NVMLpp::Session& nvmlpp_session_;
+    NVMLpp::NVML_device current_gpu_;
 
     GpuUtilizationsController gpu_utilizations_controller_;
     GpuPowerController gpu_power_controller_;
     GpuClockController gpu_clock_controller_;
     GpuFanController gpu_fan_controller_;
-
-    QTimer dynamic_info_update_timer_;
-    bool minimize_to_tray_on_close_;
-    bool last_fan_and_clock_offset_profiles_saved_;
-    int update_freq_ms_;
-
-    NVMLpp::Session& nvmlpp_session_;
-    NVMLpp::NVML_device current_gpu_;
 
     SettingsDialog settings_dialog_window_;
     AboutDialog about_dialog_window_;
@@ -112,11 +111,12 @@ protected:
 
     void connect_slots_and_signals();
     void setup_tray_menu();
+
     void load_and_validate_app_settings();
     void load_fan_and_clock_offset_profiles();
     void restore_last_fan_and_clock_offset_profiles();
+
     void set_static_info();
     void set_current_gpu_for_controllers() noexcept;
-    void manual_fan_speed_control_widgets_enabled(bool value);
     void set_max_clock_values(int gpu_clock_offset = 0, int mem_clock_offset = 0) const;
 };

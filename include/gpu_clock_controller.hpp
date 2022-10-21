@@ -16,7 +16,7 @@ public:
         unsigned mem;
     };
 
-    GpuClockController(const NVMLpp::NVML_device* nvml_device = nullptr, QObject* parrent = nullptr);
+    GpuClockController(QObject* parrent = nullptr);
     inline void set_device(const NVMLpp::NVML_device* nvml_device) noexcept { current_gpu_ = nvml_device; }
 
 public slots:

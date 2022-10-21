@@ -7,9 +7,9 @@
 static constexpr const char* PKEXEC_BIN {"/usr/bin/pkexec"};
 static constexpr const char* NVIDIA_SMI_BIN {"/usr/bin/nvidia-smi"};
 
-GpuPowerController::GpuPowerController(const NVMLpp::NVML_device* nvml_device, QObject* parrent)
+GpuPowerController::GpuPowerController(QObject* parrent)
     : QObject {parrent}
-    , current_gpu_ {nvml_device}
+    , current_gpu_ {nullptr}
 { }
 
 void GpuPowerController::set_power_limit(unsigned limit)
