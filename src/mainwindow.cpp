@@ -111,6 +111,7 @@ void MainWindow::on_EditFanProfileDialog_current_fan_profile_changed(const nlohm
     const unsigned index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex())};
     ui->comboBox_select_fan_profile->removeItem(index);
     ui->comboBox_select_fan_profile->insertItem(index, QString::fromStdString(curr_fan_profile["name"].get<std::string>()));
+    ui->comboBox_select_fan_profile->setCurrentIndex(index);
 }
 
 
@@ -143,6 +144,7 @@ void MainWindow::on_EditClockOffsetProfileDialog_current_clock_offset_profile_ch
     ui->comboBox_select_clock_offset_profile->removeItem(index);
 
     ui->comboBox_select_clock_offset_profile->insertItem(index, QString::fromStdString(curr_clock_profile["name"].get<std::string>()));
+    ui->comboBox_select_clock_offset_profile->setCurrentIndex(index);
     ui->lineEdit_current_gpu_clock_offset->setText(QString::number(curr_clock_profile["gpu_clock_offset"].get<int>()) + " MHz");
     ui->lineEdit_current_mem_clock_offset->setText(QString::number(curr_clock_profile["mem_clock_offset"].get<int>()) + " MHz");
 }
@@ -305,6 +307,8 @@ void MainWindow::load_and_validate_app_settings()
 
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
     qInfo().noquote().nospace() << "Settings for MainWindow has been loaded";
+
+    qDebug().noquote().nospace() << "Default settings: " << SettingsManager::default_settings.dump(4).c_str();
 }
 
 
@@ -486,14 +490,14 @@ void MainWindow::on_comboBox_select_clock_offset_profile_activated(int index)
 {
     if (index > CLOCK_PROFILE_NONE)
     {
-        ui->pushButton_edit_curr_clock_offset_profile->setEnabled(true);
+        ui->pushButton_edit_current_clock_offset_profile->setEnabled(true);
         const auto& current_clock_profile = app_settings_["clock_offset_profiles"][index];
         ui->lineEdit_current_gpu_clock_offset->setText(QString::number(current_clock_profile["gpu_clock_offset"].get<int>()) + " MHz");
         ui->lineEdit_current_mem_clock_offset->setText(QString::number(current_clock_profile["mem_clock_offset"].get<int>()) + " MHz");
     }
     else
     {
-        ui->pushButton_edit_curr_clock_offset_profile->setEnabled(false);
+        ui->pushButton_edit_current_clock_offset_profile->setEnabled(false);
         ui->lineEdit_current_gpu_clock_offset->setText("0 MHz");
         ui->lineEdit_current_mem_clock_offset->setText("0 MHz");
     }
