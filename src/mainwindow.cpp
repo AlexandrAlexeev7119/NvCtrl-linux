@@ -30,7 +30,6 @@ MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
 {
     ui->setupUi(this);
     setMinimumSize(size());
-
     app_settings_ = std::move(app_settings);
 
     connect_slots_and_signals();
@@ -298,7 +297,6 @@ void MainWindow::load_and_validate_app_settings()
     }
 
     load_fan_and_clock_offset_profiles();
-
     if (last_fan_and_clock_offset_profiles_saved_)
     {
         restore_last_fan_and_clock_offset_profiles();
@@ -338,18 +336,26 @@ void MainWindow::load_fan_and_clock_offset_profiles()
 
 void MainWindow::restore_last_fan_and_clock_offset_profiles()
 {
-    const unsigned last_fan_profile_index {app_settings_["last_fan_profile_index"].get<unsigned>()};
-    const unsigned last_clock_offset_profile_index {app_settings_["last_clock_offset_profile_index"].get<unsigned>()};
-    const auto& last_fan_profile = app_settings_["fan_speed_profiles"][last_fan_profile_index];
-    const auto& last_clock_offset_profile = app_settings_["clock_offset_profiles"][last_clock_offset_profile_index];
+    const auto& fan_speed_profiles = app_settings_["fan_speed_profiles"];
+    const auto& clock_offset_profiles = app_settings_["clock_offset_profiles"];
 
-    ui->comboBox_select_fan_profile->setCurrentIndex(last_fan_profile_index);
-    ui->comboBox_select_clock_offset_profile->setCurrentIndex(last_clock_offset_profile_index);
+    if (!fan_speed_profiles.is_null())
+    {
+        const unsigned last_fan_profile_index {app_settings_["last_fan_profile_index"].get<unsigned>()};
+        const auto& last_fan_profile = fan_speed_profiles[last_fan_profile_index];
+        ui->comboBox_select_fan_profile->setCurrentIndex(last_fan_profile_index);
+        on_comboBox_select_fan_profile_activated(last_fan_profile_index);
+        on_pushButton_apply_fan_speed_clicked();
+    }
 
-    on_comboBox_select_fan_profile_activated(last_fan_profile_index);
-    on_comboBox_select_clock_offset_profile_activated(last_clock_offset_profile_index);
-    on_pushButton_apply_fan_speed_clicked();
-    on_pushButton_apply_clock_offset_clicked();
+    if (!clock_offset_profiles.is_null())
+    {
+        const unsigned last_clock_offset_profile_index {app_settings_["last_clock_offset_profile_index"].get<unsigned>()};
+        const auto& last_clock_offset_profile = clock_offset_profiles[last_clock_offset_profile_index];
+        ui->comboBox_select_clock_offset_profile->setCurrentIndex(last_clock_offset_profile_index);
+        on_comboBox_select_clock_offset_profile_activated(last_clock_offset_profile_index);
+        on_pushButton_apply_clock_offset_clicked();
+    }
 }
 
 
