@@ -18,10 +18,12 @@ static std::string get_filename_in_home_dir()
 const nlohmann::json SettingsManager::default_settings
 {
     {
-        {"update_freq_ms", 500},
+        {"update_freq_ms", 1000},
         {"minimize_to_tray_on_close", false},
         {"minimize_to_tray_on_startup", false},
         {"last_fan_and_clock_offset_profiles_saved", false},
+        {"fan_speed_profiles", nlohmann::json::array_t { {{"name", "Auto (VBIOS controlled) (default)"}} } },
+        {"clock_offset_profiles", nlohmann::json::array_t { {{"name", "None (default)"}} } }
     }
 };
 
