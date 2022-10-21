@@ -71,8 +71,8 @@ void SettingsManager::write_settings(const nlohmann::json& settings)
 
 std::string SettingsManager::read_settings()
 {
-    std::string raw_json {std::istream_iterator<char>{*ptr_settings_file_},
-                          std::istream_iterator<char>{}};
+    std::string raw_json {};
+    std::getline(*ptr_settings_file_, raw_json);
     qDebug().noquote().nospace() << "Read settings from: " << get_file_name().c_str();
     return raw_json;
 }

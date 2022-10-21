@@ -10,9 +10,9 @@ constexpr const char* NVIDIA_SETTINGS_MEM_CLOCK_OFFSET {"[gpu:%1]/GPUMemoryTrans
 
 
 
-GpuClockController::GpuClockController(const NVMLpp::NVML_device* nvml_device, QObject* parrent)
+GpuClockController::GpuClockController(QObject* parrent)
     : QObject {parrent}
-    , current_gpu_ {nvml_device}
+    , current_gpu_ {nullptr}
 { }
 
 

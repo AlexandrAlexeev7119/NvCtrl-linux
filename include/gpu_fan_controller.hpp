@@ -12,7 +12,7 @@ public:
         unsigned fan_speed_level;
     };
 
-    GpuFanController(NVMLpp::NVML_device* nvml_device = nullptr, QObject* parent = nullptr);
+    GpuFanController(QObject* parent = nullptr);
     inline void set_device(NVMLpp::NVML_device* nvml_device) noexcept { current_gpu_ = nvml_device; }
 
 public slots:

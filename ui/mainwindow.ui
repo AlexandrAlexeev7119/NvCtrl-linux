@@ -421,8 +421,21 @@
            <set>Qt::AlignCenter</set>
           </property>
           <layout class="QGridLayout" name="gridLayout_3">
-           <item row="0" column="2">
-            <widget class="QLineEdit" name="lineEdit_current_power_usage">
+           <item row="1" column="5">
+            <widget class="QLabel" name="label_enforced_power_limit">
+             <property name="text">
+              <string>Enforced</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="4">
+            <widget class="QLineEdit" name="lineEdit_current_power_limit">
+             <property name="frame">
+              <bool>true</bool>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -447,8 +460,11 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="2">
-            <widget class="QLineEdit" name="lineEdit_min_power_limit">
+           <item row="0" column="2">
+            <widget class="QLineEdit" name="lineEdit_current_power_usage">
+             <property name="frame">
+              <bool>true</bool>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -464,8 +480,100 @@
              </property>
             </widget>
            </item>
+           <item row="0" column="5">
+            <widget class="QLabel" name="label_default_power_limit">
+             <property name="text">
+              <string>Default limit</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="6">
             <widget class="QLineEdit" name="lineEdit_default_power_limit">
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="6">
+            <widget class="QLineEdit" name="lineEdit_enforced_power_limit">
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QLineEdit" name="lineEdit_min_power_limit">
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_power_limit_slider_indicator">
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QLabel" name="label_max_power_limit">
+             <property name="text">
+              <string>Max limit</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_current_power_usage">
+             <property name="text">
+              <string>Usage</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <widget class="QLabel" name="label_current_power_limit">
+             <property name="text">
+              <string>Current limit</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="4">
+            <widget class="QLineEdit" name="lineEdit_max_power_limit">
+             <property name="frame">
+              <bool>true</bool>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -484,96 +592,6 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="6">
-            <widget class="QLineEdit" name="lineEdit_enforced_power_limit">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="5">
-            <widget class="QLabel" name="label_enforced_power_limit">
-             <property name="text">
-              <string>Enforced</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="4">
-            <widget class="QLineEdit" name="lineEdit_max_power_limit">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="3">
-            <widget class="QLabel" name="label_current_power_limit">
-             <property name="text">
-              <string>Current limit</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="3">
-            <widget class="QLabel" name="label_max_power_limit">
-             <property name="text">
-              <string>Max limit</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="4">
-            <widget class="QLineEdit" name="lineEdit_current_power_limit">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="5">
-            <widget class="QLabel" name="label_default_power_limit">
-             <property name="text">
-              <string>Default limit</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_power_limit_slider_indicator">
-             <property name="text">
-              <string>0</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_current_power_usage">
-             <property name="text">
-              <string>Usage</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
           </layout>
          </widget>
         </item>
@@ -586,73 +604,7 @@
            <set>Qt::AlignCenter</set>
           </property>
           <layout class="QGridLayout" name="gridLayout_6">
-           <item row="9" column="5">
-            <widget class="QPushButton" name="pushButton_apply_fan_speed">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="text">
-              <string>Apply</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1" colspan="4">
-            <widget class="QComboBox" name="comboBox_select_fan_profile">
-             <item>
-              <property name="text">
-               <string>Auto (VBIOS controlled)</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Manual</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="9" column="1" colspan="4">
-            <widget class="QSlider" name="horizontalSlider_set_fan_speed">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="maximum">
-              <number>100</number>
-             </property>
-             <property name="pageStep">
-              <number>5</number>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="tickPosition">
-              <enum>QSlider::TicksBelow</enum>
-             </property>
-             <property name="tickInterval">
-              <number>5</number>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="0">
-            <widget class="QLabel" name="label_set_fan_speed_slider_indicator">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>0%</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="5">
-            <widget class="QPushButton" name="pushButton_add_new_fan_profile">
-             <property name="text">
-              <string>Add new</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="5">
+           <item row="1" column="6">
             <widget class="QPushButton" name="pushButton_edit_current_fan_profile">
              <property name="enabled">
               <bool>false</bool>
@@ -665,15 +617,51 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_select_fan_profile">
              <property name="text">
-              <string>Select fan profile:</string>
+              <string>Select profile:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
-           <item row="4" column="2" colspan="3">
-            <layout class="QFormLayout" name="formLayout">
+           <item row="1" column="1" colspan="5">
+            <widget class="QComboBox" name="comboBox_select_fan_profile"/>
+           </item>
+           <item row="6" column="6">
+            <widget class="QPushButton" name="pushButton_apply_fan_speed">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>Apply</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="6">
+            <widget class="QPushButton" name="pushButton_add_new_fan_profile">
+             <property name="text">
+              <string>Add new</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <layout class="QGridLayout" name="gridLayout_12">
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="lineEdit_current_gpu_core_temp">
+               <property name="text">
+                <string>0</string>
+               </property>
+               <property name="frame">
+                <bool>true</bool>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
              <item row="0" column="0">
               <widget class="QLabel" name="label_current_gpu_core_temp">
                <property name="font">
@@ -683,10 +671,10 @@
                 </font>
                </property>
                <property name="text">
-                <string>Current GPU core temp:</string>
+                <string>Current GPU temp:</string>
                </property>
                <property name="alignment">
-                <set>Qt::AlignBottom|Qt::AlignRight|Qt::AlignTrailing</set>
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
              </item>
@@ -699,30 +687,26 @@
                 </font>
                </property>
                <property name="text">
-                <string>Current fan speed level:</string>
+                <string>Current fan speed:</string>
                </property>
                <property name="alignment">
-                <set>Qt::AlignBottom|Qt::AlignRight|Qt::AlignTrailing</set>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="label_current_gpu_core_temp_value">
-               <property name="text">
-                <string>0</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QLabel" name="label_current_fan_speed_level_value">
+              <widget class="QLineEdit" name="lineEdit_current_fan_speed_level">
                <property name="text">
                 <string>0%</string>
                </property>
+               <property name="frame">
+                <bool>true</bool>
+               </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -738,110 +722,6 @@
         <string>Clocking</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_9">
-        <item row="1" column="1" colspan="3">
-         <widget class="QGroupBox" name="groupBox">
-          <property name="title">
-           <string>Clock offset</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_8">
-           <item row="6" column="0">
-            <widget class="QLabel" name="label_current_gpu_clock_offset">
-             <property name="text">
-              <string>GPU clock offset:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="0">
-            <widget class="QLabel" name="label_current_mem_clock_offset">
-             <property name="text">
-              <string>Memory clock offset:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="1">
-            <widget class="QLineEdit" name="lineEdit_current_gpu_clock_offset">
-             <property name="text">
-              <string>0 MHz</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="4">
-            <widget class="QPushButton" name="pushButton_edit_curr_clock_offset_profile">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Edit current</string>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="1">
-            <widget class="QLineEdit" name="lineEdit_current_mem_clock_offset">
-             <property name="text">
-              <string>0 MHz</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="10" column="4">
-            <widget class="QPushButton" name="pushButton_apply_clock_offset">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="text">
-              <string>Apply</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_select_clock_offset_profile">
-             <property name="text">
-              <string>Select clock offset profile:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QComboBox" name="comboBox_select_clock_offset_profile">
-             <item>
-              <property name="text">
-               <string>None (default)</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="2" column="4">
-            <widget class="QPushButton" name="pushButton_add_new_clock_offset_profile">
-             <property name="text">
-              <string>Add new</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
         <item row="0" column="1" colspan="3">
          <widget class="QGroupBox" name="groupBox_clock_info">
           <property name="title">
@@ -851,6 +731,19 @@
            <set>Qt::AlignCenter</set>
           </property>
           <layout class="QGridLayout" name="gridLayout_5">
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="lineEdit_video_clock_current">
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_video_clock">
              <property name="text">
@@ -861,8 +754,24 @@
              </property>
             </widget>
            </item>
+           <item row="2" column="1">
+            <widget class="QLineEdit" name="lineEdit_sm_clock_current">
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
            <item row="2" column="2">
             <widget class="QLineEdit" name="lineEdit_sm_clock_max">
+             <property name="frame">
+              <bool>true</bool>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -881,8 +790,47 @@
              </property>
             </widget>
            </item>
+           <item row="1" column="2">
+            <widget class="QLineEdit" name="lineEdit_video_clock_max">
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_graphics_clock">
+             <property name="text">
+              <string>Graphics</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="lineEdit_graphics_clock_current">
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
            <item row="3" column="2">
             <widget class="QLineEdit" name="lineEdit_memory_clock_max">
+             <property name="frame">
+              <bool>true</bool>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -893,56 +841,9 @@
            </item>
            <item row="3" column="1">
             <widget class="QLineEdit" name="lineEdit_memory_clock_current">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
+             <property name="frame">
               <bool>true</bool>
              </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLineEdit" name="lineEdit_video_clock_current">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QLineEdit" name="lineEdit_video_clock_max">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QLineEdit" name="lineEdit_sm_clock_current">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QLineEdit" name="lineEdit_graphics_clock_max">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="lineEdit_graphics_clock_current">
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -961,15 +862,126 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_graphics_clock">
+           <item row="0" column="2">
+            <widget class="QLineEdit" name="lineEdit_graphics_clock_max">
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="3">
+         <widget class="QGroupBox" name="groupBox">
+          <property name="title">
+           <string>Clock offset</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_8">
+           <item row="4" column="5">
+            <widget class="QPushButton" name="pushButton_apply_clock_offset">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="text">
-              <string>Graphics</string>
+              <string>Apply</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="5">
+            <widget class="QPushButton" name="pushButton_edit_curr_clock_offset_profile">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Edit current</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_select_clock_offset_profile">
+             <property name="text">
+              <string>Select profile:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
+           </item>
+           <item row="0" column="1" colspan="4">
+            <widget class="QComboBox" name="comboBox_select_clock_offset_profile"/>
+           </item>
+           <item row="1" column="5">
+            <widget class="QPushButton" name="pushButton_add_new_clock_offset_profile">
+             <property name="text">
+              <string>Add new</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <layout class="QGridLayout" name="gridLayout_11">
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="lineEdit_current_gpu_clock_offset">
+               <property name="text">
+                <string>0 MHz</string>
+               </property>
+               <property name="frame">
+                <bool>true</bool>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_current_gpu_clock_offset">
+               <property name="text">
+                <string>GPU clock offset:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_current_mem_clock_offset">
+               <property name="text">
+                <string>Memory clock offset:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="lineEdit_current_mem_clock_offset">
+               <property name="text">
+                <string>0 MHz</string>
+               </property>
+               <property name="frame">
+                <bool>true</bool>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
           </layout>
          </widget>

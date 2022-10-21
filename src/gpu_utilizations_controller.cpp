@@ -2,9 +2,9 @@
 
 #include "gpu_utilizations_controller.hpp"
 
-GpuUtilizationsController::GpuUtilizationsController(const NVMLpp::NVML_device* nvml_device, QObject* parrent)
+GpuUtilizationsController::GpuUtilizationsController(QObject* parrent)
     : QObject {parrent}
-    , current_gpu_ {nvml_device}
+    , current_gpu_ {nullptr}
 { }
 
 void GpuUtilizationsController::update_info()

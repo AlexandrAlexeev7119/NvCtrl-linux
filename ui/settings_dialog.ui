@@ -31,6 +31,9 @@
        <property name="text">
         <string>Update frequency (ms)</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
       </widget>
      </item>
      <item row="0" column="0" colspan="2">
