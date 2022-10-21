@@ -17,8 +17,8 @@ public:
     void load_app_settins(nlohmann::json* app_settings) noexcept;
 
 private slots:
-    void on_pushButton_apply_clicked();
-    void on_pushButton_cancel_clicked();
+    void on_buttonBox_accepted();
+    void on_buttonBox_rejected();
 
 signals:
     void settings_applied(const nlohmann::json&);

@@ -83,6 +83,7 @@ void MainWindow::update_dynamic_info()
 void MainWindow::on_SettingsDialog_settings_applied(const nlohmann::json& app_settings)
 {
     minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].get<bool>();
+    last_fan_and_clock_offset_profiles_saved_ = app_settings["last_fan_and_clock_offset_profiles_saved"].get<bool>();
     update_freq_ms_ = app_settings["update_freq_ms"].get<unsigned>();
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
 
@@ -337,9 +338,8 @@ void MainWindow::load_fan_and_clock_offset_profiles()
 
 void MainWindow::restore_last_fan_and_clock_offset_profiles()
 {
-    const unsigned last_fan_profile_index {2 /*app_settings_["last_fan_profile_index"].get<unsigned>()*/};
-    const unsigned last_clock_offset_profile_index {1 /*app_settings_["last_clock_offset_profile_index"].get<unsigned>()*/};
-
+    const unsigned last_fan_profile_index {app_settings_["last_fan_profile_index"].get<unsigned>()};
+    const unsigned last_clock_offset_profile_index {app_settings_["last_clock_offset_profile_index"].get<unsigned>()};
     const auto& last_fan_profile = app_settings_["fan_speed_profiles"][last_fan_profile_index];
     const auto& last_clock_offset_profile = app_settings_["clock_offset_profiles"][last_clock_offset_profile_index];
 
@@ -456,10 +456,20 @@ void MainWindow::closeEvent(QCloseEvent* event)
     else
     {
         tray_icon_.hide();
-        event->accept();
-        qInfo().noquote().nospace() << "Close event accepted, MainWindow closed";
         if (last_fan_and_clock_offset_profiles_saved_)
-        {}
+        {
+            app_settings_["last_fan_profile_index"] = ui->comboBox_select_fan_profile->currentIndex();
+            app_settings_["last_clock_offset_profile_index"] = ui->comboBox_select_clock_offset_profile->currentIndex();
+
+            SettingsManager::instance().open_file(std::ios::out);
+            SettingsManager::instance().write_settings(app_settings_);
+            SettingsManager::instance().close_file();
+
+            qInfo().noquote().nospace() << "Profiles are saved";
+        }
+
+        qInfo().noquote().nospace() << "Close event accepted, MainWindow closed";
+        event->accept();
     }
 }
 
