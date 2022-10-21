@@ -93,6 +93,7 @@ private:
 
     QTimer dynamic_info_update_timer_;
     bool minimize_to_tray_on_close_;
+    bool last_fan_and_clock_offset_profiles_saved_;
     int update_freq_ms_;
 
     NVMLpp::Session& nvmlpp_session_;
@@ -112,6 +113,8 @@ protected:
     void connect_slots_and_signals();
     void setup_tray_menu();
     void load_and_validate_app_settings();
+    void load_fan_and_clock_offset_profiles();
+    void restore_last_fan_and_clock_offset_profiles();
     void set_static_info();
     void set_current_gpu_for_controllers() noexcept;
     void manual_fan_speed_control_widgets_enabled(bool value);
