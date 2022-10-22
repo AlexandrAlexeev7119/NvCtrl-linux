@@ -66,13 +66,13 @@ void FanProfileDialog::on_pushButton_create_new_profile_clicked()
             qDebug().noquote().nospace() << "fan_speed_profiles exists, add new element";
         }
 
-        emit new_profile_created(fan_speed_profiles);
-        qInfo().noquote().nospace() << "New fan profile created: " << ui->lineEdit_profile_name->text();
+        emit new_profile_created(fan_speed_profiles.back());
 
         SettingsManager::instance().open_file(std::ios::out);
         SettingsManager::instance().write_settings(app_settings_ref);
         SettingsManager::instance().close_file();
 
+        qInfo().noquote().nospace() << "New fan profile created: " << ui->lineEdit_profile_name->text();
         on_pushButton_close_clicked();
     }
 }

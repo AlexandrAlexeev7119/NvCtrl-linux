@@ -6,6 +6,8 @@
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 
+#include "app_config.hpp"
+
 #include "settings_manager.hpp"
 #include "nvmlpp/nvmlpp_session.hpp"
 #include "nvmlpp/util/nvmlpp_errors.hpp"
@@ -35,18 +37,17 @@ MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
 {
     ui->setupUi(this);
     setMinimumSize(size());
+    setup_tray_menu();
+
     app_settings_ = std::move(app_settings);
 
     connect_slots_and_signals();
-    set_static_info();
-
     set_current_gpu_for_controllers();
     load_and_validate_app_settings();
 
+    set_static_info();
     update_dynamic_info();
     dynamic_info_update_timer_.start();
-
-    setup_tray_menu();
 }
 
 
@@ -91,17 +92,35 @@ void MainWindow::on_SettingsDialog_settings_applied(const nlohmann::json& app_se
     update_freq_ms_ = app_settings["update_freq_ms"].get<unsigned>();
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
 
-    qInfo().noquote().nospace() << "New settings applied";
     ui->statusBar->showMessage("New settings applied", 2000);
+
+    if constexpr (GWEpp::config::IS_DEBUG_BUILD)
+    {
+        qDebug().noquote().nospace() << "New settings applied: " << app_settings.dump(4).c_str();
+    }
+    else
+    {
+        qInfo().noquote().nospace() << "New settings applied";
+    }
 }
 
 
 
 void MainWindow::on_FanProfileDialog_new_profile_created(const nlohmann::json& curr_fan_profile)
 {
-    const QString new_fan_profile {QString::fromStdString(curr_fan_profile.back()["name"].get<std::string>())};
-    ui->comboBox_select_fan_profile->addItem(new_fan_profile);
-    ui->statusBar->showMessage("New fan profile created: " + new_fan_profile, 2000);
+    const QString new_profile_name {QString::fromStdString(curr_fan_profile["name"].get<std::string>())};
+    ui->comboBox_select_fan_profile->addItem(new_profile_name);
+
+    ui->statusBar->showMessage("New fan profile created: " + new_profile_name, 2000);
+
+    if constexpr (GWEpp::config::IS_DEBUG_BUILD)
+    {
+        qDebug().noquote().nospace() << "New fan profile created: " << curr_fan_profile.dump(4).c_str();
+    }
+    else
+    {
+        qInfo().noquote().nospace() << "New fan profile created: " << new_profile_name;
+    }
 }
 
 
@@ -112,28 +131,44 @@ void MainWindow::on_EditFanProfileDialog_current_fan_profile_changed(const nlohm
     ui->comboBox_select_fan_profile->removeItem(index);
     ui->comboBox_select_fan_profile->insertItem(index, QString::fromStdString(curr_fan_profile["name"].get<std::string>()));
     ui->comboBox_select_fan_profile->setCurrentIndex(index);
+
+    if constexpr (GWEpp::config::IS_DEBUG_BUILD)
+    {
+        qDebug().noquote().nospace() << "Current fan profile changed: " << curr_fan_profile.dump(4).c_str();
+    }
+    else
+    {
+        qInfo().noquote().nospace() << "Current fan profile changed";
+    }
 }
 
 
 
 void MainWindow::on_EditFanProfileDialog_current_fan_profile_removed()
 {
-    const unsigned index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex())};
     qInfo().noquote().nospace() << "Fan profile removed: " << ui->comboBox_select_fan_profile->currentText();
     ui->statusBar->showMessage("Fan profile removed: " + ui->comboBox_select_fan_profile->currentText(), 2000);
 
-    ui->comboBox_select_fan_profile->removeItem(index);
+    ui->comboBox_select_fan_profile->removeItem(ui->comboBox_select_fan_profile->currentIndex());
 }
 
 
 
 void MainWindow::on_ClockProfileDialog_new_profile_created(const nlohmann::json& curr_clock_profile)
 {
-    const auto& new_clock_profile_ref = curr_clock_profile.back();
-    const QString new_clock_profile_name {QString::fromStdString(new_clock_profile_ref["name"].get<std::string>())};
-
+    const QString new_clock_profile_name {QString::fromStdString(curr_clock_profile["name"].get<std::string>())};
     ui->comboBox_select_clock_offset_profile->addItem(new_clock_profile_name);
+
     ui->statusBar->showMessage("New clock profile created: " + new_clock_profile_name, 2000);
+
+    if constexpr (GWEpp::config::IS_DEBUG_BUILD)
+    {
+        qDebug().noquote().nospace() << "New clock profile created: " << curr_clock_profile.dump(4).c_str();
+    }
+    else
+    {
+        qInfo().noquote().nospace() << "New clock profile created";
+    }
 }
 
 
@@ -147,6 +182,15 @@ void MainWindow::on_EditClockOffsetProfileDialog_current_clock_offset_profile_ch
     ui->comboBox_select_clock_offset_profile->setCurrentIndex(index);
     ui->lineEdit_current_gpu_clock_offset->setText(QString::number(curr_clock_profile["gpu_clock_offset"].get<int>()) + " MHz");
     ui->lineEdit_current_mem_clock_offset->setText(QString::number(curr_clock_profile["mem_clock_offset"].get<int>()) + " MHz");
+
+    if constexpr (GWEpp::config::IS_DEBUG_BUILD)
+    {
+        qDebug().noquote().nospace() << "Current clock profile changed: " << curr_clock_profile.dump(4).c_str();
+    }
+    else
+    {
+        qInfo().noquote().nospace() << "Current clock profile changed";
+    }
 }
 
 
@@ -154,8 +198,8 @@ void MainWindow::on_EditClockOffsetProfileDialog_current_clock_offset_profile_ch
 void MainWindow::on_EditClockOffsetProfileDialog_current_clock_offset_profile_removed()
 {
     const unsigned index {static_cast<unsigned>(ui->comboBox_select_clock_offset_profile->currentIndex())};
-    qInfo().noquote().nospace() << "Clock profile removed: " << ui->comboBox_select_clock_offset_profile->currentText();
     ui->statusBar->showMessage("Clock profile removed: " + ui->comboBox_select_clock_offset_profile->currentText(), 2000);
+    qInfo().noquote().nospace() << "Clock profile removed: " << ui->comboBox_select_clock_offset_profile->currentText();
 
     ui->comboBox_select_clock_offset_profile->removeItem(index);
 }
@@ -291,24 +335,29 @@ void MainWindow::load_and_validate_app_settings()
         update_freq_ms_ = 500;
         app_settings_["update_freq_ms"] = update_freq_ms_;
 
-        qWarning().noquote().nospace() << "Wrong update_freq_ms_ detected, fallback to default (" << update_freq_ms_ << ")";
-
         SettingsManager::instance().open_file(std::ios::out);
         SettingsManager::instance().write_settings(app_settings_);
         SettingsManager::instance().close_file();
+
+        qWarning().noquote().nospace() << "Wrong update_freq_ms_ detected, fallback to default (" << update_freq_ms_ << ")";
     }
 
     load_fan_and_clock_offset_profiles();
-
     if (last_fan_and_clock_offset_profiles_saved_)
     {
         restore_last_fan_and_clock_offset_profiles();
     }
 
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
-    qInfo().noquote().nospace() << "Settings for MainWindow has been loaded";
 
-    qDebug().noquote().nospace() << "Default settings: " << SettingsManager::default_settings.dump(4).c_str();
+    if constexpr (GWEpp::config::IS_DEBUG_BUILD)
+    {
+        qDebug().noquote().nospace() << "Settings for MainWindow loaded: " << app_settings_.dump(4).c_str();
+    }
+    else
+    {
+        qInfo().noquote().nospace() << "Settings for MainWindow loaded";
+    }
 }
 
 
@@ -324,7 +373,7 @@ void MainWindow::load_fan_and_clock_offset_profiles()
                                                              fan_speed_profile["name"].get<std::string>()
                                                          ));
             }
-            qDebug().noquote().nospace() << "Total fan profiles loaded: " << fan_speed_profiles.size();
+            qInfo().noquote().nospace() << "Total fan profiles loaded: " << fan_speed_profiles.size();
         })};
 
     auto load_clock_offset_profiles_future {std::async(std::launch::async, [this]()
@@ -336,7 +385,7 @@ void MainWindow::load_fan_and_clock_offset_profiles()
                                                                       clock_offset_profile["name"].get<std::string>()
                                                                   ));
             }
-            qDebug().noquote().nospace() << "Total clock offset profiles loaded: " << clock_offset_profiles.size();
+            qInfo().noquote().nospace() << "Total clock offset profiles loaded: " << clock_offset_profiles.size();
         })};
 }
 
@@ -355,6 +404,17 @@ void MainWindow::restore_last_fan_and_clock_offset_profiles()
     on_comboBox_select_clock_offset_profile_activated(last_clock_offset_profile_index);
     on_pushButton_apply_fan_speed_clicked();
     on_pushButton_apply_clock_offset_clicked();
+
+    if constexpr (GWEpp::config::IS_DEBUG_BUILD)
+    {
+        qDebug().noquote().nospace() << "Last fan and clock profiles restored: "
+                                    << last_fan_profile.dump(4).c_str() << "\n"
+                                    << last_clock_offset_profile.dump(4).c_str();
+    }
+    else
+    {
+        qInfo().noquote().nospace() << "Last fan and clock profiles restored";
+    }
 }
 
 
@@ -460,6 +520,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
             SettingsManager::instance().open_file(std::ios::out);
             SettingsManager::instance().write_settings(app_settings_);
             SettingsManager::instance().close_file();
+            qInfo().noquote().nospace() << "Last fan and clock profiles are saved";
         }
         qInfo().noquote().nospace() << "Close event accepted, MainWindow closed";
         event->accept();
@@ -509,8 +570,11 @@ void MainWindow::on_comboBox_select_clock_offset_profile_activated(int index)
 
 void MainWindow::on_pushButton_apply_power_limit_clicked()
 {
-    gpu_power_controller_.set_power_limit(ui->horizontalSlider_change_power_limit->value());
-    ui->statusBar->showMessage("Power limit applied: " + QString::number(ui->horizontalSlider_change_power_limit->value()) + "W", 2000);
+    const unsigned power_limit_value {static_cast<unsigned>(ui->horizontalSlider_change_power_limit->value())};
+
+    gpu_power_controller_.set_power_limit(power_limit_value);
+    ui->statusBar->showMessage("Power limit applied: " + QString::number(power_limit_value) + "W", 2000);
+    qInfo().noquote().nospace() << "Power limit applied: " << power_limit_value;
 }
 
 
@@ -526,6 +590,7 @@ void MainWindow::on_pushButton_apply_fan_speed_clicked()
     }
 
     ui->statusBar->showMessage("Fan profile applied: " + ui->comboBox_select_fan_profile->currentText(), 2000);
+    qInfo().noquote().nospace() << "Fan profile applied: " << ui->comboBox_select_fan_profile->currentText();
 }
 
 
@@ -575,6 +640,7 @@ void MainWindow::on_pushButton_apply_clock_offset_clicked()
     }
 
     ui->statusBar->showMessage("Clock profile applied: " + ui->comboBox_select_clock_offset_profile->currentText(), 2000);
+    qInfo().noquote().nospace() << "Clock profile applied: " << ui->comboBox_select_clock_offset_profile->currentText();
 }
 
 

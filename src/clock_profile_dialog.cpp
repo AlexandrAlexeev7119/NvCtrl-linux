@@ -71,13 +71,13 @@ void ClockProfileDialog::on_buttonBox_accepted()
             qDebug().noquote().nospace() << "clock_offset_profiles exists, add new element";
         }
 
-        emit new_profile_created(clock_offset_profiles);
-        qInfo().noquote().nospace() << "New clock profile created: " << ui->lineEdit_profile_name->text();
+        emit new_profile_created(clock_offset_profiles.back());
 
         SettingsManager::instance().open_file(std::ios::out);
         SettingsManager::instance().write_settings(app_settings_ref);
         SettingsManager::instance().close_file();
 
+        qInfo().noquote().nospace() << "New clock profile created: " << ui->lineEdit_profile_name->text();
         on_buttonBox_rejected();
     }
 }
