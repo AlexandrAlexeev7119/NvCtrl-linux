@@ -2,6 +2,7 @@
 #include <QMessageBox>
 #include <QDebug>
 
+#include "app_config.hpp"
 #include "spdlog/spdlog.h"
 
 #include "mainwindow.hpp"
@@ -12,26 +13,41 @@ static void qt_msg_handler(QtMsgType msg_type, const QMessageLogContext& context
 {
     switch (msg_type)
     {
-    case QtMsgType::QtCriticalMsg:  spdlog::critical(message.toStdString()); break;
-    case QtMsgType::QtDebugMsg:     spdlog::debug("[{}:{}]: {}", context.file, context.line, message.toStdString()); break;
-    case QtMsgType::QtFatalMsg:     spdlog::critical(message.toStdString()); break;
-    case QtMsgType::QtInfoMsg:      spdlog::info(message.toStdString()); break;
-    case QtMsgType::QtWarningMsg:   spdlog::warn(message.toStdString()); break;
+    case QtMsgType::QtCriticalMsg:
+        spdlog::critical(message.toStdString());
+        break;
+    case QtMsgType::QtDebugMsg:
+        spdlog::debug("[{}:{}]: {}", QUrl{context.file}.fileName().toStdString(), context.line, message.toStdString());
+        break;
+    case QtMsgType::QtFatalMsg:
+        spdlog::critical(message.toStdString());
+        break;
+    case QtMsgType::QtInfoMsg:
+        spdlog::info(message.toStdString());
+        break;
+    case QtMsgType::QtWarningMsg:
+        spdlog::warn(message.toStdString());
+        break;
     }
 }
 
+
+
 int main(int argc, char** argv)
 {
-#ifdef NDEBUG
-    spdlog::set_level(spdlog::level::info);
-#else
-    spdlog::set_level(spdlog::level::debug);
-#endif
+    if constexpr (GWEpp::config::IS_DEBUG_BUILD)
+    {
+        spdlog::set_level(spdlog::level::debug);
+    }
+    else
+    {
+        spdlog::set_level(spdlog::level::info);
+    }
+
     qInstallMessageHandler(qt_msg_handler);
 
     QApplication app {argc, argv};
     SettingsManager& settings_manager {SettingsManager::instance()};
-
     QObject::connect(&settings_manager, &SettingsManager::error,
                      [](const QString& err_msg)
     {
