@@ -7,6 +7,7 @@
 ClockProfileDialog::ClockProfileDialog(QWidget* parent)
     : QDialog {parent}
     , ui {new Ui::ClockProfileDialog}
+    , ptr_app_settings_ {nullptr}
 {
     ui->setupUi(this);
     setMinimumSize(size());
@@ -40,7 +41,9 @@ void ClockProfileDialog::load_app_settings(nlohmann::json* app_settings) noexcep
 
 void ClockProfileDialog::on_buttonBox_accepted()
 {
-    if (ui->lineEdit_profile_name->text().isEmpty())
+    const QString new_clock_profile_name {ui->lineEdit_profile_name->text()};
+
+    if (new_clock_profile_name.isEmpty())
     {
         QMessageBox::warning(this, "Warning", "Empty name is not allowed");
     }
@@ -49,35 +52,18 @@ void ClockProfileDialog::on_buttonBox_accepted()
         auto& app_settings_ref {*ptr_app_settings_};
         auto& clock_offset_profiles = app_settings_ref["clock_offset_profiles"];
 
-        if (clock_offset_profiles.is_null())
-        {
-            const nlohmann::json new_array {
-                {
-                    {"name", ui->lineEdit_profile_name->text().toStdString()},
-                    {"gpu_clock_offset", ui->horizontalSlider_gpu_clock_offset->value()},
-                    {"mem_clock_offset", ui->horizontalSlider_mem_clock_offset->value()}
-                }
-            };
-            app_settings_ref["clock_offset_profiles"] = new_array;
-            qDebug().noquote().nospace() << "clock_offset_profiles is null, create a new JSON array";
-        }
-        else
-        {
-            clock_offset_profiles.emplace_back(nlohmann::json::object_t{
-                                                   {"name", ui->lineEdit_profile_name->text().toStdString()},
-                                                   {"gpu_clock_offset", ui->horizontalSlider_gpu_clock_offset->value()},
-                                                   {"mem_clock_offset", ui->horizontalSlider_mem_clock_offset->value()}
-                                               });
-            qDebug().noquote().nospace() << "clock_offset_profiles exists, add new element";
-        }
-
+        clock_offset_profiles.emplace_back(nlohmann::json::object_t{
+                                               {"name", new_clock_profile_name.toStdString()},
+                                               {"gpu_clock_offset", ui->horizontalSlider_gpu_clock_offset->value()},
+                                               {"mem_clock_offset", ui->horizontalSlider_mem_clock_offset->value()}
+                                           });
         emit new_profile_created(clock_offset_profiles.back());
 
         SettingsManager::instance().open_file(std::ios::out);
         SettingsManager::instance().write_settings(app_settings_ref);
         SettingsManager::instance().close_file();
 
-        qInfo().noquote().nospace() << "New clock profile created: " << ui->lineEdit_profile_name->text();
+        qInfo().noquote().nospace() << "New clock profile created: " << new_clock_profile_name;
         on_buttonBox_rejected();
     }
 }

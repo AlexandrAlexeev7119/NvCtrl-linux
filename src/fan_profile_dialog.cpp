@@ -7,7 +7,7 @@
 FanProfileDialog::FanProfileDialog(QWidget* parent)
     : QDialog {parent}
     , ui {new Ui::FanProfileDialog}
-    , ptr_app_settings_ {}
+    , ptr_app_settings_ {nullptr}
 {
     ui->setupUi(this);
     setMinimumSize(size());
@@ -37,7 +37,9 @@ void FanProfileDialog::load_app_settings(nlohmann::json* app_settings) noexcept
 
 void FanProfileDialog::on_pushButton_create_new_profile_clicked()
 {
-    if (ui->lineEdit_profile_name->text().isEmpty())
+    const QString new_fan_profile_name {ui->lineEdit_profile_name->text()};
+
+    if (new_fan_profile_name.isEmpty())
     {
         QMessageBox::warning(this, "Warning", "Empty name is not allowed");
     }
@@ -46,33 +48,17 @@ void FanProfileDialog::on_pushButton_create_new_profile_clicked()
         auto& app_settings_ref {*ptr_app_settings_};
         auto& fan_speed_profiles = app_settings_ref["fan_speed_profiles"];
 
-        if (fan_speed_profiles.is_null())
-        {
-            const nlohmann::json::array_t new_array {
-                {
-                    {"name", ui->lineEdit_profile_name->text().toStdString()},
-                    {"fan_speed", ui->horizontalSlider_fan_speed->value()}
-                }
-            };
-            app_settings_ref["fan_speed_profiles"] = new_array;
-            qDebug().noquote().nospace() << "fan_speed_profiles is null, create a new JSON array";
-        }
-        else
-        {
-            fan_speed_profiles.emplace_back(nlohmann::json::object_t {
-                                                {"name", ui->lineEdit_profile_name->text().toStdString()},
-                                                {"fan_speed", ui->horizontalSlider_fan_speed->value()}
-                                            });
-            qDebug().noquote().nospace() << "fan_speed_profiles exists, add new element";
-        }
-
+        fan_speed_profiles.emplace_back(nlohmann::json::object_t {
+                                            {"name", new_fan_profile_name.toStdString()},
+                                            {"fan_speed", ui->horizontalSlider_fan_speed->value()}
+                                        });
         emit new_profile_created(fan_speed_profiles.back());
 
         SettingsManager::instance().open_file(std::ios::out);
-        SettingsManager::instance().write_settings(app_settings_ref);
+        SettingsManager::instance().write_settings(*ptr_app_settings_);
         SettingsManager::instance().close_file();
 
-        qInfo().noquote().nospace() << "New fan profile created: " << ui->lineEdit_profile_name->text();
+        qInfo().noquote().nospace() << "New fan profile created: " << new_fan_profile_name;
         on_pushButton_close_clicked();
     }
 }
