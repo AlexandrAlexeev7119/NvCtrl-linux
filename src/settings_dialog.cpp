@@ -7,7 +7,7 @@
 SettingsDialog::SettingsDialog(QWidget* parent)
     : QDialog {parent}
     , ui {new Ui::SettingsDialog}
-    , ptr_app_settings_ {}
+    , ptr_app_settings_ {nullptr}
 {
     ui->setupUi(this);
     setMinimumSize(size());

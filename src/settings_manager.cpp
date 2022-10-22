@@ -1,5 +1,4 @@
 #include <cstdlib>
-#include <iterator>
 
 #include <QDebug>
 
@@ -34,15 +33,21 @@ SettingsManager::SettingsManager()
     , file_name_ {get_filename_in_home_dir()}
 { }
 
+
+
 void SettingsManager::set_file_name(std::string_view file_name)
 {
     file_name_ = file_name;
 }
 
+
+
 std::string SettingsManager::get_file_name() const
 {
     return file_name_;
 }
+
+
 
 void SettingsManager::open_file(std::ios::openmode open_mode)
 {
@@ -60,10 +65,14 @@ void SettingsManager::open_file(std::ios::openmode open_mode)
     }
 }
 
+
+
 void SettingsManager::close_file()
 {
     ptr_settings_file_->close();
 }
+
+
 
 void SettingsManager::write_settings(const nlohmann::json& settings)
 {
@@ -71,16 +80,20 @@ void SettingsManager::write_settings(const nlohmann::json& settings)
     qDebug().noquote().nospace() << "Save settings to: " << get_file_name().c_str();
 }
 
+
+
 std::string SettingsManager::read_settings()
 {
-    std::string raw_json {};
-    std::getline(*ptr_settings_file_, raw_json);
+    std::string raw_json_string {};
+    std::getline(*ptr_settings_file_, raw_json_string);
     qDebug().noquote().nospace() << "Read settings from: " << get_file_name().c_str();
-    return raw_json;
+    return raw_json_string;
 }
+
+
 
 SettingsManager& SettingsManager::instance()
 {
-    static SettingsManager settings_manager{};
+    static SettingsManager settings_manager {};
     return settings_manager;
 }
