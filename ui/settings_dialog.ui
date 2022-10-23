@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>334</width>
-    <height>175</height>
+    <width>335</width>
+    <height>200</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,26 +16,6 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="3">
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="1" column="0" colspan="2">
-      <widget class="QCheckBox" name="checkBox_minimize_to_tray_on_close">
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="text">
-        <string>Minimize to tray on close</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_update_freq">
-       <property name="text">
-        <string>Update frequency (ms)</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="0" colspan="2">
       <widget class="QCheckBox" name="checkBox_minimize_to_tray_on_startup">
        <property name="layoutDirection">
@@ -46,7 +26,34 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="1" column="0" colspan="2">
+      <widget class="QCheckBox" name="checkBox_minimize_to_tray_on_close">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text">
+        <string>Minimize to tray on close</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_update_freq">
+       <property name="text">
+        <string>Update frequency (ms)</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" colspan="2">
+      <widget class="QCheckBox" name="checkBox_save_last_used_fan_profile">
+       <property name="text">
+        <string>Save last used fan profile</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
       <widget class="QSpinBox" name="spinBox_update_freq">
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -65,10 +72,10 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0" colspan="2">
-      <widget class="QCheckBox" name="checkBox_save_last_fan_and_clock_offset_profiles">
+     <item row="3" column="0" colspan="2">
+      <widget class="QCheckBox" name="checkBox_save_last_used_clock_offset_profile">
        <property name="text">
-        <string>Save last fan and clock offset profiles</string>
+        <string>Save last used clock offset profile</string>
        </property>
       </widget>
      </item>

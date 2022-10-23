@@ -88,7 +88,10 @@ void MainWindow::update_dynamic_info()
 void MainWindow::on_SettingsDialog_settings_applied(const nlohmann::json& app_settings)
 {
     minimize_to_tray_on_close_ = app_settings["minimize_to_tray_on_close"].get<bool>();
-    last_fan_and_clock_offset_profiles_saved_ = app_settings["last_fan_and_clock_offset_profiles_saved"].get<bool>();
+
+    last_fan_profile_saved_ = app_settings["last_fan_profile_saved"].get<bool>();
+    last_clock_offset_profile_saved_ = app_settings["last_clock_offset_profile_saved"].get<bool>();
+
     update_freq_ms_ = app_settings["update_freq_ms"].get<unsigned>();
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
 
@@ -327,7 +330,8 @@ void MainWindow::setup_tray_menu()
 void MainWindow::load_and_validate_app_settings()
 {
     minimize_to_tray_on_close_ = app_settings_["minimize_to_tray_on_close"].get<bool>();
-    last_fan_and_clock_offset_profiles_saved_ = app_settings_["last_fan_and_clock_offset_profiles_saved"].get<bool>();
+    last_fan_profile_saved_ = app_settings_["last_fan_profile_saved"].get<bool>();
+    last_clock_offset_profile_saved_ = app_settings_["last_clock_offset_profile_saved"].get<bool>();
     update_freq_ms_ = app_settings_["update_freq_ms"].get<unsigned>();
 
     if (update_freq_ms_ < 500)
@@ -343,9 +347,14 @@ void MainWindow::load_and_validate_app_settings()
     }
 
     load_fan_and_clock_offset_profiles();
-    if (last_fan_and_clock_offset_profiles_saved_)
+
+    if (last_fan_profile_saved_)
     {
-        restore_last_fan_and_clock_offset_profiles();
+        restore_last_fan_profile();
+    }
+    if (last_clock_offset_profile_saved_)
+    {
+        restore_last_clock_offset_profile();
     }
 
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
@@ -391,30 +400,24 @@ void MainWindow::load_fan_and_clock_offset_profiles()
 
 
 
-void MainWindow::restore_last_fan_and_clock_offset_profiles()
+void MainWindow::restore_last_fan_profile()
 {
     const unsigned last_fan_profile_index {app_settings_["last_fan_profile_index"].get<unsigned>()};
-    const unsigned last_clock_offset_profile_index {app_settings_["last_clock_offset_profile_index"].get<unsigned>()};
     const auto& last_fan_profile = app_settings_["fan_speed_profiles"][last_fan_profile_index];
-    const auto& last_clock_offset_profile = app_settings_["clock_offset_profiles"][last_clock_offset_profile_index];
-
     ui->comboBox_select_fan_profile->setCurrentIndex(last_fan_profile_index);
-    ui->comboBox_select_clock_offset_profile->setCurrentIndex(last_clock_offset_profile_index);
     on_comboBox_select_fan_profile_activated(last_fan_profile_index);
-    on_comboBox_select_clock_offset_profile_activated(last_clock_offset_profile_index);
     on_pushButton_apply_fan_speed_clicked();
-    on_pushButton_apply_clock_offset_clicked();
+}
 
-    if constexpr (GWEpp::config::IS_DEBUG_BUILD)
-    {
-        qDebug().noquote().nospace() << "Last fan and clock profiles restored: "
-                                    << last_fan_profile.dump(4).c_str() << "\n"
-                                    << last_clock_offset_profile.dump(4).c_str();
-    }
-    else
-    {
-        qInfo().noquote().nospace() << "Last fan and clock profiles restored";
-    }
+
+
+void MainWindow::restore_last_clock_offset_profile()
+{
+    const unsigned last_clock_offset_profile_index {app_settings_["last_clock_offset_profile_index"].get<unsigned>()};
+    const auto& last_clock_offset_profile = app_settings_["clock_offset_profiles"][last_clock_offset_profile_index];
+    ui->comboBox_select_clock_offset_profile->setCurrentIndex(last_clock_offset_profile_index);
+    on_comboBox_select_clock_offset_profile_activated(last_clock_offset_profile_index);
+    on_pushButton_apply_clock_offset_clicked();
 }
 
 
@@ -512,18 +515,27 @@ void MainWindow::closeEvent(QCloseEvent* event)
     }
     else
     {
-        tray_icon_.hide();
-        if (last_fan_and_clock_offset_profiles_saved_)
+        if (last_fan_profile_saved_)
         {
             app_settings_["last_fan_profile_index"] = ui->comboBox_select_fan_profile->currentIndex();
+            qInfo().noquote().nospace() << "Last fan profile saved";
+        }
+        if (last_clock_offset_profile_saved_)
+        {
             app_settings_["last_clock_offset_profile_index"] = ui->comboBox_select_clock_offset_profile->currentIndex();
+            qInfo().noquote().nospace() << "Last clock offset profile saved";
+        }
+
+        if (last_fan_profile_saved_ || last_clock_offset_profile_saved_)
+        {
             SettingsManager::instance().open_file(std::ios::out);
             SettingsManager::instance().write_settings(app_settings_);
             SettingsManager::instance().close_file();
-            qInfo().noquote().nospace() << "Last fan and clock profiles are saved";
         }
-        qInfo().noquote().nospace() << "Close event accepted, MainWindow closed";
+
+        tray_icon_.hide();
         event->accept();
+        qInfo().noquote().nospace() << "Close event accepted, MainWindow closed";
     }
 }
 

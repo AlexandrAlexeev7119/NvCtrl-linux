@@ -86,7 +86,8 @@ private:
     QTimer dynamic_info_update_timer_;
 
     bool minimize_to_tray_on_close_;
-    bool last_fan_and_clock_offset_profiles_saved_;
+    bool last_fan_profile_saved_;
+    bool last_clock_offset_profile_saved_;
     int update_freq_ms_;
 
     nlohmann::json app_settings_;
@@ -114,7 +115,9 @@ protected:
 
     void load_and_validate_app_settings();
     void load_fan_and_clock_offset_profiles();
-    void restore_last_fan_and_clock_offset_profiles();
+
+    void restore_last_fan_profile();
+    void restore_last_clock_offset_profile();
 
     void set_static_info();
     void set_current_gpu_for_controllers() noexcept;
