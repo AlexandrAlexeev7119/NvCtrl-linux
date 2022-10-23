@@ -97,14 +97,8 @@ void MainWindow::on_SettingsDialog_settings_applied(const nlohmann::json& app_se
 
     ui->statusBar->showMessage("New settings applied", 2000);
 
-    if constexpr (GWEpp::config::IS_DEBUG_BUILD)
-    {
-        qDebug().noquote().nospace() << "New settings applied: " << app_settings.dump(4).c_str();
-    }
-    else
-    {
-        qInfo().noquote().nospace() << "New settings applied";
-    }
+    qInfo().noquote().nospace() << "New settings applied";
+    qDebug().noquote().nospace() << app_settings.dump(4).c_str();
 }
 
 
@@ -116,14 +110,8 @@ void MainWindow::on_FanProfileDialog_new_profile_created(const nlohmann::json& c
 
     ui->statusBar->showMessage("New fan profile created: " + new_profile_name, 2000);
 
-    if constexpr (GWEpp::config::IS_DEBUG_BUILD)
-    {
-        qDebug().noquote().nospace() << "New fan profile created: " << curr_fan_profile.dump(4).c_str();
-    }
-    else
-    {
-        qInfo().noquote().nospace() << "New fan profile created: " << new_profile_name;
-    }
+    qInfo().noquote().nospace() << "New fan profile created: " << new_profile_name;
+    qDebug().noquote().nospace() << "New fan profile: " << curr_fan_profile.dump(4).c_str();
 }
 
 
@@ -135,14 +123,8 @@ void MainWindow::on_EditFanProfileDialog_current_fan_profile_changed(const nlohm
     ui->comboBox_select_fan_profile->insertItem(index, QString::fromStdString(curr_fan_profile["name"].get<std::string>()));
     ui->comboBox_select_fan_profile->setCurrentIndex(index);
 
-    if constexpr (GWEpp::config::IS_DEBUG_BUILD)
-    {
-        qDebug().noquote().nospace() << "Current fan profile changed: " << curr_fan_profile.dump(4).c_str();
-    }
-    else
-    {
-        qInfo().noquote().nospace() << "Current fan profile changed";
-    }
+    qInfo().noquote().nospace() << "Current fan profile changed";
+    qDebug().noquote().nospace() << "Current fan profile: " << curr_fan_profile.dump(4).c_str();
 }
 
 
@@ -162,16 +144,10 @@ void MainWindow::on_ClockProfileDialog_new_profile_created(const nlohmann::json&
     const QString new_clock_profile_name {QString::fromStdString(curr_clock_profile["name"].get<std::string>())};
     ui->comboBox_select_clock_offset_profile->addItem(new_clock_profile_name);
 
-    ui->statusBar->showMessage("New clock profile created: " + new_clock_profile_name, 2000);
+    ui->statusBar->showMessage("New clock offset profile created: " + new_clock_profile_name, 2000);
 
-    if constexpr (GWEpp::config::IS_DEBUG_BUILD)
-    {
-        qDebug().noquote().nospace() << "New clock profile created: " << curr_clock_profile.dump(4).c_str();
-    }
-    else
-    {
-        qInfo().noquote().nospace() << "New clock profile created";
-    }
+    qInfo().noquote().nospace() << "New clock offset profile created";
+    qDebug().noquote().nospace() << "New clock offset profile: " << curr_clock_profile.dump(4).c_str();
 }
 
 
@@ -186,14 +162,8 @@ void MainWindow::on_EditClockOffsetProfileDialog_current_clock_offset_profile_ch
     ui->lineEdit_current_gpu_clock_offset->setText(QString::number(curr_clock_profile["gpu_clock_offset"].get<int>()) + " MHz");
     ui->lineEdit_current_mem_clock_offset->setText(QString::number(curr_clock_profile["mem_clock_offset"].get<int>()) + " MHz");
 
-    if constexpr (GWEpp::config::IS_DEBUG_BUILD)
-    {
-        qDebug().noquote().nospace() << "Current clock profile changed: " << curr_clock_profile.dump(4).c_str();
-    }
-    else
-    {
-        qInfo().noquote().nospace() << "Current clock profile changed";
-    }
+    qInfo().noquote().nospace() << "Current clock profile changed";
+    qDebug().noquote().nospace() << curr_clock_profile.dump(4).c_str();
 }
 
 
@@ -359,14 +329,8 @@ void MainWindow::load_and_validate_app_settings()
 
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
 
-    if constexpr (GWEpp::config::IS_DEBUG_BUILD)
-    {
-        qDebug().noquote().nospace() << "Settings for MainWindow loaded: " << app_settings_.dump(4).c_str();
-    }
-    else
-    {
-        qInfo().noquote().nospace() << "Settings for MainWindow loaded";
-    }
+    qInfo().noquote().nospace() << "Settings for MainWindow loaded";
+    qDebug().noquote().nospace() << app_settings_.dump(4).c_str();
 }
 
 
@@ -382,6 +346,10 @@ void MainWindow::load_fan_and_clock_offset_profiles()
                                                              fan_speed_profile["name"].get<std::string>()
                                                          ));
             }
+            if (!last_fan_profile_saved_)
+            {
+                ui->comboBox_select_fan_profile->setCurrentIndex(0);
+            }
             qInfo().noquote().nospace() << "Total fan profiles loaded: " << fan_speed_profiles.size();
         })};
 
@@ -394,6 +362,10 @@ void MainWindow::load_fan_and_clock_offset_profiles()
                                                                       clock_offset_profile["name"].get<std::string>()
                                                                   ));
             }
+            if (!last_clock_offset_profile_saved_)
+            {
+                ui->comboBox_select_clock_offset_profile->setCurrentIndex(0);
+            }
             qInfo().noquote().nospace() << "Total clock offset profiles loaded: " << clock_offset_profiles.size();
         })};
 }
@@ -404,9 +376,13 @@ void MainWindow::restore_last_fan_profile()
 {
     const unsigned last_fan_profile_index {app_settings_["last_fan_profile_index"].get<unsigned>()};
     const auto& last_fan_profile = app_settings_["fan_speed_profiles"][last_fan_profile_index];
+
     ui->comboBox_select_fan_profile->setCurrentIndex(last_fan_profile_index);
     on_comboBox_select_fan_profile_activated(last_fan_profile_index);
     on_pushButton_apply_fan_speed_clicked();
+
+    qInfo().noquote().nospace() << "Last fan profile restored";
+    qDebug().noquote().nospace() << "Last fan profile: " << last_fan_profile.dump(4).c_str();
 }
 
 
@@ -415,9 +391,13 @@ void MainWindow::restore_last_clock_offset_profile()
 {
     const unsigned last_clock_offset_profile_index {app_settings_["last_clock_offset_profile_index"].get<unsigned>()};
     const auto& last_clock_offset_profile = app_settings_["clock_offset_profiles"][last_clock_offset_profile_index];
+
     ui->comboBox_select_clock_offset_profile->setCurrentIndex(last_clock_offset_profile_index);
     on_comboBox_select_clock_offset_profile_activated(last_clock_offset_profile_index);
     on_pushButton_apply_clock_offset_clicked();
+
+    qInfo().noquote().nospace() << "Last clock offset profile restored";
+    qDebug().noquote().nospace() << "Last clock offset profile: " << last_clock_offset_profile.dump(4).c_str();
 }
 
 
