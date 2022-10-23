@@ -41,11 +41,11 @@ MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
 
     app_settings_ = std::move(app_settings);
 
+    set_static_info();
     connect_slots_and_signals();
     set_current_gpu_for_controllers();
     load_and_validate_app_settings();
 
-    set_static_info();
     update_dynamic_info();
     dynamic_info_update_timer_.start();
 }
