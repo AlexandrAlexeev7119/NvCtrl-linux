@@ -35,14 +35,11 @@ static void qt_msg_handler(QtMsgType msg_type, const QMessageLogContext& context
 
 int main(int argc, char** argv)
 {
-    if constexpr (GWEpp::config::IS_DEBUG_BUILD)
-    {
-        spdlog::set_level(spdlog::level::debug);
-    }
-    else
-    {
-        spdlog::set_level(spdlog::level::info);
-    }
+#ifndef NDEBUG
+    spdlog::set_level(spdlog::level::debug);
+#else
+    spdlog::set_level(spdlog::level::info);
+#endif
 
     qInstallMessageHandler(qt_msg_handler);
 

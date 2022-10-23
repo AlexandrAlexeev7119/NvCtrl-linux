@@ -39,6 +39,7 @@ include_directories(${INCLUDE_DIRECTORIES}
 )
 
 add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")
+add_compile_definitions(APP_BUILD_TYPE="${CMAKE_BUILD_TYPE}")
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets NVMLpp spdlog)
