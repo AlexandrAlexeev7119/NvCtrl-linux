@@ -6,8 +6,6 @@
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 
-#include "app_config.hpp"
-
 #include "settings_manager.hpp"
 #include "nvmlpp/nvmlpp_session.hpp"
 #include "nvmlpp/util/nvmlpp_errors.hpp"
@@ -37,9 +35,10 @@ MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
 {
     ui->setupUi(this);
     setMinimumSize(size());
-    setup_tray_menu();
-
+    setWindowIcon(QIcon{"/usr/share/icons/gwepp/gwepp64.png"});
     app_settings_ = std::move(app_settings);
+
+    setup_tray_menu();
 
     set_static_info();
     connect_slots_and_signals();
@@ -301,7 +300,7 @@ void MainWindow::setup_tray_menu()
     tray_menu_.addAction("Quit", this, &MainWindow::on_actionQuit_triggered);
     tray_icon_.setContextMenu(&tray_menu_);
 
-    tray_icon_.setIcon(QIcon{"/usr/share/icons/gwepp/gwepp64.png"});
+    tray_icon_.setIcon(QIcon{"/usr/share/icons/gwepp/gwepp48.png"});
 }
 
 
@@ -472,11 +471,11 @@ void MainWindow::set_max_clock_values(int gpu_clock_offset, int mem_clock_offset
 
 
 
-void MainWindow::closeEvent(QCloseEvent* event)
+void MainWindow::closeEvent(QCloseEvent* close_event)
 {
     if (minimize_to_tray_on_close_)
     {
-        event->ignore();
+        close_event->ignore();
         hide();
         tray_icon_.show();
         qInfo().noquote().nospace() << "Close event ignored, minimized to tray";
@@ -502,7 +501,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
         }
 
         tray_icon_.hide();
-        event->accept();
+        close_event->accept();
         qInfo().noquote().nospace() << "Close event accepted, MainWindow closed";
     }
 }

@@ -6,8 +6,6 @@
 #include <QTimer>
 #include <QMenu>
 
-#include "nlohmann/json.hpp"
-
 #include "nvmlpp/nvmlpp_session.hpp"
 #include "nvmlpp/nvmlpp_device.hpp"
 
@@ -108,7 +106,7 @@ private:
     EditClockOffsetProfileDialog edit_clock_offset_profile_dialog_window_;
 
 protected:
-    void closeEvent(QCloseEvent* event);
+    void closeEvent(QCloseEvent* close_event);
 
     void connect_slots_and_signals();
     void setup_tray_menu();

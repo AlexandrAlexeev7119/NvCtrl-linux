@@ -60,8 +60,6 @@ int main(int argc, char** argv)
     const bool minimize_to_tray_on_startup {app_settings["minimize_to_tray_on_startup"].get<bool>()};
     MainWindow main_window {std::move(app_settings)};
 
-    main_window.setWindowIcon(QIcon{"/usr/share/icons/gwepp/gwepp48.png"});
-
     if (minimize_to_tray_on_startup)
     {
         main_window.get_tray_icon().show();

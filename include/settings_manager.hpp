@@ -4,7 +4,6 @@
 #include <fstream>
 
 #include <QObject>
-#include <QFile>
 
 #include "nlohmann/json.hpp"
 
@@ -13,14 +12,13 @@ class SettingsManager : public QObject
     Q_OBJECT
 private:
     SettingsManager();
-    SettingsManager(const QString& filename);
     ~SettingsManager() = default;
 
 public:
     static const nlohmann::json default_settings;
 
     void set_file_name(std::string_view file_name);
-    std::string get_file_name() const;
+    std::string_view get_file_name() const; // prevent full std::string copy
     void open_file(std::ios::openmode open_mode);
     void close_file();
 
@@ -35,4 +33,6 @@ signals:
 private:
     std::unique_ptr<std::fstream> ptr_settings_file_;
     std::string file_name_;
+
+    std::string get_filename_in_home_dir() const;
 };

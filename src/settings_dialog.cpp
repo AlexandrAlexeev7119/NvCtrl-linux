@@ -38,6 +38,7 @@ void SettingsDialog::on_buttonBox_accepted()
     app_settings["minimize_to_tray_on_close"] = ui->checkBox_minimize_to_tray_on_close->isChecked();
     app_settings["last_fan_profile_saved"] = ui->checkBox_save_last_used_fan_profile->isChecked();
     app_settings["last_clock_offset_profile_saved"] = ui->checkBox_save_last_used_clock_offset_profile->isChecked();
+    app_settings["last_power_profile_saved"] = ui->checkBox_save_last_used_power_profile->isChecked();
     app_settings["update_freq_ms"] = ui->spinBox_update_freq->value();
 
     save_settings_to_file(app_settings);
@@ -63,6 +64,7 @@ void SettingsDialog::showEvent(QShowEvent* event_)
     ui->checkBox_minimize_to_tray_on_close->setChecked(app_settings["minimize_to_tray_on_close"].get<bool>());
     ui->checkBox_save_last_used_fan_profile->setChecked(app_settings["last_fan_profile_saved"].get<bool>());
     ui->checkBox_save_last_used_clock_offset_profile->setChecked(app_settings["last_clock_offset_profile_saved"].get<bool>());
+    ui->checkBox_save_last_used_power_profile->setChecked(app_settings["last_power_profile_saved"].get<bool>());
     ui->spinBox_update_freq->setValue(app_settings["update_freq_ms"].get<unsigned>());
 
     qInfo().noquote().nospace() << "Settings on form loaded";
