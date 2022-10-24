@@ -2,7 +2,6 @@
 #include <QMessageBox>
 #include <QDebug>
 
-#include "app_config.hpp"
 #include "spdlog/spdlog.h"
 
 #include "mainwindow.hpp"
