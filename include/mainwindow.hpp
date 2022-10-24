@@ -86,6 +86,7 @@ private:
     bool minimize_to_tray_on_close_;
     bool last_fan_profile_saved_;
     bool last_clock_offset_profile_saved_;
+    bool last_power_profile_saved_;
     int update_freq_ms_;
 
     nlohmann::json app_settings_;
@@ -116,6 +117,7 @@ protected:
 
     void restore_last_fan_profile();
     void restore_last_clock_offset_profile();
+    void restore_last_power_profile();
 
     void set_static_info();
     void set_current_gpu_for_controllers() noexcept;

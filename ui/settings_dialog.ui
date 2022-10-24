@@ -82,7 +82,7 @@
       <item row="2" column="0">
        <widget class="QCheckBox" name="checkBox_save_last_used_power_profile">
         <property name="toolTip">
-         <string>Not implemented yet</string>
+         <string/>
         </property>
         <property name="text">
          <string>Save last used power profile</string>

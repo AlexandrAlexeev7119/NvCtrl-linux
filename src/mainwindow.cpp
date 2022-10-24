@@ -90,6 +90,7 @@ void MainWindow::on_SettingsDialog_settings_applied(const nlohmann::json& app_se
 
     last_fan_profile_saved_ = app_settings["last_fan_profile_saved"].get<bool>();
     last_clock_offset_profile_saved_ = app_settings["last_clock_offset_profile_saved"].get<bool>();
+    last_power_profile_saved_= app_settings_["last_power_profile_saved"].get<bool>();
 
     update_freq_ms_ = app_settings["update_freq_ms"].get<unsigned>();
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
@@ -310,6 +311,7 @@ void MainWindow::load_and_validate_app_settings()
     minimize_to_tray_on_close_ = app_settings_["minimize_to_tray_on_close"].get<bool>();
     last_fan_profile_saved_ = app_settings_["last_fan_profile_saved"].get<bool>();
     last_clock_offset_profile_saved_ = app_settings_["last_clock_offset_profile_saved"].get<bool>();
+    last_power_profile_saved_= app_settings_["last_power_profile_saved"].get<bool>();
     update_freq_ms_ = app_settings_["update_freq_ms"].get<unsigned>();
 
     if (update_freq_ms_ < 500)
@@ -331,6 +333,8 @@ void MainWindow::load_and_validate_app_settings()
 
     if (last_clock_offset_profile_saved_) { restore_last_clock_offset_profile(); }
     else { ui->comboBox_select_clock_offset_profile->setCurrentIndex(0); }
+
+    if (last_power_profile_saved_) { restore_last_power_profile(); }
 
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
 
@@ -392,6 +396,16 @@ void MainWindow::restore_last_clock_offset_profile()
 
     qInfo().noquote().nospace() << "Last clock offset profile restored";
     qDebug().noquote().nospace() << "Last clock offset profile: " << last_clock_offset_profile.dump(4).c_str();
+}
+
+
+
+void MainWindow::restore_last_power_profile()
+{
+    const unsigned last_power_limit {app_settings_["last_power_profile_value"].get<unsigned>()};
+    ui->horizontalSlider_change_power_limit->setValue(last_power_limit);
+    on_pushButton_apply_power_limit_clicked();
+    qInfo().noquote().nospace() << "Last power profile restored";
 }
 
 
@@ -492,8 +506,13 @@ void MainWindow::closeEvent(QCloseEvent* close_event)
             app_settings_["last_clock_offset_profile_index"] = ui->comboBox_select_clock_offset_profile->currentIndex();
             qInfo().noquote().nospace() << "Last clock offset profile saved";
         }
+        if (last_power_profile_saved_)
+        {
+            app_settings_["last_power_profile_value"] = ui->horizontalSlider_change_power_limit->value();
+            qInfo().noquote().nospace() << "Last power profile saved";
+        }
 
-        if (last_fan_profile_saved_ || last_clock_offset_profile_saved_)
+        if (last_fan_profile_saved_ || last_clock_offset_profile_saved_ || last_power_profile_saved_)
         {
             SettingsManager::instance().open_file(std::ios::out);
             SettingsManager::instance().write_settings(app_settings_);
