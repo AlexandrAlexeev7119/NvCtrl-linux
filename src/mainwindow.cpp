@@ -1,4 +1,4 @@
-#include <future>
+﻿#include <future>
 
 #include <QMessageBox>
 #include <QDebug>
@@ -118,10 +118,10 @@ void MainWindow::on_FanProfileDialog_new_profile_created(const nlohmann::json& c
 
 void MainWindow::on_EditFanProfileDialog_current_fan_profile_changed(const nlohmann::json& curr_fan_profile)
 {
-    const unsigned index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex())};
-    ui->comboBox_select_fan_profile->removeItem(index);
-    ui->comboBox_select_fan_profile->insertItem(index, QString::fromStdString(curr_fan_profile["name"].get<std::string>()));
-    ui->comboBox_select_fan_profile->setCurrentIndex(index);
+    const unsigned current_index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex())};
+    ui->comboBox_select_fan_profile->removeItem(current_index);
+    ui->comboBox_select_fan_profile->insertItem(current_index, QString::fromStdString(curr_fan_profile["name"].get<std::string>()));
+    ui->comboBox_select_fan_profile->setCurrentIndex(current_index);
 
     qInfo().noquote().nospace() << "Current fan profile changed";
     qDebug().noquote().nospace() << "Current fan profile: " << curr_fan_profile.dump(4).c_str();
@@ -131,10 +131,15 @@ void MainWindow::on_EditFanProfileDialog_current_fan_profile_changed(const nlohm
 
 void MainWindow::on_EditFanProfileDialog_current_fan_profile_removed()
 {
+    const unsigned current_index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex())};
     qInfo().noquote().nospace() << "Fan profile removed: " << ui->comboBox_select_fan_profile->currentText();
     ui->statusBar->showMessage("Fan profile removed: " + ui->comboBox_select_fan_profile->currentText(), 2000);
 
-    ui->comboBox_select_fan_profile->removeItem(ui->comboBox_select_fan_profile->currentIndex());
+    ui->comboBox_select_fan_profile->removeItem(current_index);
+    if ((current_index - 1) == FAN_PROFILE_AUTO)
+    {
+        ui->pushButton_edit_current_fan_profile->setEnabled(false);
+    }
 }
 
 
@@ -154,11 +159,11 @@ void MainWindow::on_ClockProfileDialog_new_profile_created(const nlohmann::json&
 
 void MainWindow::on_EditClockOffsetProfileDialog_current_clock_offset_profile_changed(const nlohmann::json& curr_clock_profile)
 {
-    const unsigned index {static_cast<unsigned>(ui->comboBox_select_clock_offset_profile->currentIndex())};
-    ui->comboBox_select_clock_offset_profile->removeItem(index);
+    const unsigned current_index {static_cast<unsigned>(ui->comboBox_select_clock_offset_profile->currentIndex())};
+    ui->comboBox_select_clock_offset_profile->removeItem(current_index);
 
-    ui->comboBox_select_clock_offset_profile->insertItem(index, QString::fromStdString(curr_clock_profile["name"].get<std::string>()));
-    ui->comboBox_select_clock_offset_profile->setCurrentIndex(index);
+    ui->comboBox_select_clock_offset_profile->insertItem(current_index, QString::fromStdString(curr_clock_profile["name"].get<std::string>()));
+    ui->comboBox_select_clock_offset_profile->setCurrentIndex(current_index);
     ui->lineEdit_current_gpu_clock_offset->setText(QString::number(curr_clock_profile["gpu_clock_offset"].get<int>()) + " MHz");
     ui->lineEdit_current_mem_clock_offset->setText(QString::number(curr_clock_profile["mem_clock_offset"].get<int>()) + " MHz");
 
@@ -170,11 +175,15 @@ void MainWindow::on_EditClockOffsetProfileDialog_current_clock_offset_profile_ch
 
 void MainWindow::on_EditClockOffsetProfileDialog_current_clock_offset_profile_removed()
 {
-    const unsigned index {static_cast<unsigned>(ui->comboBox_select_clock_offset_profile->currentIndex())};
+    const unsigned current_index {static_cast<unsigned>(ui->comboBox_select_clock_offset_profile->currentIndex())};
     ui->statusBar->showMessage("Clock profile removed: " + ui->comboBox_select_clock_offset_profile->currentText(), 2000);
     qInfo().noquote().nospace() << "Clock profile removed: " << ui->comboBox_select_clock_offset_profile->currentText();
 
-    ui->comboBox_select_clock_offset_profile->removeItem(index);
+    ui->comboBox_select_clock_offset_profile->removeItem(current_index);
+    if ((current_index - 1) == CLOCK_PROFILE_NONE)
+    {
+        ui->pushButton_edit_current_clock_offset_profile->setEnabled(false);
+    }
 }
 
 
@@ -292,7 +301,7 @@ void MainWindow::setup_tray_menu()
     tray_menu_.addAction("Quit", this, &MainWindow::on_actionQuit_triggered);
     tray_icon_.setContextMenu(&tray_menu_);
 
-    tray_icon_.setIcon(QIcon{"/usr/share/icons/gwepp/gwepp128.png"});
+    tray_icon_.setIcon(QIcon{"/usr/share/icons/gwepp/gwepp64.png"});
 }
 
 
@@ -318,14 +327,11 @@ void MainWindow::load_and_validate_app_settings()
 
     load_fan_and_clock_offset_profiles();
 
-    if (last_fan_profile_saved_)
-    {
-        restore_last_fan_profile();
-    }
-    if (last_clock_offset_profile_saved_)
-    {
-        restore_last_clock_offset_profile();
-    }
+    if (last_fan_profile_saved_) { restore_last_fan_profile(); }
+    else { ui->comboBox_select_fan_profile->setCurrentIndex(0); }
+
+    if (last_clock_offset_profile_saved_) { restore_last_clock_offset_profile(); }
+    else { ui->comboBox_select_clock_offset_profile->setCurrentIndex(0); }
 
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
 
@@ -337,22 +343,6 @@ void MainWindow::load_and_validate_app_settings()
 
 void MainWindow::load_fan_and_clock_offset_profiles()
 {
-    auto load_fan_profiles_future {std::async(std::launch::async, [this]()
-        {
-            const auto& fan_speed_profiles = app_settings_["fan_speed_profiles"];
-            for (const auto& fan_speed_profile : fan_speed_profiles)
-            {
-                ui->comboBox_select_fan_profile->addItem(QString::fromStdString(
-                                                             fan_speed_profile["name"].get<std::string>()
-                                                         ));
-            }
-            if (!last_fan_profile_saved_)
-            {
-                ui->comboBox_select_fan_profile->setCurrentIndex(0);
-            }
-            qInfo().noquote().nospace() << "Total fan profiles loaded: " << fan_speed_profiles.size();
-        })};
-
     auto load_clock_offset_profiles_future {std::async(std::launch::async, [this]()
         {
             const auto& clock_offset_profiles = app_settings_["clock_offset_profiles"];
@@ -362,12 +352,17 @@ void MainWindow::load_fan_and_clock_offset_profiles()
                                                                       clock_offset_profile["name"].get<std::string>()
                                                                   ));
             }
-            if (!last_clock_offset_profile_saved_)
-            {
-                ui->comboBox_select_clock_offset_profile->setCurrentIndex(0);
-            }
             qInfo().noquote().nospace() << "Total clock offset profiles loaded: " << clock_offset_profiles.size();
         })};
+
+    const auto& fan_speed_profiles = app_settings_["fan_speed_profiles"];
+    for (const auto& fan_speed_profile : fan_speed_profiles)
+    {
+        ui->comboBox_select_fan_profile->addItem(QString::fromStdString(
+                                                     fan_speed_profile["name"].get<std::string>()
+                                                 ));
+    }
+    qInfo().noquote().nospace() << "Total fan profiles loaded: " << fan_speed_profiles.size();
 }
 
 
@@ -416,15 +411,8 @@ void MainWindow::set_static_info()
     ui->lineEdit_GPU_slowdown_temp->setText(QString::number(current_gpu_.get_slowdown_temperature()) + " °C");
     ui->lineEdit_GPU_shutdown_temp->setText(QString::number(current_gpu_.get_shutdown_temperature()) + " °C");
 
-    if (ui->actionShow_GPU_UUID->isChecked())
-    {
-        ui->lineEdit_GPU_uuid->setText(QString::fromStdString(current_gpu_.get_uuid()));
-    }
-    else
-    {
-        ui->lineEdit_GPU_uuid->setText("************************");
-        ui->lineEdit_GPU_uuid->setToolTip("Disabled for a privacy reasons (enable: View -> show GPU UUID)");
-    }
+    ui->lineEdit_GPU_uuid->setText("************************");
+    ui->lineEdit_GPU_uuid->setToolTip("Disabled for a privacy reasons (enable: View -> show GPU UUID)");
 
     try
     {
