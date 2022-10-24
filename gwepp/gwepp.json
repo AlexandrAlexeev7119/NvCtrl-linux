@@ -9,10 +9,9 @@
             "name": "Auto (VBIOS controlled) (default)"
         }
     ],
-    "last_clock_offset_profile_index": 0,
     "last_clock_offset_profile_saved": false,
-    "last_fan_profile_index": 0,
     "last_fan_profile_saved": false,
+    "last_power_profile_saved": false,
     "minimize_to_tray_on_close": false,
     "minimize_to_tray_on_startup": false,
     "update_freq_ms": 1000
