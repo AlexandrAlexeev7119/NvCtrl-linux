@@ -241,34 +241,48 @@ void MainWindow::on_GpuUtilizationsController_encoder_decoder_unsupported()
 
 
 
-void MainWindow::on_GpuPowerController_error()
+void MainWindow::on_GpuPowerController_error_occured()
 {
-    disconnect(&gpu_power_controller_, &GpuPowerController::error, this, &MainWindow::on_GpuPowerController_error);
+    disconnect(&gpu_power_controller_, &GpuPowerController::error_occured, this, &MainWindow::on_GpuPowerController_error_occured);
     disconnect(&gpu_power_controller_, &GpuPowerController::info_ready, this, &MainWindow::on_GpuPowerController_info_ready);
     qWarning().noquote().nospace() << "Power control unsupported, signals disconnected";
 }
 
 
 
-void MainWindow::on_GpuClockController_error()
+void MainWindow::on_GpuClockController_error_occured()
 {
-    disconnect(&gpu_clock_controller_, &GpuClockController::error, this, &MainWindow::on_GpuClockController_error);
+    disconnect(&gpu_clock_controller_, &GpuClockController::error_occured, this, &MainWindow::on_GpuClockController_error_occured);
     disconnect(&gpu_clock_controller_, &GpuClockController::info_ready, this, &MainWindow::on_GpuClockController_info_ready);
     qWarning().noquote().nospace() << "Clock control unsupported, signals disconnected";
 }
 
 
 
-void MainWindow::on_GpuFanController_error()
+void MainWindow::on_GpuFanController_error_occured()
 {
     ui->groupBox_fan_control->setEnabled(false);
     ui->groupBox_fan_control->setToolTip("Unsupported for current GPU");
     qWarning().noquote().nospace() << "Fan control unsupported, groupBox widget disabled";
 
-    disconnect(&gpu_fan_controller_, &GpuFanController::error, this, &MainWindow::on_GpuFanController_error);
+    disconnect(&gpu_fan_controller_, &GpuFanController::error_occured, this, &MainWindow::on_GpuFanController_error_occured);
     disconnect(&gpu_fan_controller_, &GpuFanController::info_ready, this, &MainWindow::on_GpuFanController_info_ready);
 
     qWarning().noquote().nospace() << "Fan control unsupported, signals disconnected";
+}
+
+
+
+void MainWindow::on_UpdateChecker_error_occured(QStringView message)
+{
+    QMessageBox::critical(this, "GWEpp: check update error", message.toString() + "\nCheck the internet connection");
+}
+
+
+
+void MainWindow::on_UpdateChecker_new_version_released(QStringView version)
+{
+    QMessageBox::information(this, "GWEpp: new update available", QString{"New version available: v%1"}.arg(version));
 }
 
 
@@ -285,11 +299,13 @@ void MainWindow::connect_slots_and_signals()
     connect(&gpu_power_controller_, &GpuPowerController::info_ready, this, &::MainWindow::on_GpuPowerController_info_ready);
     connect(&gpu_clock_controller_, &GpuClockController::info_ready, this, &MainWindow::on_GpuClockController_info_ready);
     connect(&gpu_fan_controller_, &GpuFanController::info_ready, this, &MainWindow::on_GpuFanController_info_ready);
+    connect(&update_checker_, &UpdateChecker::new_version_released, this, &MainWindow::on_UpdateChecker_new_version_released);
 
     connect(&gpu_utilizations_controller_, &GpuUtilizationsController::encoder_decoder_unsupported, this, &MainWindow::on_GpuUtilizationsController_encoder_decoder_unsupported);
-    connect(&gpu_power_controller_, &GpuPowerController::error, this, &MainWindow::on_GpuPowerController_error);
-    connect(&gpu_clock_controller_, &GpuClockController::error, this, &MainWindow::on_GpuClockController_error);
-    connect(&gpu_fan_controller_, &GpuFanController::error, this, &MainWindow::on_GpuFanController_error);
+    connect(&gpu_power_controller_, &GpuPowerController::error_occured, this, &MainWindow::on_GpuPowerController_error_occured);
+    connect(&gpu_clock_controller_, &GpuClockController::error_occured, this, &MainWindow::on_GpuClockController_error_occured);
+    connect(&gpu_fan_controller_, &GpuFanController::error_occured, this, &MainWindow::on_GpuFanController_error_occured);
+    connect(&update_checker_, &UpdateChecker::error_occured, this, &MainWindow::on_UpdateChecker_error_occured);
 
     connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
 }

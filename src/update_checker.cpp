@@ -3,7 +3,8 @@
 #include "app_config.hpp"
 #include "update_checker.hpp"
 
-constexpr const char* last_version_file_url {"https://notabug.org/AlexCr4ckPentest/GWEpp/raw/main/.last_version"};
+constexpr const char* target_file_url {"https://notabug.org/AlexCr4ckPentest/GWEpp/raw/main/.last_version"};
+
 
 
 UpdateChecker::UpdateChecker(QObject* parent)
@@ -15,21 +16,30 @@ UpdateChecker::UpdateChecker(QObject* parent)
 
 void UpdateChecker::check_for_updates()
 {
-    retrieve_last_ver_process_.start("/usr/bin/curl", {last_version_file_url});
+    qInfo().noquote().nospace() << "Checking for updates...";
+
+    retrieve_last_ver_process_.start("/usr/bin/curl", {target_file_url});
     retrieve_last_ver_process_.waitForFinished();
 
     const int err_code {retrieve_last_ver_process_.exitCode()};
 
     if (err_code != 0)
     {
-        qCritical().noquote().nospace() << retrieve_last_ver_process_.errorString() << ", code: " << err_code;
+        const QString error_msg {QString{"Failed to check update: %1, code: %2"}.arg(retrieve_last_ver_process_.errorString()).arg(err_code)};
+        qCritical().noquote().nospace() << error_msg;
+        emit error_occured(error_msg);
     }
     else
     {
         const QString last_app_version {retrieve_last_ver_process_.readAll().trimmed()};
         if (last_app_version > GWEpp::config::APP_VERSION_STRING)
         {
-            qDebug().noquote().nospace() << "Updates available! new version: " << last_app_version;
+            qInfo().noquote().nospace() << "Update available! New version: " << last_app_version;
+            emit new_version_released(last_app_version);
+        }
+        else
+        {
+            qInfo().noquote().nospace() << "No updates available yet";
         }
     }
 }

@@ -57,9 +57,11 @@ private slots:
     void on_GpuFanController_info_ready(const GpuFanController::fan_rates& fan_rates);
 
     void on_GpuUtilizationsController_encoder_decoder_unsupported();
-    void on_GpuPowerController_error();
-    void on_GpuClockController_error();
-    void on_GpuFanController_error();
+    void on_GpuPowerController_error_occured();
+    void on_GpuClockController_error_occured();
+    void on_GpuFanController_error_occured();
+    void on_UpdateChecker_error_occured(QStringView message);
+    void on_UpdateChecker_new_version_released(QStringView version);
 
     void on_comboBox_select_fan_profile_activated(int index);
     void on_comboBox_select_clock_offset_profile_activated(int index);
