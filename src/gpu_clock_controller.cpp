@@ -31,7 +31,7 @@ void GpuClockController::update_info()
     }
     catch (const NVMLpp::errors::error_not_supported&)
     {
-        emit error();
+        emit error_occured();
     }
 }
 

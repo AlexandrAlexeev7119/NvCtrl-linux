@@ -28,7 +28,7 @@ void GpuFanController::update_info()
     }
     catch (const NVMLpp::errors::error_not_supported& err)
     {
-        emit error();
+        emit error_occured();
     }
 }
 

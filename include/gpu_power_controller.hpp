@@ -24,7 +24,7 @@ signals:
     void info_ready(const GpuPowerController::power_rates&);
     void power_usage(unsigned);
     void power_limit(unsigned);
-    void error();
+    void error_occured();
 
 private:
     const NVMLpp::NVML_device* current_gpu_;

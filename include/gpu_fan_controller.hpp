@@ -22,7 +22,7 @@ public slots:
 
 signals:
     void info_ready(const GpuFanController::fan_rates&);
-    void error();
+    void error_occured();
 
 private:
     NVMLpp::NVML_device* current_gpu_;

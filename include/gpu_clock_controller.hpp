@@ -25,7 +25,7 @@ public slots:
 
 signals:
     void info_ready(const GpuClockController::clock_values&);
-    void error();
+    void error_occured();
 
 private:
     const NVMLpp::NVML_device* current_gpu_;

@@ -18,7 +18,7 @@ void GpuPowerController::set_power_limit(unsigned limit)
     if (ret_code != 0)
     {
         qCritical().nospace().noquote() << "Failed to apply power limit";
-        emit error();
+        emit error_occured();
     }
     qInfo().nospace().noquote() << "Power limit was set to: " << limit;
 }
@@ -35,6 +35,6 @@ void GpuPowerController::update_info()
     }
     catch (const NVMLpp::errors::error_not_supported&)
     {
-        emit error();
+        emit error_occured();
     }
 }
