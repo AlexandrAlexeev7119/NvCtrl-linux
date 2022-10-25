@@ -284,7 +284,7 @@ void MainWindow::on_UpdateChecker_error_occured(const QString& message)
 void MainWindow::on_UpdateChecker_new_version_released(const QString& version)
 {
     const auto result {
-        QMessageBox::information(this, "GWEpp: new update available", "New version available: v" + version
+        QMessageBox::information(this, "GWEpp: update check", "New version available: v" + version
                                  + "\n(press Ok to view changelog)",
                                  QMessageBox::Button::Ok, QMessageBox::Button::Cancel)
     };

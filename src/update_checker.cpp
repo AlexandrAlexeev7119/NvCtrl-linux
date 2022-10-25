@@ -3,7 +3,7 @@
 #include "app_config.hpp"
 #include "update_checker.hpp"
 
-constexpr const char* target_file_url {"https://notabug.org/AlexCr4ckPentest/GWEpp/raw/single-gpu/.last_version"};
+constexpr const char* version_file_url {"https://notabug.org/AlexCr4ckPentest/GWEpp/raw/main/.last_version"};
 
 
 
@@ -25,7 +25,7 @@ void UpdateChecker::run()
 {
     qInfo().noquote().nospace() << "Checking for updates...";
 
-    retrieve_last_ver_process_.start("/usr/bin/curl", {target_file_url});
+    retrieve_last_ver_process_.start("/usr/bin/curl", {version_file_url});
     retrieve_last_ver_process_.waitForFinished();
 
     const int err_code {retrieve_last_ver_process_.exitCode()};

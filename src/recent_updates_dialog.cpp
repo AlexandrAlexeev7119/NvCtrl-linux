@@ -4,6 +4,10 @@
 #include "recent_updates_dialog.hpp"
 #include "ui_recent_updates_dialog.h"
 
+constexpr const char* changelog_file_url {"https://notabug.org/AlexCr4ckPentest/GWEpp/raw/single-gpu/CHANGELOG.md"};
+
+
+
 RecentUpdatesDialog::RecentUpdatesDialog(QWidget* parent)
     : QDialog {parent}
     , ui {new Ui::RecentUpdatesDialog}
@@ -41,7 +45,7 @@ void RecentUpdatesDialog::showEvent(QShowEvent* show_event)
 {
     qInfo().noquote().nospace() << "Getting changelog...";
 
-    retrieve_changelog_process_.start("/usr/bin/curl", {"https://notabug.org/AlexCr4ckPentest/GWEpp/raw/single-gpu/CHANGELOG.md"});
+    retrieve_changelog_process_.start("/usr/bin/curl", {changelog_file_url});
     retrieve_changelog_process_.waitForFinished();
 
     const int err_code {retrieve_changelog_process_.exitCode()};
