@@ -1,3 +1,11 @@
+## Version 1.3.0 (stable release)
+### Changes and fixes
+* Added check for updates from both branches
+* Added changelog to repository
+* Added support to read changelog when new version is available
+* Internal changes (codestyle, logic)
+* Update default app settings
+
 ## Version 1.2.8 (pre-release)
 ### Changes and fixes
 * Added changelog to repository
