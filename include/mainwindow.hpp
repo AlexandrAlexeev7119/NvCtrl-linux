@@ -5,6 +5,7 @@
 #include <QSystemTrayIcon>
 #include <QTimer>
 #include <QMenu>
+#include <QThread>
 
 #include "nvmlpp/nvmlpp_session.hpp"
 #include "nvmlpp/nvmlpp_device.hpp"
@@ -60,8 +61,8 @@ private slots:
     void on_GpuPowerController_error_occured();
     void on_GpuClockController_error_occured();
     void on_GpuFanController_error_occured();
-    void on_UpdateChecker_error_occured(QStringView message);
-    void on_UpdateChecker_new_version_released(QStringView version);
+    void on_UpdateChecker_error_occured(const QString& message);
+    void on_UpdateChecker_new_version_released(const QString& version);
 
     void on_comboBox_select_fan_profile_activated(int index);
     void on_comboBox_select_clock_offset_profile_activated(int index);
@@ -110,7 +111,7 @@ private:
     ClockProfileDialog clock_profile_dialog_window_;
     EditClockOffsetProfileDialog edit_clock_offset_profile_dialog_window_;
 
-    UpdateChecker update_checker_;
+    std::unique_ptr<UpdateChecker> update_checker_;
 
 protected:
     void closeEvent(QCloseEvent* close_event);

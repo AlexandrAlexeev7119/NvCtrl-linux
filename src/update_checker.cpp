@@ -8,13 +8,20 @@ constexpr const char* target_file_url {"https://notabug.org/AlexCr4ckPentest/GWE
 
 
 UpdateChecker::UpdateChecker(QObject* parent)
-    : QObject {parent}
+    : QThread {parent}
     , retrieve_last_ver_process_ {}
 { }
 
 
 
 void UpdateChecker::check_for_updates()
+{
+    start();
+}
+
+
+
+void UpdateChecker::run()
 {
     qInfo().noquote().nospace() << "Checking for updates...";
 

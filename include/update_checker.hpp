@@ -1,9 +1,9 @@
 #pragma once
 
-#include <QObject>
+#include <QThread>
 #include <QProcess>
 
-class UpdateChecker : public QObject
+class UpdateChecker : public QThread
 {
     Q_OBJECT
 
@@ -14,8 +14,12 @@ public slots:
     void check_for_updates();
 
 signals:
-    void new_version_released(QStringView);
-    void error_occured(QStringView);
+    void new_version_released(const QString&);
+    void error_occured(const QString&);
+
+protected:
+    using QThread::start;
+    void run() override;
 
 private:
     QProcess retrieve_last_ver_process_;

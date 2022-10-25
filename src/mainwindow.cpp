@@ -33,7 +33,7 @@ MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
     , clock_profile_dialog_window_ {this}
     , edit_clock_offset_profile_dialog_window_ {this}
 
-    , update_checker_ {this}
+    , update_checker_ {std::make_unique<UpdateChecker>()}
 {
     ui->setupUi(this);
     setMinimumSize(size());
@@ -273,16 +273,16 @@ void MainWindow::on_GpuFanController_error_occured()
 
 
 
-void MainWindow::on_UpdateChecker_error_occured(QStringView message)
+void MainWindow::on_UpdateChecker_error_occured(const QString& message)
 {
-    QMessageBox::critical(this, "GWEpp: check update error", message.toString() + "\nCheck the internet connection");
+    QMessageBox::critical(this, "GWEpp: check update error", message + "\nCheck the internet connection");
 }
 
 
 
-void MainWindow::on_UpdateChecker_new_version_released(QStringView version)
+void MainWindow::on_UpdateChecker_new_version_released(const QString& version)
 {
-    QMessageBox::information(this, "GWEpp: new update available", QString{"New version available: v%1"}.arg(version));
+    QMessageBox::information(this, "GWEpp: new update available", "New version available: v" + version);
 }
 
 
@@ -299,13 +299,15 @@ void MainWindow::connect_slots_and_signals()
     connect(&gpu_power_controller_, &GpuPowerController::info_ready, this, &::MainWindow::on_GpuPowerController_info_ready);
     connect(&gpu_clock_controller_, &GpuClockController::info_ready, this, &MainWindow::on_GpuClockController_info_ready);
     connect(&gpu_fan_controller_, &GpuFanController::info_ready, this, &MainWindow::on_GpuFanController_info_ready);
-    connect(&update_checker_, &UpdateChecker::new_version_released, this, &MainWindow::on_UpdateChecker_new_version_released);
 
     connect(&gpu_utilizations_controller_, &GpuUtilizationsController::encoder_decoder_unsupported, this, &MainWindow::on_GpuUtilizationsController_encoder_decoder_unsupported);
     connect(&gpu_power_controller_, &GpuPowerController::error_occured, this, &MainWindow::on_GpuPowerController_error_occured);
     connect(&gpu_clock_controller_, &GpuClockController::error_occured, this, &MainWindow::on_GpuClockController_error_occured);
     connect(&gpu_fan_controller_, &GpuFanController::error_occured, this, &MainWindow::on_GpuFanController_error_occured);
-    connect(&update_checker_, &UpdateChecker::error_occured, this, &MainWindow::on_UpdateChecker_error_occured);
+
+    connect(this, &MainWindow::destroyed, update_checker_.get(), &QThread::quit);
+    connect(update_checker_.get(), &UpdateChecker::new_version_released, this, &MainWindow::on_UpdateChecker_new_version_released);
+    connect(update_checker_.get(), &UpdateChecker::error_occured, this, &MainWindow::on_UpdateChecker_error_occured);
 
     connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
 }
@@ -358,6 +360,11 @@ void MainWindow::load_and_validate_app_settings()
 
     qInfo().noquote().nospace() << "Settings for MainWindow loaded";
     qDebug().noquote().nospace() << app_settings_.dump(4).c_str();
+
+    if (app_settings_["check_for_updates_on_startup"].get<bool>())
+    {
+        update_checker_->check_for_updates();
+    }
 }
 
 
@@ -719,5 +726,5 @@ void MainWindow::on_actionShow_GPU_UUID_toggled(bool checked)
 
 void MainWindow::on_actionCheck_for_updates_triggered()
 {
-    update_checker_.check_for_updates();
+    update_checker_->check_for_updates();
 }
