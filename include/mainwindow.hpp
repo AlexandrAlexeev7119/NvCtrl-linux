@@ -22,7 +22,9 @@
 #include "edit_fan_profile_dialog.hpp"
 #include "clock_profile_dialog.hpp"
 #include "edit_clock_offset_profile_dialog.hpp"
+#include "recent_updates_dialog.hpp"
 #include "update_checker.hpp"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -110,6 +112,7 @@ private:
     EditFanProfileDialog edit_fan_profile_dialog_window_;
     ClockProfileDialog clock_profile_dialog_window_;
     EditClockOffsetProfileDialog edit_clock_offset_profile_dialog_window_;
+    RecentUpdatesDialog recent_update_dialog_window_;
 
     std::unique_ptr<UpdateChecker> update_checker_;
 

@@ -3,7 +3,7 @@
 #include "app_config.hpp"
 #include "update_checker.hpp"
 
-constexpr const char* target_file_url {"https://notabug.org/AlexCr4ckPentest/GWEpp/raw/main/.last_version"};
+constexpr const char* target_file_url {"https://notabug.org/AlexCr4ckPentest/GWEpp/raw/single-gpu/.last_version"};
 
 
 

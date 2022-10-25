@@ -32,6 +32,7 @@ MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
     , edit_fan_profile_dialog_window_ {this}
     , clock_profile_dialog_window_ {this}
     , edit_clock_offset_profile_dialog_window_ {this}
+    , recent_update_dialog_window_ {this}
 
     , update_checker_ {std::make_unique<UpdateChecker>()}
 {
@@ -282,7 +283,15 @@ void MainWindow::on_UpdateChecker_error_occured(const QString& message)
 
 void MainWindow::on_UpdateChecker_new_version_released(const QString& version)
 {
-    QMessageBox::information(this, "GWEpp: new update available", "New version available: v" + version);
+    const auto result {
+        QMessageBox::information(this, "GWEpp: new update available", "New version available: v" + version
+                                 + "\n(press Ok to view changelog)",
+                                 QMessageBox::Button::Ok, QMessageBox::Button::Cancel)
+    };
+    if (result == QMessageBox::Button::Ok)
+    {
+        recent_update_dialog_window_.show();
+    }
 }
 
 
