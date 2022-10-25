@@ -17,6 +17,7 @@ const nlohmann::json SettingsManager::default_settings
         {"minimize_to_tray_on_startup", false},
         {"last_fan_and_clock_offset_profiles_saved", false},
         {"last_power_profile_saved", false},
+        {"check_for_updates_on_startup", false},
         {"fan_speed_profiles", nlohmann::json::array_t { {{"name", "Auto (VBIOS controlled) (default)"}} } },
         {"clock_offset_profiles", nlohmann::json::array_t { {{"name", "None (default)"}} } }
     }
