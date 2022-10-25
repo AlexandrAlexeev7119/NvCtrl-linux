@@ -21,3 +21,4 @@
 * Added support for check updates at startup
 * UpdateChecker now is non-blocking thread (QThread), no blocks at startup
 * Updated default app settings
+
