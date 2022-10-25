@@ -32,6 +32,8 @@ MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
     , edit_fan_profile_dialog_window_ {this}
     , clock_profile_dialog_window_ {this}
     , edit_clock_offset_profile_dialog_window_ {this}
+
+    , update_checker_ {this}
 {
     ui->setupUi(this);
     setMinimumSize(size());
@@ -695,4 +697,11 @@ void MainWindow::on_actionShow_GPU_UUID_toggled(bool checked)
         ui->lineEdit_GPU_uuid->setText("************************");
         ui->lineEdit_GPU_uuid->setToolTip("Disabled for a privacy reasons (enable: View -> show GPU UUID)");
     }
+}
+
+
+
+void MainWindow::on_actionCheck_for_updates_triggered()
+{
+    update_checker_.check_for_updates();
 }

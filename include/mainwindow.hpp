@@ -21,6 +21,7 @@
 #include "edit_fan_profile_dialog.hpp"
 #include "clock_profile_dialog.hpp"
 #include "edit_clock_offset_profile_dialog.hpp"
+#include "update_checker.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -76,6 +77,7 @@ private slots:
     void on_actionAbout_triggered();
     void on_actionReport_a_bug_triggered();
     void on_actionShow_GPU_UUID_toggled(bool checked);
+    void on_actionCheck_for_updates_triggered();
 
 private:
     Ui::MainWindow* ui;
@@ -105,6 +107,8 @@ private:
     EditFanProfileDialog edit_fan_profile_dialog_window_;
     ClockProfileDialog clock_profile_dialog_window_;
     EditClockOffsetProfileDialog edit_clock_offset_profile_dialog_window_;
+
+    UpdateChecker update_checker_;
 
 protected:
     void closeEvent(QCloseEvent* close_event);

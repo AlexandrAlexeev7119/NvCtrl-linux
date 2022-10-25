@@ -1013,6 +1013,7 @@
     </property>
     <addaction name="actionSettings"/>
     <addaction name="separator"/>
+    <addaction name="actionCheck_for_updates"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -1081,6 +1082,11 @@
    </property>
    <property name="text">
     <string>Show GPU UUID</string>
+   </property>
+  </action>
+  <action name="actionCheck_for_updates">
+   <property name="text">
+    <string>Check for &amp;updates</string>
    </property>
   </action>
  </widget>
