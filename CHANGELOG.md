@@ -1,4 +1,4 @@
-## Version 1.3.0 (stable release)
+## Version 1.3.1 (stable release)
 ### Changes and fixes
 * Hotfix: fixed error with settings (reading null object)
 
