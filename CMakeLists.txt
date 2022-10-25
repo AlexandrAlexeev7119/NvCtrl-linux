@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(gwepp VERSION 1.2.1 LANGUAGES CXX)
+project(gwepp VERSION 1.2.2 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -43,3 +43,5 @@ add_compile_definitions(APP_BUILD_TYPE="${CMAKE_BUILD_TYPE}")
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets NVMLpp spdlog)
+
+write_file(../.last_version "${PROJECT_VERSION}")
