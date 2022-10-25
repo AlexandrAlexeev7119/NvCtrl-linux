@@ -372,7 +372,7 @@ void MainWindow::load_and_validate_app_settings()
 
     if (app_settings_["check_for_updates_on_startup"].get<bool>())
     {
-        update_checker_->check_for_updates();
+        on_actionCheck_for_updates_triggered();
     }
 }
 
@@ -735,5 +735,6 @@ void MainWindow::on_actionShow_GPU_UUID_toggled(bool checked)
 
 void MainWindow::on_actionCheck_for_updates_triggered()
 {
+    update_checker_->set_update_branch(app_settings_["branch_where_get_updates"].get<unsigned>());
     update_checker_->check_for_updates();
 }

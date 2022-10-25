@@ -42,6 +42,10 @@ void SettingsDialog::on_buttonBox_accepted()
     app_settings["check_for_updates_on_startup"] = ui->checkBox_check_for_updates_on_startup->isChecked();
     app_settings["update_freq_ms"] = ui->spinBox_update_freq->value();
 
+    // 0 - main branch (stable)
+    // 1 - develop branch (unstable)
+    app_settings["branch_where_get_updates"] = ui->comboBox_select_update_branch->currentIndex();
+
     save_settings_to_file(app_settings);
     emit settings_applied(app_settings);
 
@@ -67,6 +71,7 @@ void SettingsDialog::showEvent(QShowEvent* event_)
     ui->checkBox_save_last_used_clock_offset_profile->setChecked(app_settings["last_clock_offset_profile_saved"].get<bool>());
     ui->checkBox_save_last_used_power_profile->setChecked(app_settings["last_power_profile_saved"].get<bool>());
     ui->checkBox_check_for_updates_on_startup->setChecked(app_settings["check_for_updates_on_startup"].get<bool>());
+    ui->comboBox_select_update_branch->setCurrentIndex(app_settings["branch_where_get_updates"].get<unsigned>());
     ui->spinBox_update_freq->setValue(app_settings["update_freq_ms"].get<unsigned>());
 
     qInfo().noquote().nospace() << "Settings on form loaded";

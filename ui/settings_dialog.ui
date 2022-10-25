@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>325</width>
-    <height>350</height>
+    <width>500</width>
+    <height>310</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,128 @@
    <bool>false</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="5" column="2">
+   <item row="3" column="2" colspan="2">
+    <widget class="QGroupBox" name="groupBox_minimizing_window">
+     <property name="title">
+      <string>Minimizing window</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="checkBox_minimize_to_tray_on_close">
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="text">
+         <string>Minimize to tray on close</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="checkBox_minimize_to_tray_on_startup">
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="text">
+         <string>Minimize to tray on startup</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupBox_last_used_profiles_saving">
+     <property name="title">
+      <string>Last used profiles saving</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="checkBox_save_last_used_clock_offset_profile">
+        <property name="text">
+         <string>Save last used clock offset profile</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="checkBox_save_last_used_fan_profile">
+        <property name="text">
+         <string>Save last used fan profile</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="checkBox_save_last_used_power_profile">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string>Save last used power profile</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="4">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="4">
+    <widget class="QGroupBox" name="groupBox_updates_checking">
+     <property name="title">
+      <string>Updates checking</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="1" column="1">
+       <widget class="QComboBox" name="comboBox_select_update_branch">
+        <item>
+         <property name="text">
+          <string>Main (stable)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Develop (unstable)</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Update branch</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QCheckBox" name="checkBox_check_for_updates_on_startup">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string>Check for updates on startup</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="7" column="2">
     <widget class="QSpinBox" name="spinBox_update_freq">
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -36,98 +157,13 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="3">
-    <widget class="QGroupBox" name="groupBox_minimizing_window">
-     <property name="title">
-      <string>Minimizing window</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="checkBox_minimize_to_tray_on_startup">
-        <property name="layoutDirection">
-         <enum>Qt::LeftToRight</enum>
-        </property>
-        <property name="text">
-         <string>Minimize to tray on startup</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="checkBox_minimize_to_tray_on_close">
-        <property name="layoutDirection">
-         <enum>Qt::LeftToRight</enum>
-        </property>
-        <property name="text">
-         <string>Minimize to tray on close</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="7" column="0" colspan="3">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="3">
-    <widget class="QGroupBox" name="groupBox_last_used_profiles_saving">
-     <property name="title">
-      <string>Last used profiles saving</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="checkBox_save_last_used_fan_profile">
-        <property name="text">
-         <string>Save last used fan profile</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="checkBox_save_last_used_clock_offset_profile">
-        <property name="text">
-         <string>Save last used clock offset profile</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="checkBox_save_last_used_power_profile">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="text">
-         <string>Save last used power profile</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="5" column="0" colspan="2">
+   <item row="7" column="0" colspan="2">
     <widget class="QLabel" name="label_update_freq">
      <property name="text">
       <string>Update frequency (ms)</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0" colspan="3">
-    <widget class="QCheckBox" name="checkBox_check_for_updates_on_startup">
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="text">
-      <string>Check for updates on startup</string>
      </property>
     </widget>
    </item>

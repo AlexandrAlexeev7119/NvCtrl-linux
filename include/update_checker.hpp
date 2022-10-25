@@ -6,9 +6,12 @@
 class UpdateChecker : public QThread
 {
     Q_OBJECT
+    enum { MAIN_BRANCH, DEV_BRANCH };
 
 public:
     UpdateChecker(QObject* parent = nullptr);
+
+    void set_update_branch(unsigned branch_type) noexcept;
 
 public slots:
     void check_for_updates();
@@ -23,4 +26,5 @@ protected:
 
 private:
     QProcess retrieve_last_ver_process_;
+    unsigned branch_type_;
 };

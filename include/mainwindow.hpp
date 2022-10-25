@@ -5,7 +5,6 @@
 #include <QSystemTrayIcon>
 #include <QTimer>
 #include <QMenu>
-#include <QThread>
 
 #include "nvmlpp/nvmlpp_session.hpp"
 #include "nvmlpp/nvmlpp_device.hpp"

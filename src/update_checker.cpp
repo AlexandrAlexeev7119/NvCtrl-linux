@@ -3,14 +3,23 @@
 #include "app_config.hpp"
 #include "update_checker.hpp"
 
-constexpr const char* version_file_url {"https://notabug.org/AlexCr4ckPentest/GWEpp/raw/main/.last_version"};
+constexpr const char* version_file_url_main {"https://notabug.org/AlexCr4ckPentest/GWEpp/raw/main/.last_version"};
+constexpr const char* version_file_url_develop {"https://notabug.org/AlexCr4ckPentest/GWEpp/raw/single-gpu/.last_version"};
 
 
 
 UpdateChecker::UpdateChecker(QObject* parent)
     : QThread {parent}
     , retrieve_last_ver_process_ {}
+    , branch_type_ {0}
 { }
+
+
+
+void UpdateChecker::set_update_branch(unsigned branch_type) noexcept
+{
+    branch_type_= branch_type;
+}
 
 
 
@@ -25,7 +34,15 @@ void UpdateChecker::run()
 {
     qInfo().noquote().nospace() << "Checking for updates...";
 
-    retrieve_last_ver_process_.start("/usr/bin/curl", {version_file_url});
+    if (branch_type_ == MAIN_BRANCH)
+    {
+        retrieve_last_ver_process_.start("/usr/bin/curl", {version_file_url_main});
+    }
+    else
+    {
+        retrieve_last_ver_process_.start("/usr/bin/curl", {version_file_url_develop});
+    }
+
     retrieve_last_ver_process_.waitForFinished();
 
     const int err_code {retrieve_last_ver_process_.exitCode()};
@@ -39,6 +56,7 @@ void UpdateChecker::run()
     else
     {
         const QString last_app_version {retrieve_last_ver_process_.readAll().trimmed()};
+        qDebug().noquote().nospace() << "Retrieved version: " << last_app_version;
         if (last_app_version > GWEpp::config::APP_VERSION_STRING)
         {
             qInfo().noquote().nospace() << "Update available! New version: " << last_app_version;
