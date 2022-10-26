@@ -1,7 +1,6 @@
+#include <QShowEvent>
 #include <QDesktopServices>
 #include <QUrl>
-#include <QShowEvent>
-#include <QProcess>
 
 #include <cstdlib>
 
@@ -44,14 +43,14 @@ void ReportABugDialog::on_label_text_linkActivated(const QString& link)
 
 
 
-void ReportABugDialog::showEvent(QShowEvent* event_)
+void ReportABugDialog::showEvent(QShowEvent* show_event)
 {
     if (ui->plainTextEdit_system_info->toPlainText().isEmpty())
     {
         const QString session_type {std::getenv("XDG_SESSION_TYPE")};
         const QString desktop_env {std::getenv("XDG_CURRENT_DESKTOP")};
 
-        external_process_.start("/usr/bin/uname", {"-r"});
+        external_process_.start("/usr/bin/uname", {"-r"}, QIODevice::ReadOnly);
         external_process_.waitForFinished();
         const QString kernel_ver {external_process_.readAll()};
 
@@ -69,5 +68,5 @@ void ReportABugDialog::showEvent(QShowEvent* event_)
         ui->plainTextEdit_system_info->insertPlainText(sys_info);
     }
 
-    event_->accept();
+    show_event->accept();
 }

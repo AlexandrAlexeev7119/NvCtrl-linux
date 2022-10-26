@@ -314,7 +314,6 @@ void MainWindow::connect_slots_and_signals()
     connect(&gpu_clock_controller_, &GpuClockController::error_occured, this, &MainWindow::on_GpuClockController_error_occured);
     connect(&gpu_fan_controller_, &GpuFanController::error_occured, this, &MainWindow::on_GpuFanController_error_occured);
 
-    connect(this, &MainWindow::destroyed, update_checker_.get(), &QThread::quit);
     connect(update_checker_.get(), &UpdateChecker::new_version_released, this, &MainWindow::on_UpdateChecker_new_version_released);
     connect(update_checker_.get(), &UpdateChecker::error_occured, this, &MainWindow::on_UpdateChecker_error_occured);
 

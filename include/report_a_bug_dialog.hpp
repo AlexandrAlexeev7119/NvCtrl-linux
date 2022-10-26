@@ -20,5 +20,5 @@ private:
     Ui::ReportABugDialog* ui;
     QProcess external_process_;
 
-    void showEvent(QShowEvent* event_);
+    void showEvent(QShowEvent* show_event);
 };
