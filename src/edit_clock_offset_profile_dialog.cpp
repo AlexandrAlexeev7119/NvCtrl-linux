@@ -64,7 +64,7 @@ void EditClockOffsetProfileDialog::on_buttonBox_accepted()
         current_clock_offset_profile["mem_clock_offset"] = ui->horizontalSlider_mem_clock_offset->value();
 
         emit current_clock_offset_profile_changed(current_clock_offset_profile);
-        write_new_settings(*ptr_app_settings_);
+        write_settings_to_file(*ptr_app_settings_);
 
         on_buttonBox_rejected();
     }
@@ -101,7 +101,7 @@ void EditClockOffsetProfileDialog::showEvent(QShowEvent* event_)
 
 
 
-void EditClockOffsetProfileDialog::write_new_settings(const nlohmann::json& app_settings)
+void EditClockOffsetProfileDialog::write_settings_to_file(const nlohmann::json& app_settings)
 {
     SettingsManager::instance().open_file(std::ios::out);
     SettingsManager::instance().write_settings(app_settings);
@@ -116,7 +116,7 @@ void EditClockOffsetProfileDialog::on_pushButton_remove_current_profile_clicked(
 
     clock_offset_profiles.erase(current_clock_offset_profile_index_);
     emit current_clock_offset_profile_removed();
-    write_new_settings(*ptr_app_settings_);
+    write_settings_to_file(*ptr_app_settings_);
 
     on_buttonBox_rejected();
 }

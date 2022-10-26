@@ -32,5 +32,5 @@ private:
     nlohmann::json* ptr_app_settings_;
 
     void showEvent(QShowEvent* event_);
-    void write_new_settings(const nlohmann::json& app_settings);
+    void write_settings_to_file(const nlohmann::json& app_settings);
 };
