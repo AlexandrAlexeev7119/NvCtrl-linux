@@ -299,7 +299,7 @@ void MainWindow::on_UpdateChecker_new_version_released(const QString& version)
 void MainWindow::connect_slots_and_signals()
 {
     connect(&tray_icon_, &QSystemTrayIcon::activated, this, &MainWindow::toggle_tray);
-    connect(ui->horizontalSlider_change_power_limit, &QSlider::valueChanged, [this](int value)
+    connect(ui->horizontalSlider_change_power_limit, &QSlider::valueChanged, this, [this](int value)
     {
         ui->label_power_limit_slider_indicator->setText(QString::number(value));
     });
