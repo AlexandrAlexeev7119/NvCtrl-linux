@@ -15,7 +15,7 @@ no other extra dependencies such as Python
 * run `makepkg -si`
 
 ### Other distribution
-* Download AppImage file from [latest release](https://github.com/AlexandrAlexeev7119/GWEpp/releases/latest/download/GWEpp-x86_64.AppImage)
+* Download AppImage file from [latest release](https://github.com/AlexandrAlexeev7119/GWEpp/releases/latest/download/GWEpp-x86_64.AppImage )
 
 
 ### Building from sources
