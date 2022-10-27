@@ -10,6 +10,7 @@
 #include "nvmlpp/nvmlpp_session.hpp"
 #include "nvmlpp/util/nvmlpp_errors.hpp"
 
+
 MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
     : QMainWindow {parent}
     , ui {new Ui::MainWindow}
