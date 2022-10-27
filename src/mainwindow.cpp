@@ -39,7 +39,7 @@ MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
 {
     ui->setupUi(this);
     setMinimumSize(size());
-    setWindowIcon(QIcon{"/usr/share/icons/gwepp/gwepp64.png"});
+    setWindowIcon(QIcon{":/icons/gwepp64.png"});
     app_settings_ = std::move(app_settings);
 
     setup_tray_menu();
@@ -330,7 +330,7 @@ void MainWindow::setup_tray_menu()
     tray_menu_.addAction("Quit", this, &MainWindow::on_actionQuit_triggered);
     tray_icon_.setContextMenu(&tray_menu_);
 
-    tray_icon_.setIcon(QIcon{"/usr/share/icons/gwepp/gwepp48.png"});
+    tray_icon_.setIcon(QIcon{":/icons/gwepp64.png"});
 }
 
 

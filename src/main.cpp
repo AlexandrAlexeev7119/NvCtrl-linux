@@ -40,6 +40,7 @@ int main(int argc, char** argv)
     spdlog::set_level(spdlog::level::info);
 #endif
 
+    Q_INIT_RESOURCE(icons);
     qInstallMessageHandler(qt_msg_handler);
 
     QApplication app {argc, argv};

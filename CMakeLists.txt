@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(gwepp VERSION 1.3.1 LANGUAGES CXX)
+project(gwepp VERSION 1.3.2 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -23,6 +23,8 @@ add_subdirectory(lib/spdlog)
 file(GLOB_RECURSE SRC src/*.cpp)
 file(GLOB_RECURSE HDR include/*.hpp)
 file(GLOB_RECURSE UI ui/*.ui)
+file(GLOB_RECURSE RESOURCES qrc/icons.qrc)
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
 
 set(PROJECT_SOURCES
@@ -42,7 +44,7 @@ include_directories(${INCLUDE_DIRECTORIES}
 add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")
 add_compile_definitions(APP_BUILD_TYPE="${CMAKE_BUILD_TYPE}")
 
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${RESOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets NVMLpp spdlog)
 
 write_file(../.last_version "${PROJECT_VERSION}")
