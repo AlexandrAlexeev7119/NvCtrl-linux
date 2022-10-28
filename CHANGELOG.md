@@ -1,3 +1,9 @@
+## Version 1.3.3 (stable release)
+### Changes and fixes
+* Updated public interface of SettingsManager class
+* Moved app settings validation from MainWidnow into SettingsManager
+* Some other internal fixes
+
 ## Version 1.3.2 (stable release)
 ### Changes and fixes
 * Added qrc file and move icons inside it (no more /usr/share/icons is used)
