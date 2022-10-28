@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(gwepp VERSION 1.3.2 LANGUAGES CXX)
+project(gwepp VERSION 1.3.3 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
