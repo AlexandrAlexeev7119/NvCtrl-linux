@@ -54,7 +54,7 @@ int main(int argc, char** argv)
         std::exit(1);
     });
 
-    const auto app_settings = settings_manager.read_settings();
+    auto app_settings = settings_manager.read_settings();
 
     const bool minimize_to_tray_on_startup {app_settings["minimize_to_tray_on_startup"].get<bool>()};
     MainWindow main_window {std::move(app_settings)};
