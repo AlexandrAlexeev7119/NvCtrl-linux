@@ -69,6 +69,7 @@ nlohmann::json SettingsManager::read_settings()
     {
         app_settings["update_freq_ms"] = 500;
         write_settings(app_settings);
+        qWarning().noquote().nospace() << "Wrong update_freq_ms_ detected, fallback to default (500)";
     }
 
     close_file();
