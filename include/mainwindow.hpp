@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QMainWindow>
-#include <QCloseEvent>
 #include <QSystemTrayIcon>
 #include <QTimer>
 #include <QMenu>
