@@ -11,17 +11,15 @@ static constexpr const char* DEFAULT_FILENAME{"/usr/share/gwepp/gwepp.json"};
 
 const nlohmann::json SettingsManager::default_settings
 {
-    {
-        {"update_freq_ms", 1000},
-        {"minimize_to_tray_on_close", false},
-        {"minimize_to_tray_on_startup", false},
-        {"last_fan_and_clock_offset_profiles_saved", false},
-        {"last_power_profile_saved", false},
-        {"check_for_updates_on_startup", false},
-        {"branch_where_get_updates", 0},
-        {"fan_speed_profiles", nlohmann::json::array_t { {{"name", "Auto (VBIOS controlled) (default)"}} } },
-        {"clock_offset_profiles", nlohmann::json::array_t { {{"name", "None (default)"}} } }
-    }
+    {"update_freq_ms", 1000},
+    {"minimize_to_tray_on_close", false},
+    {"minimize_to_tray_on_startup", false},
+    {"last_fan_and_clock_offset_profiles_saved", false},
+    {"last_power_profile_saved", false},
+    {"check_for_updates_on_startup", false},
+    {"branch_where_get_updates", 0},
+    {"fan_speed_profiles", nlohmann::json::array_t { {{"name", "Auto (VBIOS controlled) (default)"}} } },
+    {"clock_offset_profiles", nlohmann::json::array_t { {{"name", "None (default)"}} } }
 };
 
 
@@ -62,14 +60,19 @@ nlohmann::json SettingsManager::read_settings()
 
     qDebug().noquote().nospace() << "Read settings from: " << file_name_.c_str();
 
+    // Assumes that the user is never editting file manually
+    // Any atempt to modify config file manually may results to runtime errors and other issues
     auto app_settings = nlohmann::json::parse(std::move(raw_json_string));
 
+    // But user can manually edit value of timer update frequency
+    // To prevent this, next code validate app settings before it returned to caller
     const unsigned update_freq_ms {app_settings["update_freq_ms"].get<unsigned>()};
     if (update_freq_ms < 500 || update_freq_ms > 3000)
     {
-        app_settings["update_freq_ms"] = 500;
+        app_settings["update_freq_ms"] = default_settings["update_freq_ms"].get<unsigned>();
         write_settings(app_settings);
-        qWarning().noquote().nospace() << "Wrong update_freq_ms_ detected, fallback to default (500)";
+        qWarning().noquote().nospace() << "Wrong update_freq_ms_ detected, fallback to default ("
+                                       << default_settings["update_freq_ms"].get<unsigned>() << ")";
     }
 
     close_file();
