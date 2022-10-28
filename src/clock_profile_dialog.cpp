@@ -59,9 +59,7 @@ void ClockProfileDialog::on_buttonBox_accepted()
                                            });
         emit new_profile_created(clock_offset_profiles.back());
 
-        SettingsManager::instance().open_file(std::ios::out);
         SettingsManager::instance().write_settings(app_settings_ref);
-        SettingsManager::instance().close_file();
 
         qInfo().noquote().nospace() << "New clock profile created: " << new_clock_profile_name;
         on_buttonBox_rejected();

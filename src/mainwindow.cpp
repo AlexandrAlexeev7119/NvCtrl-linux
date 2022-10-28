@@ -47,7 +47,7 @@ MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
     set_static_info();
     connect_slots_and_signals();
     set_current_gpu_for_controllers();
-    load_and_validate_app_settings();
+    load_app_settings();
 
     update_dynamic_info();
     dynamic_info_update_timer_.start();
@@ -335,25 +335,13 @@ void MainWindow::setup_tray_menu()
 
 
 
-void MainWindow::load_and_validate_app_settings()
+void MainWindow::load_app_settings()
 {
     minimize_to_tray_on_close_ = app_settings_["minimize_to_tray_on_close"].get<bool>();
     last_fan_profile_saved_ = app_settings_["last_fan_profile_saved"].get<bool>();
     last_clock_offset_profile_saved_ = app_settings_["last_clock_offset_profile_saved"].get<bool>();
     last_power_profile_saved_= app_settings_["last_power_profile_saved"].get<bool>();
     update_freq_ms_ = app_settings_["update_freq_ms"].get<unsigned>();
-
-    if (update_freq_ms_ < 500)
-    {
-        update_freq_ms_ = 500;
-        app_settings_["update_freq_ms"] = update_freq_ms_;
-
-        SettingsManager::instance().open_file(std::ios::out);
-        SettingsManager::instance().write_settings(app_settings_);
-        SettingsManager::instance().close_file();
-
-        qWarning().noquote().nospace() << "Wrong update_freq_ms_ detected, fallback to default (" << update_freq_ms_ << ")";
-    }
 
     load_fan_and_clock_offset_profiles();
 
@@ -548,9 +536,7 @@ void MainWindow::closeEvent(QCloseEvent* close_event)
 
         if (last_fan_profile_saved_ || last_clock_offset_profile_saved_ || last_power_profile_saved_)
         {
-            SettingsManager::instance().open_file(std::ios::out);
             SettingsManager::instance().write_settings(app_settings_);
-            SettingsManager::instance().close_file();
         }
 
         tray_icon_.hide();

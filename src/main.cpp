@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 
     QApplication app {argc, argv};
     SettingsManager& settings_manager {SettingsManager::instance()};
-    QObject::connect(&settings_manager, &SettingsManager::error,
+    QObject::connect(&settings_manager, &SettingsManager::error_occured,
                      [](const QString& err_msg)
     {
         qCritical().nospace().noquote() << err_msg;
@@ -53,9 +53,7 @@ int main(int argc, char** argv)
         std::exit(1);
     });
 
-    settings_manager.open_file(std::ios::in);
-    const auto app_settings = nlohmann::json::parse(settings_manager.read_settings());
-    settings_manager.close_file();
+    const auto app_settings = settings_manager.read_settings();
 
     const bool minimize_to_tray_on_startup {app_settings["minimize_to_tray_on_startup"].get<bool>()};
     MainWindow main_window {std::move(app_settings)};

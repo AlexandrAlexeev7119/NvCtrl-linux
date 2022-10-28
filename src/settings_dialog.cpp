@@ -82,8 +82,6 @@ void SettingsDialog::showEvent(QShowEvent* event_)
 
 void SettingsDialog::save_settings_to_file(const nlohmann::json& app_settings)
 {
-    SettingsManager::instance().open_file(std::ios::out);
     SettingsManager::instance().write_settings(app_settings);
-    SettingsManager::instance().close_file();
     qInfo().noquote().nospace() << "Settings saved to file";
 }

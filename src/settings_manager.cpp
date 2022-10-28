@@ -33,16 +33,55 @@ SettingsManager::SettingsManager()
 
 
 
-void SettingsManager::set_file_name(std::string_view file_name)
+std::string_view SettingsManager::get_file_name() const
 {
-    file_name_ = file_name;
+    return file_name_;
 }
 
 
 
-std::string_view SettingsManager::get_file_name() const
+void SettingsManager::write_settings(const nlohmann::json& app_settings)
 {
-    return file_name_;
+    if (!ptr_settings_file_->is_open())
+    {
+        open_file(std::ios::out);
+    }
+    (*ptr_settings_file_) << app_settings.dump(4);
+    close_file();
+    qDebug().noquote().nospace() << "Save settings to: " << file_name_.c_str();
+}
+
+
+
+nlohmann::json SettingsManager::read_settings()
+{
+    open_file(std::ios::in | std::ios::out);
+
+    std::string raw_json_string {std::istreambuf_iterator<char>{*ptr_settings_file_},
+                                 std::istreambuf_iterator<char>{}};
+
+    qDebug().noquote().nospace() << "Read settings from: " << file_name_.c_str();
+
+    auto app_settings = nlohmann::json::parse(std::move(raw_json_string));
+
+    const unsigned update_freq_ms {app_settings["update_freq_ms"].get<unsigned>()};
+    if (update_freq_ms < 500 || update_freq_ms > 3000)
+    {
+        app_settings["update_freq_ms"] = 500;
+        write_settings(app_settings);
+    }
+
+    close_file();
+
+    return app_settings;
+}
+
+
+
+SettingsManager& SettingsManager::instance()
+{
+    static SettingsManager settings_manager {};
+    return settings_manager;
 }
 
 
@@ -58,7 +97,7 @@ void SettingsManager::open_file(std::ios::openmode open_mode)
         ptr_settings_file_->open(file_name_, open_mode);
         if (!ptr_settings_file_->is_open())
         {
-            emit error("Failed to open file: " + QString::fromStdString(file_name_));
+            emit error_occured("Failed to open file: " + QString::fromStdString(file_name_));
         }
     }
 }
@@ -68,32 +107,6 @@ void SettingsManager::open_file(std::ios::openmode open_mode)
 void SettingsManager::close_file()
 {
     ptr_settings_file_->close();
-}
-
-
-
-void SettingsManager::write_settings(const nlohmann::json& settings)
-{
-    (*ptr_settings_file_) << settings.dump(4);
-    qDebug().noquote().nospace() << "Save settings to: " << file_name_.c_str();
-}
-
-
-
-std::string SettingsManager::read_settings()
-{
-    std::string raw_json_string {std::istreambuf_iterator<char>{*ptr_settings_file_},
-                                 std::istreambuf_iterator<char>{}};
-    qDebug().noquote().nospace() << "Read settings from: " << file_name_.c_str();
-    return raw_json_string;
-}
-
-
-
-SettingsManager& SettingsManager::instance()
-{
-    static SettingsManager settings_manager {};
-    return settings_manager;
 }
 
 

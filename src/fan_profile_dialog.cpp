@@ -54,9 +54,7 @@ void FanProfileDialog::on_pushButton_create_new_profile_clicked()
                                         });
         emit new_profile_created(fan_speed_profiles.back());
 
-        SettingsManager::instance().open_file(std::ios::out);
         SettingsManager::instance().write_settings(*ptr_app_settings_);
-        SettingsManager::instance().close_file();
 
         qInfo().noquote().nospace() << "New fan profile created: " << new_fan_profile_name;
         on_pushButton_close_clicked();

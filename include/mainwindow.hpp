@@ -121,7 +121,7 @@ protected:
     void connect_slots_and_signals();
     void setup_tray_menu();
 
-    void load_and_validate_app_settings();
+    void load_app_settings();
     void load_fan_and_clock_offset_profiles();
 
     void restore_last_fan_profile();
