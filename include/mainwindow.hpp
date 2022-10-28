@@ -92,7 +92,7 @@ private:
     bool last_fan_profile_saved_;
     bool last_clock_offset_profile_saved_;
     bool last_power_profile_saved_;
-    int update_freq_ms_;
+    unsigned update_freq_ms_;
 
     nlohmann::json app_settings_;
     NVMLpp::Session& nvmlpp_session_;
