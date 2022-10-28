@@ -1,6 +1,7 @@
 ## Version 1.3.4 (stable release)
 ### Changes and fixes
 * Updated logic inside SettingsManager
+* Fixed std::move() call in main.cpp (remove const)
 
 ## Version 1.3.3 (stable release)
 ### Changes and fixes
