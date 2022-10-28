@@ -1,3 +1,7 @@
+## Version 1.3.4 (stable release)
+### Changes and fixes
+* Updated logic inside SettingsManager
+
 ## Version 1.3.3 (stable release)
 ### Changes and fixes
 * Updated public interface of SettingsManager class
