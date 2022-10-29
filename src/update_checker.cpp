@@ -65,6 +65,7 @@ void UpdateChecker::run()
         else
         {
             qInfo().noquote().nospace() << "No updates available yet";
+            emit update_not_found();
         }
     }
 }

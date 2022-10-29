@@ -18,6 +18,7 @@ public slots:
 
 signals:
     void new_version_released(const QString&);
+    void update_not_found();
     void error_occured(const QString&);
 
 protected:
