@@ -1,5 +1,5 @@
 build*
 *.user*
 GWEpp.AppDir
-GWEpp-debug.AppDir
+*.AppImage
 
