@@ -23,7 +23,7 @@ add_subdirectory(lib/spdlog)
 file(GLOB_RECURSE SRC src/*.cpp)
 file(GLOB_RECURSE HDR include/*.hpp)
 file(GLOB_RECURSE UI ui/*.ui)
-file(GLOB_RECURSE RESOURCES qrc/icons.qrc)
+file(GLOB_RECURSE RESOURCES qrc/*.qrs)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
 
