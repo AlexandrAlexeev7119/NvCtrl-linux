@@ -286,7 +286,7 @@ void MainWindow::on_UpdateChecker_error_occured(const QString& message)
 void MainWindow::on_UpdateChecker_new_version_released(const QString& version)
 {
     const auto result {
-        QMessageBox::information(this, "GWEpp: update available", "New version available: v" + version
+        QMessageBox::information(this, "GWEpp: updates available", "New version available: v" + version
                                  + "\n(press Ok to view changelog)",
                                  QMessageBox::Button::Ok, QMessageBox::Button::Cancel)
     };
@@ -300,7 +300,7 @@ void MainWindow::on_UpdateChecker_new_version_released(const QString& version)
 
 void MainWindow::on_UpdateChecker_update_not_found()
 {
-    QMessageBox::information(this, "GWEpp: ", QString{"No updates available, you are using latest version (v%1)"}
+    QMessageBox::information(this, "GWEpp: no updates found", QString{"No updates available, you are using latest version (v%1)"}
                              .arg(GWEpp::config::APP_VERSION_STRING));
 }
 
