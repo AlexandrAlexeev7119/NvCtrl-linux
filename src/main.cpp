@@ -8,7 +8,7 @@
 #include "mainwindow.hpp"
 #include "settings_manager.hpp"
 
-static void qt_msg_handler(QtMsgType msg_type, const QMessageLogContext& context,
+static void qt_message_handler(QtMsgType msg_type, const QMessageLogContext& context,
                            const QString& message)
 {
     switch (msg_type)
@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 #endif
 
     Q_INIT_RESOURCE(icons);
-    qInstallMessageHandler(qt_msg_handler);
+    qInstallMessageHandler(qt_message_handler);
 
     QApplication app {argc, argv};
     SettingsManager& settings_manager {SettingsManager::instance()};
