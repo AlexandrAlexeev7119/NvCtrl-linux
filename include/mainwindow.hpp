@@ -23,6 +23,8 @@
 #include "recent_updates_dialog.hpp"
 #include "update_checker.hpp"
 
+#include "steps_fan_profile_dialog.hpp"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -107,6 +109,7 @@ private:
     AboutDialog about_dialog_window_;
     ReportABugDialog report_a_bug_dialog_window_;
     FanProfileDialog fan_profile_dialog_window_;
+    StepsFanProfileDialog step_fan_profile_dialog_window_;
     EditFanProfileDialog edit_fan_profile_dialog_window_;
     ClockProfileDialog clock_profile_dialog_window_;
     EditClockOffsetProfileDialog edit_clock_offset_profile_dialog_window_;

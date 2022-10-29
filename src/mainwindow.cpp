@@ -31,6 +31,7 @@ MainWindow::MainWindow(nlohmann::json&& app_settings, QWidget* parent)
     , about_dialog_window_ {this}
     , report_a_bug_dialog_window_ {this}
     , fan_profile_dialog_window_ {this}
+    , step_fan_profile_dialog_window_ {this}
     , edit_fan_profile_dialog_window_ {this}
     , clock_profile_dialog_window_ {this}
     , edit_clock_offset_profile_dialog_window_ {this}
@@ -627,6 +628,7 @@ void MainWindow::on_pushButton_add_new_fan_profile_clicked()
 {
     fan_profile_dialog_window_.load_app_settings(&app_settings_);
     fan_profile_dialog_window_.show();
+//    step_fan_profile_dialog_window_.show();
 }
 
 
