@@ -23,7 +23,6 @@
 #include "recent_updates_dialog.hpp"
 #include "update_checker.hpp"
 
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -63,6 +62,7 @@ private slots:
     void on_GpuFanController_error_occured();
     void on_UpdateChecker_error_occured(const QString& message);
     void on_UpdateChecker_new_version_released(const QString& version);
+    void on_UpdateChecker_update_not_found();
 
     void on_comboBox_select_fan_profile_activated(int index);
     void on_comboBox_select_clock_offset_profile_activated(int index);
@@ -112,7 +112,7 @@ private:
     EditClockOffsetProfileDialog edit_clock_offset_profile_dialog_window_;
     RecentUpdatesDialog recent_update_dialog_window_;
 
-    std::unique_ptr<UpdateChecker> update_checker_;
+    std::unique_ptr<UpdateChecker, void(*)(UpdateChecker* ptr)> update_checker_;
 
 protected:
     void closeEvent(QCloseEvent* close_event);

@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include <QDebug>
 
+#include "app_config.hpp"
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 
@@ -35,7 +36,7 @@ MainWindow::MainWindow(nlohmann::json app_settings, QWidget* parent)
     , edit_clock_offset_profile_dialog_window_ {this}
     , recent_update_dialog_window_ {this}
 
-    , update_checker_ {std::make_unique<UpdateChecker>()}
+    , update_checker_ {new UpdateChecker, [](UpdateChecker* update_checker_thread) { update_checker_thread->quit(); }}
 {
     ui->setupUi(this);
     setMinimumSize(size());
@@ -285,7 +286,7 @@ void MainWindow::on_UpdateChecker_error_occured(const QString& message)
 void MainWindow::on_UpdateChecker_new_version_released(const QString& version)
 {
     const auto result {
-        QMessageBox::information(this, "GWEpp: update check", "New version available: v" + version
+        QMessageBox::information(this, "GWEpp: update available", "New version available: v" + version
                                  + "\n(press Ok to view changelog)",
                                  QMessageBox::Button::Ok, QMessageBox::Button::Cancel)
     };
@@ -293,6 +294,14 @@ void MainWindow::on_UpdateChecker_new_version_released(const QString& version)
     {
         recent_update_dialog_window_.show();
     }
+}
+
+
+
+void MainWindow::on_UpdateChecker_update_not_found()
+{
+    QMessageBox::information(this, "GWEpp: ", QString{"No updates available, you are using latest version (v%1)"}
+                             .arg(GWEpp::config::APP_VERSION_STRING));
 }
 
 
@@ -316,6 +325,7 @@ void MainWindow::connect_slots_and_signals()
     connect(&gpu_fan_controller_, &GpuFanController::error_occured, this, &MainWindow::on_GpuFanController_error_occured);
 
     connect(update_checker_.get(), &UpdateChecker::new_version_released, this, &MainWindow::on_UpdateChecker_new_version_released);
+    connect(update_checker_.get(), &UpdateChecker::update_not_found, this, &MainWindow::on_UpdateChecker_update_not_found);
     connect(update_checker_.get(), &UpdateChecker::error_occured, this, &MainWindow::on_UpdateChecker_error_occured);
 
     connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
