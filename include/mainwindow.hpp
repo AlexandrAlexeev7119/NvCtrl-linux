@@ -34,7 +34,7 @@ class MainWindow final : public QMainWindow
     enum { CLOCK_PROFILE_NONE };
 
 public:
-    MainWindow(nlohmann::json app_settings, QWidget* parent = nullptr);
+    MainWindow(nlohmann::json&& app_settings, QWidget* parent = nullptr);
     ~MainWindow();
 
     QSystemTrayIcon& get_tray_icon() noexcept { return tray_icon_; }
