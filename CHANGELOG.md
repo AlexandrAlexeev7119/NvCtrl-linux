@@ -1,4 +1,5 @@
 ## Version 1.3.5 (stable release)
+### Changes and fixes
 * Fixed error with thread stopping while it running
 * Added new signal in UpdateChecker
 * Showing message box when no updates found
