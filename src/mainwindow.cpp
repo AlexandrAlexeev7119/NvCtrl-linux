@@ -108,7 +108,7 @@ void MainWindow::on_SettingsDialog_settings_applied(const nlohmann::json& app_se
 
 
 
-void MainWindow::on_FanProfileDialog_new_profile_created(const nlohmann::json& curr_fan_profile)
+void MainWindow::on_StepsFanProfileDialog_new_profile_created(const nlohmann::json& curr_fan_profile)
 {
     const QString new_profile_name {QString::fromStdString(curr_fan_profile["name"].get<std::string>())};
     ui->comboBox_select_fan_profile->addItem(new_profile_name);
@@ -632,10 +632,7 @@ void MainWindow::on_pushButton_add_new_fan_profile_clicked()
 
 void MainWindow::on_pushButton_edit_current_fan_profile_clicked()
 {
-    const unsigned current_fan_profile_index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex())};
-    edit_fan_profile_dialog_window_.load_app_settings(&app_settings_);
-    edit_fan_profile_dialog_window_.set_current_fan_profile_index(current_fan_profile_index);
-    edit_fan_profile_dialog_window_.show();
+    QMessageBox::warning(this, "Warning", "Fan profile editting not implemented yet");
 }
 
 
