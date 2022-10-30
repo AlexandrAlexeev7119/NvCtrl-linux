@@ -30,7 +30,6 @@ MainWindow::MainWindow(nlohmann::json&& app_settings, QWidget* parent)
     , settings_dialog_window_ {this}
     , about_dialog_window_ {this}
     , report_a_bug_dialog_window_ {this}
-    , fan_profile_dialog_window_ {this}
     , step_fan_profile_dialog_window_ {this}
     , edit_fan_profile_dialog_window_ {this}
     , clock_profile_dialog_window_ {this}
@@ -562,12 +561,12 @@ void MainWindow::on_comboBox_select_fan_profile_activated(int index)
 {
     if (index > FAN_PROFILE_AUTO)
     {
-        gpu_fan_controller_.set_fan_control_state(true);
+        gpu_fan_controller_.set_fan_control_state_enabled(true);
         ui->pushButton_edit_current_fan_profile->setEnabled(true);
     }
     else
     {
-        gpu_fan_controller_.set_fan_control_state(false);
+        gpu_fan_controller_.set_fan_control_state_enabled(false);
         ui->pushButton_edit_current_fan_profile->setEnabled(false);
     }
 
@@ -614,8 +613,7 @@ void MainWindow::on_pushButton_apply_fan_speed_clicked()
     if (index > FAN_PROFILE_AUTO)
     {
         const auto& current_fan_profile = app_settings_["fan_speed_profiles"][index];
-        const unsigned fan_speed_level {current_fan_profile["fan_speed"].get<unsigned>()};
-        gpu_fan_controller_.set_fan_speed(fan_speed_level);
+        gpu_fan_controller_.load_fan_speed_profile(&current_fan_profile);
     }
 
     ui->statusBar->showMessage("Fan profile applied: " + ui->comboBox_select_fan_profile->currentText(), 2000);
@@ -626,9 +624,8 @@ void MainWindow::on_pushButton_apply_fan_speed_clicked()
 
 void MainWindow::on_pushButton_add_new_fan_profile_clicked()
 {
-    fan_profile_dialog_window_.load_app_settings(&app_settings_);
-    fan_profile_dialog_window_.show();
-//    step_fan_profile_dialog_window_.show();
+    step_fan_profile_dialog_window_.load_app_settings(&app_settings_);
+    step_fan_profile_dialog_window_.show();
 }
 
 

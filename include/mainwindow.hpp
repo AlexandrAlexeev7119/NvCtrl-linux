@@ -16,14 +16,13 @@
 #include "settings_dialog.hpp"
 #include "about_dialog.hpp"
 #include "report_a_bug_dialog.hpp"
-#include "fan_profile_dialog.hpp"
+#include "steps_fan_profile_dialog.hpp"
 #include "edit_fan_profile_dialog.hpp"
 #include "clock_profile_dialog.hpp"
 #include "edit_clock_offset_profile_dialog.hpp"
 #include "recent_updates_dialog.hpp"
 #include "update_checker.hpp"
 
-#include "steps_fan_profile_dialog.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -108,7 +107,6 @@ private:
     SettingsDialog settings_dialog_window_;
     AboutDialog about_dialog_window_;
     ReportABugDialog report_a_bug_dialog_window_;
-    FanProfileDialog fan_profile_dialog_window_;
     StepsFanProfileDialog step_fan_profile_dialog_window_;
     EditFanProfileDialog edit_fan_profile_dialog_window_;
     ClockProfileDialog clock_profile_dialog_window_;
