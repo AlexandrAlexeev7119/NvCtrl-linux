@@ -13,12 +13,7 @@ constexpr const char* NVIDIA_SETTINGS_GPU_FAN_SPEED {"[fan:0]/GPUTargetFanSpeed=
 GpuFanController::GpuFanController(QObject* parent)
     : QObject {parent}
     , current_gpu_ {nullptr}
-    , ptr_current_fan_profile_ {nullptr}
-    , timer_ {this}
-{
-    timer_.setInterval(1000);
-    connect(&timer_, &QTimer::timeout, this, &GpuFanController::apply_fan_speed_from_profile);
-}
+{ }
 
 
 
@@ -39,61 +34,22 @@ void GpuFanController::update_info()
 
 
 
-void GpuFanController::set_fan_control_state_enabled(bool enabled)
+void GpuFanController::set_fan_speed(unsigned fan_speed_level)
 {
-    const auto set_fan_control_command {
+    const auto set_fan_speed {QString{NVIDIA_SETTINGS_GPU_FAN_SPEED}.arg(fan_speed_level)};
+    run_nvidia_settings(set_fan_speed);
+}
+
+
+
+void GpuFanController::set_fan_control_state(bool value)
+{
+    const auto enable_fan_control {
         QString{NVIDIA_SETTINGS_GPU_FAN_CONTROL_STATE}
                 .arg(current_gpu_->get_index())
-                .arg(static_cast<int>(enabled))
+                .arg(static_cast<int>(value))
     };
-    if (!enabled)
-    {
-        timer_.stop();
-    }
-    run_nvidia_settings(set_fan_control_command);
-}
-
-
-
-void GpuFanController::load_fan_speed_profile(const nlohmann::json* fan_profile) noexcept
-{
-    ptr_current_fan_profile_ = fan_profile;
-    timer_.start();
-}
-
-
-
-void GpuFanController::apply_fan_speed_from_profile()
-{
-    const auto& fan_profile {*ptr_current_fan_profile_};
-    const auto& temperature_steps = fan_profile["steps"];
-    // Very very bad implementation
-    // But it works
-    // #FIXME
-    const unsigned current_temp {current_gpu_->get_current_temperature()};
-    if (current_temp >= temperature_steps.back()[TEMPERATURE_VALUE].get<unsigned>())
-    {
-        set_fan_speed(temperature_steps.back()[FAN_SPEED_VALUE].get<unsigned>());
-    }
-    else
-    {
-        for (auto& step : temperature_steps)
-        {
-            if (current_temp >= step[TEMPERATURE_VALUE].get<unsigned>())
-            {
-                set_fan_speed(step[FAN_SPEED_VALUE].get<unsigned>());
-                break;
-            }
-        }
-    }
-}
-
-
-
-void GpuFanController::set_fan_speed(unsigned fan_speed)
-{
-    const QString set_fan_speed_command {QString{NVIDIA_SETTINGS_GPU_FAN_SPEED}.arg(fan_speed)};
-    run_nvidia_settings(set_fan_speed_command);
+    run_nvidia_settings(enable_fan_control);
 }
 
 

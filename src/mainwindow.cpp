@@ -30,7 +30,7 @@ MainWindow::MainWindow(nlohmann::json&& app_settings, QWidget* parent)
     , settings_dialog_window_ {this}
     , about_dialog_window_ {this}
     , report_a_bug_dialog_window_ {this}
-    , step_fan_profile_dialog_window_ {this}
+    , fan_profile_dialog_window_ {this}
     , edit_fan_profile_dialog_window_ {this}
     , clock_profile_dialog_window_ {this}
     , edit_clock_offset_profile_dialog_window_ {this}
@@ -108,7 +108,7 @@ void MainWindow::on_SettingsDialog_settings_applied(const nlohmann::json& app_se
 
 
 
-void MainWindow::on_StepsFanProfileDialog_new_profile_created(const nlohmann::json& curr_fan_profile)
+void MainWindow::on_FanProfileDialog_new_profile_created(const nlohmann::json& curr_fan_profile)
 {
     const QString new_profile_name {QString::fromStdString(curr_fan_profile["name"].get<std::string>())};
     ui->comboBox_select_fan_profile->addItem(new_profile_name);
@@ -561,12 +561,12 @@ void MainWindow::on_comboBox_select_fan_profile_activated(int index)
 {
     if (index > FAN_PROFILE_AUTO)
     {
-        gpu_fan_controller_.set_fan_control_state_enabled(true);
+        gpu_fan_controller_.set_fan_control_state(true);
         ui->pushButton_edit_current_fan_profile->setEnabled(true);
     }
     else
     {
-        gpu_fan_controller_.set_fan_control_state_enabled(false);
+        gpu_fan_controller_.set_fan_control_state(false);
         ui->pushButton_edit_current_fan_profile->setEnabled(false);
     }
 
@@ -613,7 +613,8 @@ void MainWindow::on_pushButton_apply_fan_speed_clicked()
     if (index > FAN_PROFILE_AUTO)
     {
         const auto& current_fan_profile = app_settings_["fan_speed_profiles"][index];
-        gpu_fan_controller_.load_fan_speed_profile(&current_fan_profile);
+        const unsigned fan_speed_level {current_fan_profile["fan_speed"].get<unsigned>()};
+        gpu_fan_controller_.set_fan_speed(fan_speed_level);
     }
 
     ui->statusBar->showMessage("Fan profile applied: " + ui->comboBox_select_fan_profile->currentText(), 2000);
@@ -624,15 +625,18 @@ void MainWindow::on_pushButton_apply_fan_speed_clicked()
 
 void MainWindow::on_pushButton_add_new_fan_profile_clicked()
 {
-    step_fan_profile_dialog_window_.load_app_settings(&app_settings_);
-    step_fan_profile_dialog_window_.show();
+    fan_profile_dialog_window_.load_app_settings(&app_settings_);
+    fan_profile_dialog_window_.show();
 }
 
 
 
 void MainWindow::on_pushButton_edit_current_fan_profile_clicked()
 {
-    QMessageBox::warning(this, "Warning", "Fan profile editting not implemented yet");
+    const unsigned current_fan_profile_index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex())};
+    edit_fan_profile_dialog_window_.load_app_settings(&app_settings_);
+    edit_fan_profile_dialog_window_.set_current_fan_profile_index(current_fan_profile_index);
+    edit_fan_profile_dialog_window_.show();
 }
 
 

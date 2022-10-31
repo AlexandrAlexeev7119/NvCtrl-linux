@@ -16,13 +16,12 @@
 #include "settings_dialog.hpp"
 #include "about_dialog.hpp"
 #include "report_a_bug_dialog.hpp"
-#include "steps_fan_profile_dialog.hpp"
+#include "fan_profile_dialog.hpp"
 #include "edit_fan_profile_dialog.hpp"
 #include "clock_profile_dialog.hpp"
 #include "edit_clock_offset_profile_dialog.hpp"
 #include "recent_updates_dialog.hpp"
 #include "update_checker.hpp"
-
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -45,7 +44,7 @@ private slots:
     void update_dynamic_info();
 
     void on_SettingsDialog_settings_applied(const nlohmann::json& app_settings);
-    void on_StepsFanProfileDialog_new_profile_created(const nlohmann::json& curr_fan_profile);
+    void on_FanProfileDialog_new_profile_created(const nlohmann::json& curr_fan_profile);
     void on_EditFanProfileDialog_current_fan_profile_changed(const nlohmann::json& curr_fan_profile);
     void on_EditFanProfileDialog_current_fan_profile_removed();
     void on_ClockProfileDialog_new_profile_created(const nlohmann::json& curr_clock_profile);
@@ -107,7 +106,7 @@ private:
     SettingsDialog settings_dialog_window_;
     AboutDialog about_dialog_window_;
     ReportABugDialog report_a_bug_dialog_window_;
-    StepsFanProfileDialog step_fan_profile_dialog_window_;
+    FanProfileDialog fan_profile_dialog_window_;
     EditFanProfileDialog edit_fan_profile_dialog_window_;
     ClockProfileDialog clock_profile_dialog_window_;
     EditClockOffsetProfileDialog edit_clock_offset_profile_dialog_window_;
