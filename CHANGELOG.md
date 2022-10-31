@@ -1,4 +1,4 @@
-## Version 1.3.7 (stable release)
+## Version 1.3.7 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Started develop of new clock profile design (per pstate control)
 * Show messageBox with warning - creating new clock profile is not implemented yet (it will implemented in next ver)
