@@ -1,6 +1,6 @@
 [submodule "lib/NVMLpp"]
 	path = lib/NVMLpp
-	url = https://notabug.org/AlexCr4ckPentest/NVMLpp
+	url = https://codeberg.org/AlexCr4ckPentest/NVMLpp
 	branch = dev
 [submodule "lib/spdlog"]
 	path = lib/spdlog
