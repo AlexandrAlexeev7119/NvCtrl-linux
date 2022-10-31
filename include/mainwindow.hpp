@@ -45,7 +45,7 @@ private slots:
     void update_dynamic_info();
 
     void on_SettingsDialog_settings_applied(const nlohmann::json& app_settings);
-    void on_StepsFanProfileDialog_new_profile_created(const nlohmann::json& curr_fan_profile);
+    void on_FanProfileDialog_new_profile_created(const nlohmann::json& curr_fan_profile);
     void on_EditFanProfileDialog_current_fan_profile_changed(const nlohmann::json& curr_fan_profile);
     void on_EditFanProfileDialog_current_fan_profile_removed();
     void on_ClockProfileDialog_new_profile_created(const nlohmann::json& curr_clock_profile);

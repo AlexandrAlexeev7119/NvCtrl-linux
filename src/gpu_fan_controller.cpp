@@ -67,9 +67,6 @@ void GpuFanController::apply_fan_speed_from_profile()
 {
     const auto& fan_profile {*ptr_current_fan_profile_};
     const auto& temperature_steps = fan_profile["steps"];
-    // Very very bad implementation
-    // But it works
-    // #FIXME
     const unsigned current_temp {current_gpu_->get_current_temperature()};
     if (current_temp >= temperature_steps.back()[TEMPERATURE_VALUE].get<unsigned>())
     {
