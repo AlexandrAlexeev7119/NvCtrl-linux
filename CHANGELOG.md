@@ -1,7 +1,6 @@
 ## Version 1.3.6 (pre-release)
 ### Changes and fixes
 * Added base for new fan profile model with steps (not working yet)
-* Added shell script for fast AppImage generating
 
 ## Version 1.3.5 (stable release)
 ### Changes and fixes
