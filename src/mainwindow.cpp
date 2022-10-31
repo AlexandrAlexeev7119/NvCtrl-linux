@@ -149,15 +149,16 @@ void MainWindow::on_EditFanProfileDialog_current_fan_profile_removed()
 
 
 
-void MainWindow::on_ClockProfileDialog_new_profile_created(const nlohmann::json& curr_clock_profile)
+void MainWindow::on_ClockProfileDialog_new_profile_created([[maybe_unused]] const nlohmann::json& curr_clock_profile)
 {
-    const QString new_clock_profile_name {QString::fromStdString(curr_clock_profile["name"].get<std::string>())};
-    ui->comboBox_select_clock_offset_profile->addItem(new_clock_profile_name);
+//    const QString new_clock_profile_name {QString::fromStdString(curr_clock_profile["name"].get<std::string>())};
+//    ui->comboBox_select_clock_offset_profile->addItem(new_clock_profile_name);
 
-    ui->statusBar->showMessage("New clock offset profile created: " + new_clock_profile_name, 2000);
+//    ui->statusBar->showMessage("New clock offset profile created: " + new_clock_profile_name, 2000);
 
-    qInfo().noquote().nospace() << "New clock offset profile created";
-    qDebug().noquote().nospace() << "New clock offset profile: " << curr_clock_profile.dump(4).c_str();
+//    qInfo().noquote().nospace() << "New clock offset profile created";
+//    qDebug().noquote().nospace() << "New clock offset profile: " << curr_clock_profile.dump(4).c_str();
+    QMessageBox::warning(this, "Warning", "Creating of new clock profiles is not implemented yet!");
 }
 
 
