@@ -9,6 +9,7 @@ namespace Ui { class ClockProfileDialog; }
 class ClockProfileDialog : public QDialog
 {
     Q_OBJECT
+    enum { GPU_CLOCK_OFFSET_MIN = -200, GPU_CLOCK_OFFSET_MAX = 1000 };
 
 public:
     explicit ClockProfileDialog(QWidget* parent = nullptr);
@@ -26,5 +27,7 @@ private slots:
 private:
     Ui::ClockProfileDialog* ui;
     nlohmann::json* ptr_app_settings_;
-};
 
+    void connect_signals_and_slots();
+    void reset_on_form_widgets();
+};
