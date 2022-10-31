@@ -1,3 +1,8 @@
+## Version 1.3.7 (stable release)
+### Changes and fixes
+* Started develop of new clock profile design (per pstate control)
+* Show messageBox with warning - creating new clock profile is not implemented yet (it will implemented in next ver)
+
 ## Version 1.3.6 (stable release)
 ### Changes and fixes
 * Updates submodules (update NVMLpp: PIMPL idiom)
