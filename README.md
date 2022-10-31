@@ -10,17 +10,17 @@ no other extra dependencies such as Python
 
 ## Installation
 ### Arch GNU/Linux (creating native package)
-* Download PKGBUILD file from [latest release](https://github.com/AlexandrAlexeev7119/GWEpp/releases/latest/download/PKGBUILD)
+* Download PKGBUILD file from [latest release](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/latest)
 * Place PKGBUILD file to dedicated directory (for example: GWEpp)
 * run `makepkg -si`
 
 ### Other distribution
-* Download AppImage file from [latest release](https://github.com/AlexandrAlexeev7119/GWEpp/releases/latest)
+* Download AppImage file from [latest release](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/latest)
 
 
 ### Building from sources
 ```
-$ git clone --recurse-submodules https://notabug.org/AlexCr4ckPentest/GWEpp
+$ git clone --recurse-submodules https://codeberg.org/AlexCr4ckPentest/GWEpp
 $ cd GWEpp
 $ mkdir build && cd build
 $ cmake ..
