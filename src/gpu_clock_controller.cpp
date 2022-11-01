@@ -17,6 +17,26 @@ GpuClockController::GpuClockController(QObject* parrent)
 
 
 
+void GpuClockController::apply_current_clock_profile()
+{
+    const auto& current_clock_profile {*ptr_current_clock_profile_};
+    const auto& clock_offset_values = current_clock_profile["offset_values"];
+    for (const auto& value : clock_offset_values)
+    {
+        const auto& [pstate, gpu_clock_offset] {value.get<std::pair<int, int>>()};
+        qDebug().noquote().nospace() << "pstate: " << pstate << " gpu_clock_offset: " << gpu_clock_offset;
+    }
+}
+
+
+
+void GpuClockController::reset_values()
+{
+    set_clock_offsets(0, 0);
+}
+
+
+
 void GpuClockController::update_info()
 {
     try
@@ -25,7 +45,7 @@ void GpuClockController::update_info()
             .graphics = current_gpu_->get_clock_graphics(),
             .video = current_gpu_->get_clock_video(),
             .sm = current_gpu_->get_clock_sm(),
-            .mem = current_gpu_->get_clock_memory()
+            .memory = current_gpu_->get_clock_memory()
         };
         emit info_ready(clock_values_);
     }

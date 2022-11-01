@@ -151,14 +151,13 @@ void MainWindow::on_EditFanProfileDialog_current_fan_profile_removed()
 
 void MainWindow::on_ClockProfileDialog_new_profile_created([[maybe_unused]] const nlohmann::json& curr_clock_profile)
 {
-//    const QString new_clock_profile_name {QString::fromStdString(curr_clock_profile["name"].get<std::string>())};
-//    ui->comboBox_select_clock_offset_profile->addItem(new_clock_profile_name);
+    const QString new_clock_profile_name {QString::fromStdString(curr_clock_profile["name"].get<std::string>())};
+    ui->comboBox_select_clock_offset_profile->addItem(new_clock_profile_name);
 
-//    ui->statusBar->showMessage("New clock offset profile created: " + new_clock_profile_name, 2000);
+    ui->statusBar->showMessage("New clock offset profile created: " + new_clock_profile_name, 2000);
 
-//    qInfo().noquote().nospace() << "New clock offset profile created";
-//    qDebug().noquote().nospace() << "New clock offset profile: " << curr_clock_profile.dump(4).c_str();
-    QMessageBox::warning(this, "Warning", "Creating of new clock profiles is not implemented yet!");
+    qInfo().noquote().nospace() << "New clock offset profile created";
+    qDebug().noquote().nospace() << "New clock offset profile: " << curr_clock_profile.dump(4).c_str();
 }
 
 
@@ -220,7 +219,7 @@ void MainWindow::on_GpuClockController_info_ready(const GpuClockController::cloc
     ui->lineEdit_graphics_clock_current->setText(QString::number(clock_values.graphics) + " MHz");
     ui->lineEdit_video_clock_current->setText(QString::number(clock_values.video) + " MHz");
     ui->lineEdit_sm_clock_current->setText(QString::number(clock_values.sm) + " MHz");
-    ui->lineEdit_memory_clock_current->setText(QString::number(clock_values.mem) + " MHz");
+    ui->lineEdit_memory_clock_current->setText(QString::number(clock_values.memory) + " MHz");
 }
 
 
@@ -580,10 +579,11 @@ void MainWindow::on_comboBox_select_clock_offset_profile_activated(int index)
 {
     if (index > CLOCK_PROFILE_NONE)
     {
+#if 1
         ui->pushButton_edit_current_clock_offset_profile->setEnabled(true);
         const auto& current_clock_profile = app_settings_["clock_offset_profiles"][index];
-        ui->lineEdit_current_gpu_clock_offset->setText(QString::number(current_clock_profile["gpu_clock_offset"].get<int>()) + " MHz");
-        ui->lineEdit_current_mem_clock_offset->setText(QString::number(current_clock_profile["mem_clock_offset"].get<int>()) + " MHz");
+        gpu_clock_controller_.load_profile(&current_clock_profile);
+#endif
     }
     else
     {
@@ -655,16 +655,15 @@ void MainWindow::on_pushButton_apply_clock_offset_clicked()
     const unsigned index {static_cast<unsigned>(ui->comboBox_select_clock_offset_profile->currentIndex())};
     if (index > CLOCK_PROFILE_NONE)
     {
-        const auto& current_clock_profile = app_settings_["clock_offset_profiles"][index];
-        const int gpu_clock_offset {current_clock_profile["gpu_clock_offset"].get<int>()};
-        const int mem_clock_offset {current_clock_profile["mem_clock_offset"].get<int>()};
-
-        gpu_clock_controller_.set_clock_offsets(gpu_clock_offset, mem_clock_offset);
-        set_max_clock_values(gpu_clock_offset, mem_clock_offset);
+        QMessageBox::warning(this, "Warning", "Applying custom clock profiles is not implemented yet!");
+#if 1
+        gpu_clock_controller_.apply_current_clock_profile();
+        set_max_clock_values();
+#endif
     }
     else
     {
-        gpu_clock_controller_.set_clock_offsets(0, 0);
+        gpu_clock_controller_.reset_values();
         set_max_clock_values();
     }
 

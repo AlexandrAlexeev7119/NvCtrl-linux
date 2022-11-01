@@ -3,6 +3,7 @@
 #include <QObject>
 
 #include "nvmlpp/nvmlpp_device.hpp"
+#include "nlohmann/json.hpp"
 
 class GpuClockController : public QObject
 {
@@ -13,15 +14,18 @@ public:
         unsigned graphics;
         unsigned video;
         unsigned sm;
-        unsigned mem;
+        unsigned memory;
     };
 
     GpuClockController(QObject* parrent = nullptr);
     inline void set_device(const NVMLpp::NVML_device* nvml_device) noexcept { current_gpu_ = nvml_device; }
+    inline void load_profile(const nlohmann::json* clock_offset_profile) noexcept { ptr_current_clock_profile_ = clock_offset_profile; }
+
+    void apply_current_clock_profile();
+    void reset_values();
 
 public slots:
     void update_info();
-    void set_clock_offsets(unsigned gpu_clock_offset, unsigned memory_clock_offset);
 
 signals:
     void info_ready(const GpuClockController::clock_values&);
@@ -29,6 +33,8 @@ signals:
 
 private:
     const NVMLpp::NVML_device* current_gpu_;
+    const nlohmann::json* ptr_current_clock_profile_;
 
+    void set_clock_offsets(unsigned gpu_clock_offset, unsigned memory_clock_offset);
     void run_nvidia_settings(const QString& arg);
 };
