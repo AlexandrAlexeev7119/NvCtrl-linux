@@ -1,3 +1,9 @@
+## Version 1.3.8 (pre-release (UNSTABLE))
+### Changes and fixes
+* Added support of saving and applying clock profiles
+* Internal changes in GpuClockController class (added new methods and other)
+* Removed warning when selecting custom clock profile
+
 ## Version 1.3.7 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Started develop of new clock profile design (per pstate control)
