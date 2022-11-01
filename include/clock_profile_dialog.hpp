@@ -1,6 +1,9 @@
 #pragma once
 
 #include <QDialog>
+#include <QCheckBox>
+#include <QSlider>
+#include <QSpinBox>
 
 #include "settings_manager.hpp"
 
@@ -27,7 +30,13 @@ private slots:
 private:
     Ui::ClockProfileDialog* ui;
     nlohmann::json* ptr_app_settings_;
+    std::vector<std::tuple<QCheckBox*, QSlider*, QSpinBox*>> pstates_gpu_;
+    std::vector<std::tuple<QCheckBox*, QSlider*, QSpinBox*>> pstates_mem_;
 
     void connect_signals_and_slots();
     void reset_on_form_widgets();
+    void fill_gpu_clock_offsets(nlohmann::json& gpu_offsets);
+    void fill_mem_clock_offsets(nlohmann::json& gpu_offsets);
+
+    void showEvent(QShowEvent* show_event);
 };
