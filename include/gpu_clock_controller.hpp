@@ -22,7 +22,7 @@ public:
     inline void load_profile(const nlohmann::json* clock_offset_profile) noexcept { ptr_current_clock_profile_ = clock_offset_profile; }
 
     void apply_current_clock_profile();
-    void reset_values();
+    void reset_clocks();
 
 public slots:
     void update_info();
@@ -35,6 +35,5 @@ private:
     const NVMLpp::NVML_device* current_gpu_;
     const nlohmann::json* ptr_current_clock_profile_;
 
-    void set_clock_offsets(unsigned gpu_clock_offset, unsigned memory_clock_offset);
-    void run_nvidia_settings(const QString& arg);
+    void run_nvidia_settings(QStringList&& args);
 };
