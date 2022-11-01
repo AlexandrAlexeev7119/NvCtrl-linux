@@ -1,3 +1,11 @@
+## Version 1.3.9 (pre-release (UNSTABLE))
+### Changes and fixes
+* Reimplemented clock profile saving
+* Added support clocks for GPU and memory both
+* Added support of applying custon clock profile
+* Reviewed and Reimplemented some methods inside GpuClockController class
+* Optimized and fixed applying of attributes via nvidia-settings subprocess call (packs args to batch instead of creating of nvidia-settings instances)
+
 ## Version 1.3.8 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Added support of saving and applying clock profiles
