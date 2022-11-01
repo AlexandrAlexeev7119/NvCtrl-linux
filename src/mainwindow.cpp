@@ -655,15 +655,12 @@ void MainWindow::on_pushButton_apply_clock_offset_clicked()
     const unsigned index {static_cast<unsigned>(ui->comboBox_select_clock_offset_profile->currentIndex())};
     if (index > CLOCK_PROFILE_NONE)
     {
-        QMessageBox::warning(this, "Warning", "Applying custom clock profiles is not implemented yet!");
-#if 1
         gpu_clock_controller_.apply_current_clock_profile();
         set_max_clock_values();
-#endif
     }
     else
     {
-        gpu_clock_controller_.reset_values();
+        gpu_clock_controller_.reset_clocks();
         set_max_clock_values();
     }
 
