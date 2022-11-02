@@ -114,9 +114,6 @@ private:
 
     std::unique_ptr<UpdateChecker, void(*)(UpdateChecker* ptr)> update_checker_;
 
-protected:
-    void closeEvent(QCloseEvent* close_event);
-
     void connect_slots_and_signals();
     void setup_tray_menu();
 
@@ -130,4 +127,10 @@ protected:
     void set_static_info();
     void set_current_gpu_for_controllers() noexcept;
     void set_max_clock_values(int gpu_clock_offset = 0, int mem_clock_offset = 0) const;
+
+    void update_clock_offset_widgets(int gpu_clock_offset, int mem_clock_offset) const;
+    void update_clock_offset_widgets(const nlohmann::json& curr_clock_profile) const;
+    const std::pair<std::vector<QSpinBox*>, std::vector<QSpinBox*>>& get_clock_offset_widgets() const;
+
+    void closeEvent(QCloseEvent* close_event);
 };
