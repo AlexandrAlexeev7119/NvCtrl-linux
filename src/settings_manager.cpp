@@ -43,6 +43,11 @@ SettingsManager::SettingsManager()
         qDebug().noquote().nospace() << "Directory " << get_home_dir().c_str() << " doesn`t exists and will be created";
     }
     file_name_ = get_home_dir() + "gwepp.json";
+    if (!ptr_settings_file_->is_open())
+    {
+        qDebug().noquote().nospace() << "File " << file_name_.c_str() << " doesn`t exists and will ge created";
+        write_settings(default_settings);
+    }
 }
 
 
@@ -109,12 +114,6 @@ SettingsManager& SettingsManager::instance()
 void SettingsManager::open_file(std::ios::openmode open_mode)
 {
     ptr_settings_file_->open(file_name_, open_mode);
-    if (!ptr_settings_file_->is_open())
-    {
-        qDebug().noquote().nospace() << "File " << file_name_.c_str() << " doesn`t exists and will ge created";
-        write_settings(default_settings);
-        ptr_settings_file_->open(file_name_, open_mode);
-    }
 }
 
 
