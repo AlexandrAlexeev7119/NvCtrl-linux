@@ -1,3 +1,9 @@
+## Version 1.3.15 (pre-release (UNSTABLE))
+### Changes and fixes
+* Added support to show clock offset values of current profile
+* Fixed error with old (wrong) values on window when canceling EditClockOffsetProfile dialog
+* Added some new methods to MainWindow class for update clock offset values
+
 ## Version 1.3.14 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Added current clock profile editting support (renewed EditClockOffsetProfileDialog UI)
