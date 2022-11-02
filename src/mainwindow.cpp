@@ -169,8 +169,6 @@ void MainWindow::on_EditClockOffsetProfileDialog_current_clock_offset_profile_ch
 
     ui->comboBox_select_clock_offset_profile->insertItem(current_index, QString::fromStdString(curr_clock_profile["name"].get<std::string>()));
     ui->comboBox_select_clock_offset_profile->setCurrentIndex(current_index);
-    ui->lineEdit_current_gpu_clock_offset->setText(QString::number(curr_clock_profile["gpu_clock_offset"].get<int>()) + " MHz");
-    ui->lineEdit_current_mem_clock_offset->setText(QString::number(curr_clock_profile["mem_clock_offset"].get<int>()) + " MHz");
 
     qInfo().noquote().nospace() << "Current clock profile changed";
     qDebug().noquote().nospace() << curr_clock_profile.dump(4).c_str();
