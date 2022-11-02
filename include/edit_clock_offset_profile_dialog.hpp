@@ -1,6 +1,11 @@
 #pragma once
 
+#include <vector>
+
 #include <QDialog>
+#include <QCheckBox>
+#include <QSlider>
+#include <QSpinBox>
 
 #include "nlohmann/json.hpp"
 
@@ -14,8 +19,8 @@ public:
     explicit EditClockOffsetProfileDialog(QWidget* parent = nullptr);
     ~EditClockOffsetProfileDialog();
 
-    void load_app_settings(nlohmann::json* app_settings) noexcept;
-    void set_current_clock_offset_profile_index(unsigned index) noexcept;
+    inline void load_app_settings(nlohmann::json* app_settings) noexcept { ptr_app_settings_ = app_settings; }
+    inline void set_current_clock_offset_profile_index(unsigned index) noexcept { current_clock_offset_profile_index_= index; }
 
 signals:
     void current_clock_offset_profile_changed(const nlohmann::json&);
@@ -28,9 +33,16 @@ private slots:
 
 private:
     Ui::EditClockOffsetProfileDialog* ui;
-    unsigned current_clock_offset_profile_index_;
     nlohmann::json* ptr_app_settings_;
+    unsigned current_clock_offset_profile_index_;
 
-    void showEvent(QShowEvent* event_);
-    void write_settings_to_file(const nlohmann::json& app_settings);
+    std::vector<std::tuple<QCheckBox*, QSlider*, QSpinBox*>> pstates_gpu_;
+    std::vector<std::tuple<QCheckBox*, QSlider*, QSpinBox*>> pstates_mem_;
+
+    void connect_signals_and_slots();
+    void reset_on_form_widgets();
+    void fill_array_from_widgets(nlohmann::json& array,
+                                 std::vector<std::tuple<QCheckBox*, QSlider*, QSpinBox*>>& widgets) const;
+
+    void showEvent(QShowEvent* show_event);
 };
