@@ -79,7 +79,6 @@ void EditClockOffsetProfileDialog::on_buttonBox_accepted()
             emit current_clock_offset_profile_changed(current_clock_offset_profile);
             SettingsManager::instance().write_settings(*ptr_app_settings_);
 
-            reset_on_form_widgets();
             on_buttonBox_rejected();
         }
     }
@@ -89,6 +88,7 @@ void EditClockOffsetProfileDialog::on_buttonBox_accepted()
 
 void EditClockOffsetProfileDialog::on_buttonBox_rejected()
 {
+    reset_on_form_widgets();
     close();
 }
 
