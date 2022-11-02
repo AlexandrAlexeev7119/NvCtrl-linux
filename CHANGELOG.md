@@ -1,3 +1,9 @@
+## Version 1.3.10 (pre-release (UNSTABLE))
+### Changes and fixes
+* Fixed error when trying to open unexisting file in home dir (now SettingsManager create a new file)
+* Removed support of loading default config from /usr/share/gwepp/gwepp.json
+* Updated default settings and fixed error with wrong value
+
 ## Version 1.3.9 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Reimplemented clock profile saving
