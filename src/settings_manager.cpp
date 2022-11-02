@@ -35,18 +35,17 @@ const nlohmann::json SettingsManager::default_settings
 
 SettingsManager::SettingsManager()
     : ptr_settings_file_ {std::make_unique<std::fstream>()}
-    , file_name_ {}
+    , file_name_ {get_home_dir() + "gwepp.json"}
 {
     if (!std::filesystem::exists(get_home_dir()))
     {
         std::filesystem::create_directory(get_home_dir());
         qDebug().noquote().nospace() << "Directory " << get_home_dir().c_str() << " doesn`t exists and will be created";
     }
-    file_name_ = get_home_dir() + "gwepp.json";
     if (!std::filesystem::exists(file_name_))
     {
-        qDebug().noquote().nospace() << "File " << file_name_.c_str() << " doesn`t exists and will ge created";
         write_settings(default_settings);
+        qDebug().noquote().nospace() << "File " << file_name_.c_str() << " doesn`t exists and will ge created";
     }
 }
 
