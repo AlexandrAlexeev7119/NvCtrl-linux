@@ -35,8 +35,6 @@ private:
 
     void connect_signals_and_slots();
     void reset_on_form_widgets();
-    void fill_gpu_clock_offsets(nlohmann::json& gpu_offsets);
-    void fill_mem_clock_offsets(nlohmann::json& gpu_offsets);
-
-    void showEvent(QShowEvent* show_event);
+    void fill_array_from_widgets(nlohmann::json& array,
+                                 std::vector<std::tuple<QCheckBox*, QSlider*, QSpinBox*>>& widgets) const;
 };
