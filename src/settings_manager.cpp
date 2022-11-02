@@ -5,21 +5,29 @@
 
 #include "settings_manager.hpp"
 
-static constexpr const char* DEFAULT_FILENAME{"/usr/share/gwepp/gwepp.json"};
 
 
 
 const nlohmann::json SettingsManager::default_settings
 {
-    {"update_freq_ms", 1000},
-    {"minimize_to_tray_on_close", false},
-    {"minimize_to_tray_on_startup", false},
-    {"last_fan_and_clock_offset_profiles_saved", false},
-    {"last_power_profile_saved", false},
     {"check_for_updates_on_startup", false},
     {"branch_where_get_updates", 0},
+    {"minimize_to_tray_on_close", false},
+    {"minimize_to_tray_on_startup", false},
+
+    {"last_fan_profile_index", 0},
+    {"last_fan_profile_saved", false},
+
+    {"last_clock_offset_profile_index", 0},
+    {"last_clock_offset_profile_saved", false},
+
+    {"last_power_profile_value", 0},
+    {"last_power_profile_saved", false},
+
     {"fan_speed_profiles", nlohmann::json::array_t { {{"name", "Auto (VBIOS controlled) (default)"}} } },
-    {"clock_offset_profiles", nlohmann::json::array_t { {{"name", "None (default)"}} } }
+    {"clock_offset_profiles", nlohmann::json::array_t { {{"name", "None (default)"}} } },
+
+    {"update_freq_ms", 1000}
 };
 
 
@@ -92,17 +100,12 @@ SettingsManager& SettingsManager::instance()
 
 void SettingsManager::open_file(std::ios::openmode open_mode)
 {
-    // First of all, try to open settings file from /home/<user>/.config/gwepp/
     ptr_settings_file_->open(file_name_, open_mode);
     if (!ptr_settings_file_->is_open())
     {
-        // Otherwise try to open from default location /usr/share/gwepp/
-        file_name_ = DEFAULT_FILENAME;
-        ptr_settings_file_->open(file_name_, open_mode);
-        if (!ptr_settings_file_->is_open())
-        {
-            emit error_occured("Failed to open file: " + QString::fromStdString(file_name_));
-        }
+        qDebug().noquote().nospace() << "File " << file_name_.c_str() << " doesn`t exists and will ge created";
+        write_settings(default_settings);
+        open_file(open_mode);
     }
 }
 
