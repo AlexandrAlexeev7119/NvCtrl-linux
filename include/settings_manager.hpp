@@ -34,5 +34,5 @@ private:
     void open_file(std::ios::openmode open_mode);
     void close_file();
 
-    std::string& get_home_dir() const;
+    const std::string& get_home_dir() const;
 };

@@ -84,8 +84,6 @@ nlohmann::json SettingsManager::read_settings()
     // Any atempt to modify config file manually may results to runtime errors and other issues
     auto app_settings = nlohmann::json::parse(std::move(raw_json_string));
 
-    // But user can manually edit value of timer update frequency
-    // To prevent this, next code validate app settings before it returned to caller
     const unsigned update_freq_ms {app_settings["update_freq_ms"].get<unsigned>()};
     if (update_freq_ms < 500 || update_freq_ms > 3000)
     {
@@ -124,8 +122,8 @@ void SettingsManager::close_file()
 
 
 
-std::string& SettingsManager::get_home_dir() const
+const std::string& SettingsManager::get_home_dir() const
 {
-    static std::string home_dir {"/home/" + std::string{std::getenv("USER")} + "/.config/gwepp/"};
+    static const std::string home_dir {"/home/" + std::string{std::getenv("USER")} + "/.config/gwepp/"};
     return home_dir;
 }
