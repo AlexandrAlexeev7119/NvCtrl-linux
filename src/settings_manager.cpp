@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <filesystem>
 #include <iterator>
 
 #include <QDebug>
@@ -34,8 +35,15 @@ const nlohmann::json SettingsManager::default_settings
 
 SettingsManager::SettingsManager()
     : ptr_settings_file_ {std::make_unique<std::fstream>()}
-    , file_name_ {get_filename_in_home_dir()}
-{ }
+    , file_name_ {}
+{
+    if (!std::filesystem::exists(get_home_dir()))
+    {
+        std::filesystem::create_directory(get_home_dir());
+        qDebug().noquote().nospace() << "Directory " << get_home_dir().c_str() << " doesn`t exists and will be created";
+    }
+    file_name_ = get_home_dir() + "gwepp.json";
+}
 
 
 
@@ -118,8 +126,8 @@ void SettingsManager::close_file()
 
 
 
-std::string SettingsManager::get_filename_in_home_dir() const
+std::string& SettingsManager::get_home_dir() const
 {
-    const std::string username {std::getenv("USER")};
-    return "/home/" + username + "/.config/gwepp/gwepp.json";
+    static std::string home_dir {"/home/" + std::string{std::getenv("USER")} + "/.config/gwepp/"};
+    return home_dir;
 }
