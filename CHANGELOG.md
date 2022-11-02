@@ -1,3 +1,10 @@
+## Version 1.3.14 (pre-release (UNSTABLE))
+### Changes and fixes
+* Added current clock profile editting support (renewed EditClockOffsetProfileDialog UI)
+* Fixed layout and widgets width on ClockProfileDialog
+* In ClockProfileDialog replaced raw for-loops with std::for_each(), improved readability
+* Some other fixes
+
 ## Version 1.3.11 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Fixed error with unexisting directory in /home
