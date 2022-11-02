@@ -43,7 +43,7 @@ SettingsManager::SettingsManager()
         qDebug().noquote().nospace() << "Directory " << get_home_dir().c_str() << " doesn`t exists and will be created";
     }
     file_name_ = get_home_dir() + "gwepp.json";
-    if (!ptr_settings_file_->is_open())
+    if (!std::filesystem::exists(file_name_))
     {
         qDebug().noquote().nospace() << "File " << file_name_.c_str() << " doesn`t exists and will ge created";
         write_settings(default_settings);
