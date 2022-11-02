@@ -166,7 +166,7 @@ void EditClockOffsetProfileDialog::reset_on_form_widgets()
             slider->setValue(0);
             spin_box->setValue(0);
             check_box->setChecked(false);
-            check_box->click();
+            check_box->clicked();
         }
     };
     ui->lineEdit_current_profile_name->clear();
