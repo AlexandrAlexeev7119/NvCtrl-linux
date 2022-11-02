@@ -105,7 +105,7 @@ void SettingsManager::open_file(std::ios::openmode open_mode)
     {
         qDebug().noquote().nospace() << "File " << file_name_.c_str() << " doesn`t exists and will ge created";
         write_settings(default_settings);
-        open_file(open_mode);
+        ptr_settings_file_->open(file_name_, open_mode);
     }
 }
 
