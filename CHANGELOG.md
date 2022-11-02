@@ -1,3 +1,7 @@
+## Version 1.3.11 (pre-release (UNSTABLE))
+### Changes and fixes
+* Fixed error with unexisting directory in /home
+
 ## Version 1.3.10 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Fixed error when trying to open unexisting file in home dir (now SettingsManager create a new file)
