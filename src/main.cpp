@@ -9,7 +9,7 @@
 #include "settings_manager.hpp"
 
 static void qt_message_handler(QtMsgType msg_type, const QMessageLogContext& context,
-                           const QString& message)
+                               const QString& message)
 {
     switch (msg_type)
     {
@@ -51,6 +51,7 @@ int main(int argc, char** argv)
     {
         qCritical().nospace().noquote() << err_msg;
         QMessageBox::critical(nullptr, "Error", err_msg);
+        Q_CLEANUP_RESOURCE(icons);
         std::exit(1);
     });
 
@@ -69,6 +70,8 @@ int main(int argc, char** argv)
         main_window.show();
         qInfo().nospace().noquote() << "Start normal window";
     }
+
+    Q_CLEANUP_RESOURCE(icons);
 
     return app.exec();
 }
