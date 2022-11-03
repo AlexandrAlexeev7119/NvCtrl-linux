@@ -1,5 +1,4 @@
 ﻿#include <future>
-#include <ranges>
 
 #include <QCloseEvent>
 #include <QMessageBox>
