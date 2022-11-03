@@ -1,3 +1,7 @@
+## Version 1.3.16 (pre-release (UNSTABLE))
+### Changes and fixes
+* Changes all urls, on dialog about fixed label alignment
+
 ## Version 1.3.15 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Added support to show clock offset values of current profile
