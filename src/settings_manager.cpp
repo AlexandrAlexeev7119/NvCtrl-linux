@@ -8,7 +8,6 @@
 
 
 
-
 const nlohmann::json SettingsManager::default_settings
 {
     {"check_for_updates_on_startup", false},
