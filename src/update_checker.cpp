@@ -3,8 +3,8 @@
 #include "app_config.hpp"
 #include "update_checker.hpp"
 
-constexpr const char* version_file_url_main {"https://notabug.org/AlexCr4ckPentest/GWEpp/raw/main/.last_version"};
-constexpr const char* version_file_url_develop {"https://notabug.org/AlexCr4ckPentest/GWEpp/raw/single-gpu/.last_version"};
+constexpr const char* version_file_url_main {"https://codeberg.org/AlexCr4ckPentest/GWEpp/raw/branch/main/.last_version"};
+constexpr const char* version_file_url_develop {"https://codeberg.org/AlexCr4ckPentest/GWEpp/raw/branch/single-gpu/.last_version"};
 
 
 
