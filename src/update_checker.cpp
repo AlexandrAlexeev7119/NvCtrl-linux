@@ -64,18 +64,29 @@ void UpdateChecker::run()
         const int current_minor {current_app_version[MINOR_VER].toInt()};
         const int current_patch {current_app_version[PATCH_VER].toInt()};
 
-        qDebug().noquote().nospace() << "Retrieved version: " << last_app_version;
+        qDebug().noquote().nospace() << "Retrieved ver: v" << last_app_version.join('.')
+                                     << ", current: v" << GWEpp::config::APP_VERSION_STRING;
 
         if (last_patch > current_patch ||
                 last_minor > current_minor ||
                 last_major > current_major)
         {
-            qInfo().noquote().nospace() << "Update available! New version: " << last_app_version;
-            emit new_version_released(last_app_version.join("."));
+            qInfo().noquote().nospace() << "New update: v" << last_app_version.join('.')
+                                        << " (current: v" << GWEpp::config::APP_VERSION_STRING << ")";
+            emit new_version_released(last_app_version.join('.'));
+        }
+        else if (last_patch < current_patch ||
+                 last_minor < current_minor ||
+                 last_major < current_major)
+        {
+            qInfo().noquote().nospace() << "The remote version v" << last_app_version.join('.') << " is lower than yours current: v"
+                                        << GWEpp::config::APP_VERSION_STRING;
+            qInfo().noquote().nospace() << "WTF? REALLY? Probably you are developer and yours version is greater than remote, isn`t it?";
+            qInfo().noquote().nospace() << "Or you can predict the future... Oh shit...";
         }
         else
         {
-            qInfo().noquote().nospace() << "No updates available yet";
+            qInfo().nospace().nospace() << "No updates available yet";
             emit update_not_found();
         }
     }
