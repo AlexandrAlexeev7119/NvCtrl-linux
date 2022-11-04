@@ -71,7 +71,7 @@ void UpdateChecker::run()
                 last_major > current_major)
         {
             qInfo().noquote().nospace() << "Update available! New version: " << last_app_version;
-            emit new_version_released(last_app_version.join());
+            emit new_version_released(last_app_version.join("."));
         }
         else
         {
