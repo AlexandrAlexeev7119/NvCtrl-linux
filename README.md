@@ -9,12 +9,6 @@ no other extra dependencies such as Python
 ![UI 3](img/ui3.png)
 
 ## Installation
-### Arch GNU/Linux (creating native package)
-* Download PKGBUILD file from [latest release](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/latest)
-* Place PKGBUILD file to dedicated directory (for example: GWEpp)
-* run `makepkg -si`
-
-### Other distribution
 * Download AppImage file from [latest release](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/latest)
 
 
