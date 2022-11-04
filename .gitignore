@@ -3,3 +3,4 @@ build*
 GWEpp.AppDir
 *.AppImage
 PKGBUILD
+.cache
