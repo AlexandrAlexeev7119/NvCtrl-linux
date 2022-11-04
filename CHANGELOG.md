@@ -1,7 +1,7 @@
 ## Version 1.4.0 (release)
 ### Changes and fixes
 * Big updates:
-* * Fixed bug in UpdateChecker
+* * Fixed bugs in UpdateChecker
 * * Changes all urls, on dialog about fixed label alignment
 * * Added some new methods to MainWindow class for update clock offset values
 * * Reimplemented clock profile UI and internals (NOT compatible with older versions!!!)
