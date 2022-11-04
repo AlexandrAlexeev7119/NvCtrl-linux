@@ -1,12 +1,8 @@
 # GWEpp
 GreenWithEnvy re-implementation using only C++ and Qt
 
-no other extra dependencies such as Python
-
-## UI preview
+no other extra dependencies such as Python and XNvCtrlLib
 ![UI 1](img/ui1.png)
-![UI 2](img/ui2.png)
-![UI 3](img/ui3.png)
 
 ## Installation
 * Download AppImage file from [latest release](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/latest)
