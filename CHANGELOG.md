@@ -1,3 +1,17 @@
+## Version 1.4.0 (release)
+### Changes and fixes
+* Big updates:
+* * Fixed bug in UpdateChecker
+* * Changes all urls, on dialog about fixed label alignment
+* * Added some new methods to MainWindow class for update clock offset values
+* * Reimplemented clock profile UI and internals (NOT compatible with older versions!!!)
+* * Reviewed and Reimplemented some methods inside GpuClockController class
+* * In ClockProfileDialog replaced raw for-loops with std::for_each(), improved readability
+* * Optimized and fixed applying of attributes via nvidia-settings subprocess call (packs args to batch instead of creating of nvidia-settings instances)
+* * Fixed error when trying to open unexisting file in home dir (now SettingsManager create a new file)
+* * Removed support of loading default config from /usr/share/gwepp/gwepp.json
+* PKGBUILD files is no longer distributes
+
 ## Version 1.3.19 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Replaced submodule nlohman-json with single-include header file to speedup PKGBUILD packaging
