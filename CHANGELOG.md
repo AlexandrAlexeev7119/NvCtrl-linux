@@ -1,3 +1,8 @@
+## Version 1.3.19 (pre-release (UNSTABLE))
+### Changes and fixes
+* Replaced submodule nlohman-json with single-include header file to speedup PKGBUILD packaging
+* Fixed compile error
+
 ## Version 1.3.18 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Fixed bug in UpdateChecker
