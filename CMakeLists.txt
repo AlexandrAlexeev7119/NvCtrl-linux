@@ -48,3 +48,4 @@ add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${RESOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets NVMLpp spdlog)
 
 write_file(../.last_version "${PROJECT_VERSION}")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
