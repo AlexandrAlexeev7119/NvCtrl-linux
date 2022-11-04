@@ -1,3 +1,8 @@
+## Version 1.3.18 (pre-release (UNSTABLE))
+### Changes and fixes
+* Fixed bug in UpdateChecker
+* Some internal changes and fixes
+
 ## Version 1.3.16 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Changes all urls, on dialog about fixed label alignment
