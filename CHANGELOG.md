@@ -1,3 +1,8 @@
+## Version 1.4.2 (release)
+### Changes and fixes
+* Changed SettingsManager class, now its doesn\`t need QObject
+* Removed std::unique_ptr<> from SettingsManager for std::fstream object
+
 ## Version 1.4.0 (release)
 ### Changes and fixes
 * Big updates:
