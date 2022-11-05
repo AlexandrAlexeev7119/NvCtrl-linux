@@ -5,8 +5,10 @@
 
 #include "spdlog/spdlog.h"
 
+#include "app_config.hpp"
 #include "mainwindow.hpp"
 #include "settings_manager.hpp"
+#include "single_instance_app_guard.hpp"
 
 static void qt_message_handler(QtMsgType msg_type, const QMessageLogContext& context,
                                const QString& message)
@@ -40,6 +42,12 @@ int main(int argc, char** argv)
 #else
     spdlog::set_level(spdlog::level::info);
 #endif
+
+    SingleInstanceAppGuard single_app_instance {"GWEpp"};
+    if (!single_app_instance.run())
+    {
+        return 0;
+    }
 
     Q_INIT_RESOURCE(icons);
     qInstallMessageHandler(qt_message_handler);

@@ -54,6 +54,7 @@ nlohmann::json SettingsManager::read_settings()
     // Any atempt to modify config file manually may results to runtime errors and other issues
     auto app_settings = nlohmann::json::parse(std::move(raw_json_string));
 
+#if 0
     const unsigned update_freq_ms {app_settings["update_freq_ms"].get<unsigned>()};
     if (update_freq_ms < 500 || update_freq_ms > 3000)
     {
@@ -62,6 +63,7 @@ nlohmann::json SettingsManager::read_settings()
                                        << default_settings["update_freq_ms"].get<unsigned>() << ")";
         write_settings(app_settings);
     }
+#endif
 
     return app_settings;
 }
