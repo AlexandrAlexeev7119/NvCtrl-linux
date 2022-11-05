@@ -1,3 +1,10 @@
+## Version 1.4.5 (release)
+### Changes and fixes
+* Added support only one single application instance
+* Added support to show MainWindow of already running application via IPC (DBus)
+* New dependency: QtDBus lib (should be already installed with qt5-base package (for Arch GNU/Linux), other distros not tested)
+* Some other internal fixes
+
 ## Version 1.4.2 (release)
 ### Changes and fixes
 * Changed SettingsManager class, now its doesn\`t need QObject
