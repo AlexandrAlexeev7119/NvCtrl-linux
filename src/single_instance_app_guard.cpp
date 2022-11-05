@@ -11,7 +11,7 @@ SingleInstanceAppGuard::SingleInstanceAppGuard(const QString& key)
     , shared_mem_ {shared_mem_key_}
     , system_semaphore_ {semaphore_key_, 1}
 {
-    std::lock_guard<QSystemSemaphore> {system_semaphore_};
+    const std::lock_guard<QSystemSemaphore> lock {system_semaphore_};
     {
         QSharedMemory tmp {shared_mem_key_};
         tmp.attach();
@@ -34,7 +34,7 @@ bool SingleInstanceAppGuard::is_running()
         return false;
     }
 
-    std::lock_guard<QSystemSemaphore> {system_semaphore_};
+    const std::lock_guard<QSystemSemaphore> lock {system_semaphore_};
     const bool is_running {shared_mem_.attach()};
     if (is_running)
     {
@@ -54,7 +54,7 @@ bool SingleInstanceAppGuard::run()
     }
 
     {
-        std::lock_guard<QSystemSemaphore> {system_semaphore_};
+        const std::lock_guard<QSystemSemaphore> lock {system_semaphore_};
         const bool success {shared_mem_.create(sizeof(char))};
         if (!success)
         {
@@ -70,7 +70,7 @@ bool SingleInstanceAppGuard::run()
 
 void SingleInstanceAppGuard::release()
 {
-    std::lock_guard<QSystemSemaphore> {system_semaphore_};
+    const std::lock_guard<QSystemSemaphore> lock {system_semaphore_};
     if (shared_mem_.isAttached())
     {
         shared_mem_.detach();
