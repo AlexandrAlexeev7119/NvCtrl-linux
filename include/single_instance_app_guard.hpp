@@ -10,7 +10,7 @@
 namespace std
 {
 template<>
-struct lock_guard<QSystemSemaphore>
+struct lock_guard<QSystemSemaphore> final
 {
     using mutex_type = QSystemSemaphore;
 

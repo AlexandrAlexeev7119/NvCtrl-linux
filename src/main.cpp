@@ -9,6 +9,7 @@
 #include "mainwindow.hpp"
 #include "settings_manager.hpp"
 #include "single_instance_app_guard.hpp"
+#include "dbus_sender.hpp"
 
 static void qt_message_handler(QtMsgType msg_type, const QMessageLogContext& context,
                                const QString& message)
@@ -46,6 +47,11 @@ int main(int argc, char** argv)
     SingleInstanceAppGuard single_app_instance {"GWEpp"};
     if (!single_app_instance.run())
     {
+        DBusSender sender {GWEpp::config::APP_DBUS_SERVICE_NAME};
+        if (sender.iface_is_valid())
+        {
+            sender.send_message();
+        }
         return 0;
     }
 

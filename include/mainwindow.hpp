@@ -23,6 +23,8 @@
 #include "recent_updates_dialog.hpp"
 #include "update_checker.hpp"
 
+#include "dbus_receiver.hpp"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -112,7 +114,8 @@ private:
     EditClockOffsetProfileDialog edit_clock_offset_profile_dialog_window_;
     RecentUpdatesDialog recent_update_dialog_window_;
 
-    std::unique_ptr<UpdateChecker, void(*)(UpdateChecker* ptr)> update_checker_;
+    std::unique_ptr<UpdateChecker, void(*)(UpdateChecker* ptr)> update_checker_thread_;
+    DBusReceiver dbus_message_receiver_;
 
     void connect_slots_and_signals();
     void setup_tray_menu();
