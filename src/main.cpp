@@ -46,14 +46,13 @@ int main(int argc, char** argv)
 
     QApplication app {argc, argv};
     SettingsManager& settings_manager {SettingsManager::instance()};
-    QObject::connect(&settings_manager, &SettingsManager::error_occured,
-                     [](const QString& err_msg)
+
+    if (!settings_manager.file_is_open())
     {
-        qCritical().nospace().noquote() << err_msg;
-        QMessageBox::critical(nullptr, "Error", err_msg);
+        QMessageBox::critical(nullptr, "Error", "Failed to open settings file");
         Q_CLEANUP_RESOURCE(icons);
         std::exit(1);
-    });
+    }
 
     auto app_settings = settings_manager.read_settings();
 

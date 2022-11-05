@@ -32,52 +32,23 @@ const nlohmann::json SettingsManager::default_settings
 
 
 
-SettingsManager::SettingsManager()
-    : ptr_settings_file_ {std::make_unique<std::fstream>()}
-    , file_name_ {get_home_dir() + "gwepp.json"}
-{
-    if (!std::filesystem::exists(get_home_dir()))
-    {
-        std::filesystem::create_directory(get_home_dir());
-        qDebug().noquote().nospace() << "Directory " << get_home_dir().c_str() << " doesn`t exists and will be created";
-    }
-    if (!std::filesystem::exists(file_name_))
-    {
-        write_settings(default_settings);
-        qDebug().noquote().nospace() << "File " << file_name_.c_str() << " doesn`t exists and will ge created";
-    }
-}
-
-
-
-std::string_view SettingsManager::get_file_name() const
-{
-    return file_name_;
-}
-
-
-
 void SettingsManager::write_settings(const nlohmann::json& app_settings)
 {
-    if (!ptr_settings_file_->is_open())
-    {
-        open_file(std::ios::out);
-    }
-    (*ptr_settings_file_) << app_settings.dump(4);
     close_file();
-    qDebug().noquote().nospace() << "Save settings to: " << file_name_.c_str();
+    open_file(std::ios::in | std::ios::out | std::ios::trunc);
+    settings_file_ << app_settings.dump(4);
+    settings_file_.flush();
+    qDebug().noquote().nospace() << "Saving settings to: " << file_name_.c_str();
 }
 
 
 
 nlohmann::json SettingsManager::read_settings()
 {
-    open_file(std::ios::in | std::ios::out);
-
-    std::string raw_json_string {std::istreambuf_iterator<char>{*ptr_settings_file_},
+    std::string raw_json_string {std::istreambuf_iterator<char>{settings_file_},
                                  std::istreambuf_iterator<char>{}};
 
-    qDebug().noquote().nospace() << "Read settings from: " << file_name_.c_str();
+    qDebug().noquote().nospace() << "Reading settings from: " << file_name_.c_str();
 
     // Assumes that the user is never editting file manually
     // Any atempt to modify config file manually may results to runtime errors and other issues
@@ -87,14 +58,19 @@ nlohmann::json SettingsManager::read_settings()
     if (update_freq_ms < 500 || update_freq_ms > 3000)
     {
         app_settings["update_freq_ms"] = default_settings["update_freq_ms"].get<unsigned>();
-        write_settings(app_settings);
         qWarning().noquote().nospace() << "Wrong update_freq_ms_ detected, fallback to default ("
                                        << default_settings["update_freq_ms"].get<unsigned>() << ")";
+        write_settings(app_settings);
     }
 
-    close_file();
-
     return app_settings;
+}
+
+
+
+bool SettingsManager::file_is_open() const
+{
+    return settings_file_.is_open();
 }
 
 
@@ -107,16 +83,46 @@ SettingsManager& SettingsManager::instance()
 
 
 
+SettingsManager::SettingsManager()
+    : settings_file_ {}
+    , file_name_ {get_home_dir() + "gwepp.json"}
+{
+    if (!std::filesystem::exists(get_home_dir()))
+    {
+        qDebug().noquote().nospace() << "Directory " << get_home_dir().c_str() << " doesn`t exists and will be created";
+        std::filesystem::create_directory(get_home_dir());
+    }
+
+    if (!std::filesystem::exists(file_name_))
+    {
+        qDebug().noquote().nospace() << "File " << file_name_.c_str() << " doesn`t exists and will ge created";
+        open_file(std::ios::out);
+        write_settings(default_settings);
+        close_file();
+    }
+
+    open_file(std::ios::in | std::ios::out);
+}
+
+
+
+SettingsManager::~SettingsManager()
+{
+    close_file();
+}
+
+
+
 void SettingsManager::open_file(std::ios::openmode open_mode)
 {
-    ptr_settings_file_->open(file_name_, open_mode);
+    settings_file_.open(file_name_, open_mode);
 }
 
 
 
 void SettingsManager::close_file()
 {
-    ptr_settings_file_->close();
+    settings_file_.close();
 }
 
 
