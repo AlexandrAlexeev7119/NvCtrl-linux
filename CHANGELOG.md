@@ -1,3 +1,11 @@
+## Version 1.4.7 (pre-release (UNSTABLE))
+### Changes and fixes
+* Changed class name
+* Added new class GpuProcessesController to get info about running processes on GPU
+* Added timer on GpuProcessesOverviewDialog for work with GpuClockController
+* Fixed not showing messagebox when local version is little bit higher than remote (for developers)
+* Some other internal changes (codestyle, logic)
+
 ## Version 1.4.5 (release)
 ### Changes and fixes
 * Added support only one single application instance
