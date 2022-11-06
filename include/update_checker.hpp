@@ -6,6 +6,7 @@
 class UpdateChecker : public QThread
 {
     Q_OBJECT
+
     enum { MAIN_BRANCH, DEV_BRANCH };
     enum { MAJOR_VER, MINOR_VER, PATCH_VER };
 

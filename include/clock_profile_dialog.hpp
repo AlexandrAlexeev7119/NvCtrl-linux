@@ -12,6 +12,7 @@ namespace Ui { class ClockProfileDialog; }
 class ClockProfileDialog : public QDialog
 {
     Q_OBJECT
+
     enum { GPU_CLOCK_OFFSET_MIN = -200, GPU_CLOCK_OFFSET_MAX = 1000 };
 
 public:

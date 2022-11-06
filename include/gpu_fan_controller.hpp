@@ -6,6 +6,7 @@
 class GpuFanController : public QObject
 {
     Q_OBJECT
+
 public:
     struct fan_rates
     {

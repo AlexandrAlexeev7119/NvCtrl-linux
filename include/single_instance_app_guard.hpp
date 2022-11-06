@@ -5,8 +5,6 @@
 #include <QSharedMemory>
 #include <QSystemSemaphore>
 
-
-// Specialization for QSystemSemaphore
 namespace std
 {
 template<>

@@ -3,8 +3,6 @@
 
 #include "dbus_sender.hpp"
 
-
-
 DBusSender::DBusSender(std::string_view service_name, QObject* parent)
     : QObject {parent}
     , dbus_iface_ {service_name.data(), "/", {}, QDBusConnection::sessionBus()}

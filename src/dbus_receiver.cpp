@@ -2,8 +2,6 @@
 
 #include "dbus_receiver.hpp"
 
-
-
 DBusReceiver::DBusReceiver(std::string_view service_name, QObject* parent)
     : QObject {parent}
 {

@@ -9,6 +9,7 @@ namespace Ui { class RecentUpdatesDialog; }
 class RecentUpdatesDialog : public QDialog
 {
     Q_OBJECT
+
 public:
     explicit RecentUpdatesDialog(QWidget* parent = nullptr);
     ~RecentUpdatesDialog();

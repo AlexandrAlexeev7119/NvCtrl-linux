@@ -3,8 +3,6 @@
 
 #include "single_instance_app_guard.hpp"
 
-
-
 SingleInstanceAppGuard::SingleInstanceAppGuard(const QString& key)
     : shared_mem_key_ {generate_hash(key, "gwepp_shared_mem_key_")}
     , semaphore_key_ {generate_hash(key, "gwepp_semaphore_key_")}

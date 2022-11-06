@@ -1,19 +1,30 @@
 #pragma once
 
-#include <vector>
-
 #include <QDialog>
+#include <QTimer>
 
-namespace Ui { class GPUProcessesOverviewDialog; }
+#include "gpu_processes_controller.hpp"
 
-class GPUProcessesOverviewDialog : public QDialog
+namespace Ui { class GpuProcessesOverviewDialog; }
+
+class GpuProcessesOverviewDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit GPUProcessesOverviewDialog(QWidget* parent = nullptr);
-    ~GPUProcessesOverviewDialog();
+    explicit GpuProcessesOverviewDialog(QWidget* parent = nullptr);
+    ~GpuProcessesOverviewDialog();
+
+    void set_current_gpu(NVMLpp::NVML_device* curr_gpu);
+
+private slots:
+    void on_buttonBox_rejected();
 
 private:
-    Ui::GPUProcessesOverviewDialog* ui;
+    Ui::GpuProcessesOverviewDialog* ui;
+    GpuProcessesController gpu_process_controller_;
+    QTimer timer_;
+
+    void showEvent(QShowEvent* show_event);
+    void closeEvent(QCloseEvent* close_event);
 };

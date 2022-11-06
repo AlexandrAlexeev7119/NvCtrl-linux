@@ -8,6 +8,7 @@
 class GpuClockController : public QObject
 {
     Q_OBJECT
+
 public:
     struct clock_values
     {

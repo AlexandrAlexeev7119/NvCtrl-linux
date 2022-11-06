@@ -8,6 +8,7 @@ namespace Ui { class ReportABugDialog; }
 class ReportABugDialog : public QDialog
 {
     Q_OBJECT
+
 public:
     explicit ReportABugDialog(QWidget* parent = nullptr);
     ~ReportABugDialog();

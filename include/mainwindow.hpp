@@ -26,8 +26,6 @@
 #include "update_checker.hpp"
 #include "dbus_receiver.hpp"
 
-
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -35,6 +33,7 @@ QT_END_NAMESPACE
 class MainWindow final : public QMainWindow
 {
     Q_OBJECT
+
     enum { FAN_PROFILE_AUTO };
     enum { CLOCK_PROFILE_NONE };
 
@@ -117,7 +116,7 @@ private:
     ClockProfileDialog clock_profile_dialog_window_;
     EditClockOffsetProfileDialog edit_clock_offset_profile_dialog_window_;
     RecentUpdatesDialog recent_update_dialog_window_;
-    GPUProcessesOverviewDialog gpu_processes_overview_dialog_window_;
+    GpuProcessesOverviewDialog gpu_processes_overview_dialog_window_;
 
     std::unique_ptr<UpdateChecker, void(*)(UpdateChecker* ptr)> update_checker_thread_;
     DBusReceiver dbus_message_receiver_;
