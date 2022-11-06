@@ -79,6 +79,7 @@ void UpdateChecker::run()
                  last_minor < current_minor ||
                  last_major < current_major)
         {
+            emit update_not_found();
             qInfo().noquote().nospace() << "The remote version v" << last_app_version.join('.') << " is lower than yours current: v"
                                         << GWEpp::config::APP_VERSION_STRING;
             qInfo().noquote().nospace() << "WTF? REALLY? Probably you are developer and yours version is greater than remote, isn`t it?";
