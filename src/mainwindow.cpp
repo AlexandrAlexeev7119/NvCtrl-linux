@@ -35,6 +35,7 @@ MainWindow::MainWindow(nlohmann::json&& app_settings, QWidget* parent)
     , clock_profile_dialog_window_ {this}
     , edit_clock_offset_profile_dialog_window_ {this}
     , recent_update_dialog_window_ {this}
+    , gpu_processes_overview_dialog_window_ {this}
 
     , update_checker_thread_ {new UpdateChecker, [](UpdateChecker* thread) { thread->quit(); }}
 
@@ -664,6 +665,13 @@ void MainWindow::on_actionCheck_for_updates_triggered()
 {
     update_checker_thread_->set_update_branch(app_settings_["branch_where_get_updates"].get<unsigned>());
     update_checker_thread_->check_for_updates();
+}
+
+
+
+void MainWindow::on_actionShow_GPU_processes_triggered()
+{
+    gpu_processes_overview_dialog_window_.show();
 }
 
 

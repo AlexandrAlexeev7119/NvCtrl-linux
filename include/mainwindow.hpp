@@ -21,9 +21,12 @@
 #include "clock_profile_dialog.hpp"
 #include "edit_clock_offset_profile_dialog.hpp"
 #include "recent_updates_dialog.hpp"
-#include "update_checker.hpp"
+#include "gpu_processes_overview_dialog.hpp"
 
+#include "update_checker.hpp"
 #include "dbus_receiver.hpp"
+
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -83,6 +86,7 @@ private slots:
     void on_actionReport_a_bug_triggered();
     void on_actionShow_GPU_UUID_toggled(bool checked);
     void on_actionCheck_for_updates_triggered();
+    void on_actionShow_GPU_processes_triggered();
 
 private:
     Ui::MainWindow* ui;
@@ -113,6 +117,7 @@ private:
     ClockProfileDialog clock_profile_dialog_window_;
     EditClockOffsetProfileDialog edit_clock_offset_profile_dialog_window_;
     RecentUpdatesDialog recent_update_dialog_window_;
+    GPUProcessesOverviewDialog gpu_processes_overview_dialog_window_;
 
     std::unique_ptr<UpdateChecker, void(*)(UpdateChecker* ptr)> update_checker_thread_;
     DBusReceiver dbus_message_receiver_;

@@ -1636,6 +1636,7 @@
      <string>&amp;View</string>
     </property>
     <addaction name="actionShow_GPU_UUID"/>
+    <addaction name="actionShow_GPU_processes"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -1693,8 +1694,16 @@
    </property>
   </action>
   <action name="actionCheck_for_updates">
+   <property name="icon">
+    <iconset theme="network-receive"/>
+   </property>
    <property name="text">
     <string>Check for &amp;updates</string>
+   </property>
+  </action>
+  <action name="actionShow_GPU_processes">
+   <property name="text">
+    <string>Show GPU &amp;processes</string>
    </property>
   </action>
  </widget>
