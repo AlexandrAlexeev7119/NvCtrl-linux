@@ -1,10 +1,7 @@
 #pragma once
 
-#include <vector>
-
 #include <QDialog>
 #include <QTimer>
-
 #include "nvmlpp/nvmlpp_device.hpp"
 
 namespace Ui { class GpuProcessesOverviewDialog; }

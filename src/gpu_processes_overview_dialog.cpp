@@ -1,5 +1,8 @@
+#include <vector>
+
 #include <QShowEvent>
 #include <QCloseEvent>
+#include <QMessageBox>
 #include <QLabel>
 #include <QDebug>
 
@@ -76,8 +79,18 @@ void GpuProcessesOverviewDialog::show_processes_info()
 
 
 
-void GpuProcessesOverviewDialog::on_tableWidget_proc_info_cellDoubleClicked([[maybe_unused]] int row, [[maybe_unused]] int column)
+void GpuProcessesOverviewDialog::on_tableWidget_proc_info_cellDoubleClicked(int row, [[maybe_unused]] int column)
 {
+    const int pid {qobject_cast<QLabel*>(ui->tableWidget_proc_info->cellWidget(row, CELL_PROC_PID))->text().toInt()};
+    const auto ans {
+        QMessageBox::question(this, "Confirm action",
+                              QString{"Are you sure what you WANT TO KILL process with PID=%1?"}.arg(pid),
+                              QMessageBox::Button::Yes, QMessageBox::Button::No)
+    };
+    if (ans == QMessageBox::Button::Yes)
+    {
+        QMessageBox::warning(this, "Warning", "Killing processes is not implemented yet");
+    }
 }
 
 
@@ -105,8 +118,6 @@ void GpuProcessesOverviewDialog::showEvent(QShowEvent* show_event)
 
 void GpuProcessesOverviewDialog::closeEvent(QCloseEvent* close_event)
 {
-    qDebug().noquote().nospace() << "Close event emited, stopping timer";
-
     timer_.stop();
     close_event->accept();
 }
