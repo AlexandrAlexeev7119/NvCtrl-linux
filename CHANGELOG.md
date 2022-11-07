@@ -1,3 +1,9 @@
+## Version 1.4.9 (pre-release (UNSTABLE))
+### Changes and fixes
+* Added base for killing selected process
+* Added spacer in menuBar at tab 'view'
+* Replaced GpuProcessesOverviewDialog with raw NVMLpp::NVML_device\* (GpuProcessesController not used yet)
+
 ## Version 1.4.8 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Added basic processes view (PID, memory usage, proc name)
