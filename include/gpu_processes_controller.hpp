@@ -16,7 +16,7 @@ public slots:
     void update_info();
 
 signals:
-    void info_ready();
+    void info_ready(const std::vector<NVML_native::nvmlProcessInfo_t>&);
 
 private:
     const NVMLpp::NVML_device* current_gpu_;

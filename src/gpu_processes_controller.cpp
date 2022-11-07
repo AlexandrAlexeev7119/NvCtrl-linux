@@ -18,6 +18,5 @@ void GpuProcessesController::set_current_gpu(const NVMLpp::NVML_device* current_
 
 void GpuProcessesController::update_info()
 {
-    qDebug().noquote().nospace() << "Total compute processes: " <<  current_gpu_->get_compute_processess_count();
-    qDebug().noquote().noquote() << "Total graphics processes: " << current_gpu_->get_graphics_processess_count();
+    emit info_ready(current_gpu_->get_running_processes());
 }
