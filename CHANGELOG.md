@@ -1,3 +1,9 @@
+## Version 1.4.8 (pre-release (UNSTABLE))
+### Changes and fixes
+* Added basic processes view (PID, memory usage, proc name)
+* Updated UI elements on GpuProcessesOverviewDialog
+* Fixed errors in NVMLpp lib
+
 ## Version 1.4.7 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Changed class name
