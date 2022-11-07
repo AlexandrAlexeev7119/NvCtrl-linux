@@ -9,7 +9,7 @@
 GpuProcessesOverviewDialog::GpuProcessesOverviewDialog(QWidget* parent)
     : QDialog {parent}
     , ui {new Ui::GpuProcessesOverviewDialog}
-    , gpu_process_controller_ {this}
+    , current_gpu_ {nullptr}
     , timer_ {this}
 {
     ui->setupUi(this);
@@ -17,8 +17,7 @@ GpuProcessesOverviewDialog::GpuProcessesOverviewDialog(QWidget* parent)
     ui->tableWidget_proc_info->setHorizontalHeaderLabels({"PID", "Memory", "Command"});
 
     timer_.setInterval(1200);
-    connect(&timer_, &QTimer::timeout, &gpu_process_controller_, &GpuProcessesController::update_info);
-    connect(&gpu_process_controller_, &GpuProcessesController::info_ready, this, &GpuProcessesOverviewDialog::on_GpuProcessController_info_ready);
+    connect(&timer_, &QTimer::timeout, this, &GpuProcessesOverviewDialog::show_processes_info);
 }
 
 
@@ -30,9 +29,9 @@ GpuProcessesOverviewDialog::~GpuProcessesOverviewDialog()
 
 
 
-void GpuProcessesOverviewDialog::set_current_gpu(NVMLpp::NVML_device* curr_gpu)
+void GpuProcessesOverviewDialog::set_current_gpu(const NVMLpp::NVML_device* curr_gpu) noexcept
 {
-    gpu_process_controller_.set_current_gpu(curr_gpu);
+    current_gpu_ = curr_gpu;
 }
 
 
@@ -44,9 +43,13 @@ void GpuProcessesOverviewDialog::on_buttonBox_rejected()
 
 
 
-void GpuProcessesOverviewDialog::on_GpuProcessController_info_ready(const std::vector<NVML_native::nvmlProcessInfo_t>& proc_list)
+void GpuProcessesOverviewDialog::show_processes_info()
 {
     using vec_size_t = std::vector<NVML_native::nvmlProcessInfo_t>::size_type;
+    const auto proc_list {current_gpu_->get_running_processes()};
+
+    qDebug().noquote().nospace() << "Processes run on GPU: " << proc_list.size();
+
     if (static_cast<vec_size_t>(ui->tableWidget_proc_info->rowCount()) != proc_list.size())
     {
         ui->tableWidget_proc_info->clearContents();
@@ -66,18 +69,23 @@ void GpuProcessesOverviewDialog::on_GpuProcessController_info_ready(const std::v
                                                      });
             curr_row++;
         });
+
+        qDebug().noquote().nospace() << "Processes list changed, widgets updated";
     }
 }
 
 
 
 void GpuProcessesOverviewDialog::on_tableWidget_proc_info_cellDoubleClicked([[maybe_unused]] int row, [[maybe_unused]] int column)
-{ }
+{
+}
 
 
 
 void GpuProcessesOverviewDialog::hideEvent(QHideEvent* hide_event)
 {
+    qDebug().noquote().nospace() << "Hide event emited, stopping timer";
+
     timer_.stop();
     hide_event->accept();
 }
@@ -86,7 +94,9 @@ void GpuProcessesOverviewDialog::hideEvent(QHideEvent* hide_event)
 
 void GpuProcessesOverviewDialog::showEvent(QShowEvent* show_event)
 {
-    gpu_process_controller_.update_info();
+    qDebug().noquote().nospace() << "Show event emited, restarting timer";
+
+    show_processes_info();
     timer_.start();
     show_event->accept();
 }
@@ -95,6 +105,8 @@ void GpuProcessesOverviewDialog::showEvent(QShowEvent* show_event)
 
 void GpuProcessesOverviewDialog::closeEvent(QCloseEvent* close_event)
 {
+    qDebug().noquote().nospace() << "Close event emited, stopping timer";
+
     timer_.stop();
     close_event->accept();
 }

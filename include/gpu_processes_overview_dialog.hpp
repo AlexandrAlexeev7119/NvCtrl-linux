@@ -5,7 +5,7 @@
 #include <QDialog>
 #include <QTimer>
 
-#include "gpu_processes_controller.hpp"
+#include "nvmlpp/nvmlpp_device.hpp"
 
 namespace Ui { class GpuProcessesOverviewDialog; }
 
@@ -19,16 +19,16 @@ public:
     explicit GpuProcessesOverviewDialog(QWidget* parent = nullptr);
     ~GpuProcessesOverviewDialog();
 
-    void set_current_gpu(NVMLpp::NVML_device* curr_gpu);
+    void set_current_gpu(const NVMLpp::NVML_device* curr_gpu) noexcept;
 
 private slots:
     void on_buttonBox_rejected();
-    void on_GpuProcessController_info_ready(const std::vector<NVML_native::nvmlProcessInfo_t>& proc_list);
+    void show_processes_info();
     void on_tableWidget_proc_info_cellDoubleClicked(int row, int column);
 
 private:
     Ui::GpuProcessesOverviewDialog* ui;
-    GpuProcessesController gpu_process_controller_;
+    const NVMLpp::NVML_device* current_gpu_;
     QTimer timer_;
 
     void hideEvent(QHideEvent* hide_event);
