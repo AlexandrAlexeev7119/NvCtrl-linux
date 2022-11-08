@@ -1,3 +1,7 @@
+## Version 1.4.10 (pre-release (UNSTABLE))
+### Changes and fixes
+* Added selected process termination via kill() syscall
+
 ## Version 1.4.9 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Added base for killing selected process
