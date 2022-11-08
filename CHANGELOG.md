@@ -1,6 +1,8 @@
 ## Version 1.4.10 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Added selected process termination via kill() syscall
+* Added download links to changelog
+* Open browser when link clicked on RecentUpdatesDialog window
 ### Download
 Download AppImage file [for version 1.4.10](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/tag/v1.4.10)
 
