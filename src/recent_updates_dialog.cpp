@@ -1,5 +1,6 @@
 #include <QDebug>
 #include <QShowEvent>
+#include <QDesktopServices>
 
 #include "recent_updates_dialog.hpp"
 #include "ui_recent_updates_dialog.h"
@@ -37,6 +38,13 @@ void RecentUpdatesDialog::on_buttonBox_accepted()
 void RecentUpdatesDialog::on_buttonBox_rejected()
 {
     close();
+}
+
+
+
+void RecentUpdatesDialog::on_label_changelog_text_linkActivated(const QString& link)
+{
+    QDesktopServices::openUrl(QUrl{link});
 }
 
 
