@@ -93,6 +93,8 @@ void GpuProcessesOverviewDialog::on_tableWidget_proc_info_cellDoubleClicked(int 
     };
     if (ans == QMessageBox::Button::Yes)
     {
+        // Is it good? Use Linux API directrly from C++ code
+        // I doesnt`t know other method to kill (terminate) the process without using polkit
         if (::kill(pid, SIGTERM) == 0)
         {
             qInfo().noquote().nospace() << "Process " << pid << " succesfully killed!";
