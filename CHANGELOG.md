@@ -1,18 +1,24 @@
 ## Version 1.4.10 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Added selected process termination via kill() syscall
+---
+Download AppImage file [for version 1.4.10](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/tag/v1.4.10)
 
 ## Version 1.4.9 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Added base for killing selected process
 * Added spacer in menuBar at tab 'view'
 * Replaced GpuProcessesOverviewDialog with raw NVMLpp::NVML_device\* (GpuProcessesController not used yet)
+---
+Download AppImage file [for version 1.4.9](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/tag/v1.4.9)
 
 ## Version 1.4.8 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Added basic processes view (PID, memory usage, proc name)
 * Updated UI elements on GpuProcessesOverviewDialog
 * Fixed errors in NVMLpp lib
+---
+Download AppImage file [for version 1.4.8](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/tag/v1.4.8)
 
 ## Version 1.4.7 (pre-release (UNSTABLE))
 ### Changes and fixes
@@ -21,6 +27,8 @@
 * Added timer on GpuProcessesOverviewDialog for work with GpuClockController
 * Fixed not showing messagebox when local version is little bit higher than remote (for developers)
 * Some other internal changes (codestyle, logic)
+---
+Download AppImage file [for version 1.4.7](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/tag/v1.4.7)
 
 ## Version 1.4.5 (release)
 ### Changes and fixes
@@ -28,11 +36,15 @@
 * Added support to show MainWindow of already running application via IPC (DBus)
 * New dependency: QtDBus lib (should be already installed with qt5-base package (for Arch GNU/Linux), other distros not tested)
 * Some other internal fixes
+---
+Download AppImage file [for version 1.4.5](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/tag/v1.4.5)
 
 ## Version 1.4.2 (release)
 ### Changes and fixes
 * Changed SettingsManager class, now its doesn\`t need QObject
 * Removed std::unique_ptr<> from SettingsManager for std::fstream object
+---
+Download AppImage file [for version 1.4.2](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/tag/v1.4.2)
 
 ## Version 1.4.0 (release)
 ### Changes and fixes
@@ -47,6 +59,8 @@
 * * Fixed error when trying to open unexisting file in home dir (now SettingsManager create a new file)
 * * Removed support of loading default config from /usr/share/gwepp/gwepp.json
 * PKGBUILD files is no longer distributes
+---
+Download AppImage file [for versions 1.4.0](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/tag/v1.4.0)
 
 ## Version 1.3.19 (pre-release (UNSTABLE))
 ### Changes and fixes
