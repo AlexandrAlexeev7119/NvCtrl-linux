@@ -756,25 +756,21 @@ void MainWindow::load_app_settings()
 
 void MainWindow::load_fan_and_clock_offset_profiles()
 {
-    auto load_clock_offset_profiles_future {std::async(std::launch::async, [this]()
-        {
-            const auto& clock_offset_profiles = app_settings_["clock_offset_profiles"];
-            for (const auto& clock_offset_profile : clock_offset_profiles)
-            {
-                ui->comboBox_select_clock_offset_profile->addItem(QString::fromStdString(
-                                                                      clock_offset_profile["name"].get<std::string>()
-                                                                  ));
-            }
-            qInfo().noquote().nospace() << "Total clock offset profiles loaded: " << clock_offset_profiles.size();
-        })};
-
+    const auto& clock_offset_profiles = app_settings_["clock_offset_profiles"];
     const auto& fan_speed_profiles = app_settings_["fan_speed_profiles"];
-    for (const auto& fan_speed_profile : fan_speed_profiles)
-    {
-        ui->comboBox_select_fan_profile->addItem(QString::fromStdString(
-                                                     fan_speed_profile["name"].get<std::string>()
-                                                 ));
-    }
+
+    std::for_each(clock_offset_profiles.begin(), clock_offset_profiles.end(), [this](const nlohmann::json& clock_profile) {
+        ui->comboBox_select_clock_offset_profile->addItem(QString::fromStdString(
+                                                              clock_profile["name"].get<std::string>()
+                                                          ));
+    });
+    qInfo().noquote().nospace() << "Total clock offset profiles loaded: " << clock_offset_profiles.size();
+
+    std::for_each(fan_speed_profiles.begin(), fan_speed_profiles.end(), [this](const nlohmann::json& fan_profile) {
+        ui->comboBox_select_clock_offset_profile->addItem(QString::fromStdString(
+                                                              fan_profile["name"].get<std::string>()
+                                                          ));
+    });
     qInfo().noquote().nospace() << "Total fan profiles loaded: " << fan_speed_profiles.size();
 }
 
