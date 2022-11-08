@@ -1,3 +1,10 @@
+## Version 1.4.11 (pre-release (UNSTABLE))
+### Changes and fixes
+* Removed std::async() call, replace by std::for_each
+* Fixed: wrong memory usage value for running processes
+### Download
+Download AppImage file [for version 1.4.11](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/tag/v1.4.11)
+
 ## Version 1.4.10 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Added selected process termination via kill() syscall
