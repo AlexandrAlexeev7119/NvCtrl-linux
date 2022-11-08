@@ -1,3 +1,7 @@
+#include <signal.h>
+#include <sys/types.h>
+
+#include <cstring>
 #include <vector>
 
 #include <QShowEvent>
@@ -89,7 +93,16 @@ void GpuProcessesOverviewDialog::on_tableWidget_proc_info_cellDoubleClicked(int 
     };
     if (ans == QMessageBox::Button::Yes)
     {
-        QMessageBox::warning(this, "Warning", "Killing processes is not implemented yet");
+        if (::kill(pid, SIGTERM) == 0)
+        {
+            qInfo().noquote().nospace() << "Process " << pid << " succesfully killed!";
+        }
+        else
+        {
+            const QString err_str {QString{"Trying to kill process %1, got error: %2"}.arg(pid).arg(std::strerror(errno))};
+            qCritical().noquote().nospace() << err_str;
+            QMessageBox::critical(this, "Error occured", err_str);
+        }
     }
 }
 
