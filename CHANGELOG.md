@@ -1,3 +1,15 @@
+## Version 1.4.13 (release)
+### Changes and fixes
+* Added basic processes view (PID, memory usage, proc name)
+* Added download links to changelog
+* Open browser when link clicked on RecentUpdatesDialog window
+* Removed std::async() call, replace by std::for_each
+* Fixed not showing messagebox when local version is little bit higher than remote (for developers)
+* Fixed wrong fan profile loading (it was load to clock offset comboBox widget)
+* Removed unused code
+### Download
+Download AppImage file [for version 1.4.13](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/tag/v1.4.13)
+
 ## Version 1.4.12 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Fixed wrong fan profile loading (it was load to clock offset comboBox widget)
