@@ -56,7 +56,6 @@ void GpuProcessesOverviewDialog::show_processes_info()
 
     qDebug().noquote().nospace() << "Processes run on GPU: " << proc_list.size();
 
-    ui->tableWidget_proc_info->clearContents();
     ui->tableWidget_proc_info->setRowCount(proc_list.size());
 
     int curr_row {0};
@@ -73,8 +72,6 @@ void GpuProcessesOverviewDialog::show_processes_info()
                                                  });
         curr_row++;
     });
-
-    qDebug().noquote().nospace() << "Processes list changed, widgets updated";
 }
 
 
