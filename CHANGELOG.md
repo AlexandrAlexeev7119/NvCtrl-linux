@@ -1,3 +1,10 @@
+## Version 1.4.12 (pre-release (UNSTABLE))
+### Changes and fixes
+* Fixed wrong fan profile loading (it was load to clock offset comboBox widget)
+* Removed unused code
+### Download
+Download AppImage file [for version 1.4.12](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/tag/v1.4.12)
+
 ## Version 1.4.11 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Removed std::async() call, replace by std::for_each
