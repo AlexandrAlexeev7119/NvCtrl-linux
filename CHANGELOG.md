@@ -1,3 +1,10 @@
+## Version 1.4.14 (release)
+### Changes and fixes
+* Change .dump() func call to decrease file size
+* Added function name in debug log
+### Download
+Download AppImage file [for version 1.4.14](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/tag/v1.4.14)
+
 ## Version 1.4.13 (release)
 ### Changes and fixes
 * Added basic processes view (PID, memory usage, proc name)
