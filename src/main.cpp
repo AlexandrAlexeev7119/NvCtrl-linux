@@ -20,7 +20,7 @@ static void qt_message_handler(QtMsgType msg_type, const QMessageLogContext& con
         spdlog::critical(message.toStdString());
         break;
     case QtMsgType::QtDebugMsg:
-        spdlog::debug("[{}:{}]: {}", QUrl{context.file}.fileName().toStdString(), context.line, message.toStdString());
+        spdlog::debug("[{}:{} {}]: {}", QUrl{context.file}.fileName().toStdString(), context.line, context.function, message.toStdString());
         break;
     case QtMsgType::QtFatalMsg:
         spdlog::critical(message.toStdString());
