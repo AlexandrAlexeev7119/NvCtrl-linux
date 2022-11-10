@@ -294,7 +294,7 @@ void MainWindow::on_UpdateChecker_new_version_released(const QString& version)
     };
     if (result == QMessageBox::Button::Ok)
     {
-        recent_update_dialog_window_.show();
+        recent_update_dialog_window_.exec();
     }
 }
 
@@ -562,7 +562,7 @@ void MainWindow::on_pushButton_apply_fan_speed_clicked()
 void MainWindow::on_pushButton_add_new_fan_profile_clicked()
 {
     fan_profile_dialog_window_.load_app_settings(&app_settings_);
-    fan_profile_dialog_window_.show();
+    fan_profile_dialog_window_.exec();
 }
 
 
@@ -572,7 +572,7 @@ void MainWindow::on_pushButton_edit_current_fan_profile_clicked()
     const unsigned current_fan_profile_index {static_cast<unsigned>(ui->comboBox_select_fan_profile->currentIndex())};
     edit_fan_profile_dialog_window_.load_app_settings(&app_settings_);
     edit_fan_profile_dialog_window_.set_current_fan_profile_index(current_fan_profile_index);
-    edit_fan_profile_dialog_window_.show();
+    edit_fan_profile_dialog_window_.exec();
 }
 
 
@@ -580,7 +580,7 @@ void MainWindow::on_pushButton_edit_current_fan_profile_clicked()
 void MainWindow::on_pushButton_add_new_clock_offset_profile_clicked()
 {
     clock_profile_dialog_window_.load_app_settings(&app_settings_);
-    clock_profile_dialog_window_.show();
+    clock_profile_dialog_window_.exec();
 }
 
 
@@ -610,7 +610,7 @@ void MainWindow::on_pushButton_edit_current_clock_offset_profile_clicked()
     const unsigned current_clock_offset_profile_index {static_cast<unsigned>(ui->comboBox_select_clock_offset_profile->currentIndex())};
     edit_clock_offset_profile_dialog_window_.load_app_settings(&app_settings_);
     edit_clock_offset_profile_dialog_window_.set_current_clock_offset_profile_index(current_clock_offset_profile_index);
-    edit_clock_offset_profile_dialog_window_.show();
+    edit_clock_offset_profile_dialog_window_.exec();
 }
 
 
@@ -618,7 +618,7 @@ void MainWindow::on_pushButton_edit_current_clock_offset_profile_clicked()
 void MainWindow::on_actionSettings_triggered()
 {
     settings_dialog_window_.load_app_settins(&app_settings_);
-    settings_dialog_window_.show();
+    settings_dialog_window_.exec();
 }
 
 
@@ -633,14 +633,14 @@ void MainWindow::on_actionQuit_triggered()
 
 void MainWindow::on_actionAbout_triggered()
 {
-    about_dialog_window_.show();
+    about_dialog_window_.exec();
 }
 
 
 
 void MainWindow::on_actionReport_a_bug_triggered()
 {
-    report_a_bug_dialog_window_.show();
+    report_a_bug_dialog_window_.exec();
 }
 
 
@@ -672,7 +672,7 @@ void MainWindow::on_actionCheck_for_updates_triggered()
 void MainWindow::on_actionShow_GPU_processes_triggered()
 {
     gpu_processes_overview_dialog_window_.set_current_gpu(&current_gpu_);
-    gpu_processes_overview_dialog_window_.show();
+    gpu_processes_overview_dialog_window_.exec();
 }
 
 

@@ -61,6 +61,7 @@ void GpuProcessesOverviewDialog::show_processes_info()
     }
 
     ui->tableWidget_proc_info->setRowCount(proc_list.size());
+
     int curr_row {0};
     std::for_each(proc_list.begin(), proc_list.end(), [this, &curr_row](const NVML_native::nvmlProcessInfo_t& process)
     {
