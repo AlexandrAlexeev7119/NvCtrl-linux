@@ -34,7 +34,7 @@ void SettingsManager::write_settings(const nlohmann::json& app_settings)
 {
     close_file();
     open_file(std::ios::in | std::ios::out | std::ios::trunc);
-    settings_file_ << app_settings.dump(4);
+    settings_file_ << app_settings.dump(2);
     settings_file_.flush();
     qDebug().noquote().nospace() << "Saving settings to: " << file_name_.c_str();
 }
@@ -51,17 +51,6 @@ nlohmann::json SettingsManager::read_settings()
     // Assumes that the user is never editting file manually
     // Any atempt to modify config file manually may results to runtime errors and other issues
     auto app_settings = nlohmann::json::parse(std::move(raw_json_string));
-
-#if 0
-    const unsigned update_freq_ms {app_settings["update_freq_ms"].get<unsigned>()};
-    if (update_freq_ms < 500 || update_freq_ms > 3000)
-    {
-        app_settings["update_freq_ms"] = default_settings["update_freq_ms"].get<unsigned>();
-        qWarning().noquote().nospace() << "Wrong update_freq_ms_ detected, fallback to default ("
-                                       << default_settings["update_freq_ms"].get<unsigned>() << ")";
-        write_settings(app_settings);
-    }
-#endif
 
     return app_settings;
 }

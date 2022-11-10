@@ -106,7 +106,7 @@ void MainWindow::on_SettingsDialog_settings_applied(const nlohmann::json& app_se
     ui->statusBar->showMessage("New settings applied", 2000);
 
     qInfo().noquote().nospace() << "New settings applied";
-    qDebug().noquote().nospace() << app_settings.dump(4).c_str();
+    qDebug().noquote().nospace() << app_settings.dump(2).c_str();
 }
 
 
@@ -119,7 +119,7 @@ void MainWindow::on_FanProfileDialog_new_profile_created(const nlohmann::json& c
     ui->statusBar->showMessage("New fan profile created: " + new_profile_name, 2000);
 
     qInfo().noquote().nospace() << "New fan profile created: " << new_profile_name;
-    qDebug().noquote().nospace() << "New fan profile: " << curr_fan_profile.dump(4).c_str();
+    qDebug().noquote().nospace() << "New fan profile: " << curr_fan_profile.dump(2).c_str();
 }
 
 
@@ -132,7 +132,7 @@ void MainWindow::on_EditFanProfileDialog_current_fan_profile_changed(const nlohm
     ui->comboBox_select_fan_profile->setCurrentIndex(current_index);
 
     qInfo().noquote().nospace() << "Current fan profile changed";
-    qDebug().noquote().nospace() << "Current fan profile: " << curr_fan_profile.dump(4).c_str();
+    qDebug().noquote().nospace() << "Current fan profile: " << curr_fan_profile.dump(2).c_str();
 }
 
 
@@ -160,7 +160,7 @@ void MainWindow::on_ClockProfileDialog_new_profile_created(const nlohmann::json&
     ui->statusBar->showMessage("New clock offset profile created: " + new_clock_profile_name, 2000);
 
     qInfo().noquote().nospace() << "New clock offset profile created";
-    qDebug().noquote().nospace() << "New clock offset profile: " << curr_clock_profile.dump(4).c_str();
+    qDebug().noquote().nospace() << "New clock offset profile: " << curr_clock_profile.dump(2).c_str();
 }
 
 
@@ -175,7 +175,7 @@ void MainWindow::on_EditClockOffsetProfileDialog_current_clock_offset_profile_ch
     update_clock_offset_widgets(curr_clock_profile);
 
     qInfo().noquote().nospace() << "Current clock profile changed";
-    qDebug().noquote().nospace() << curr_clock_profile.dump(4).c_str();
+    qDebug().noquote().nospace() << curr_clock_profile.dump(2).c_str();
 }
 
 
@@ -744,7 +744,7 @@ void MainWindow::load_app_settings()
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
 
     qInfo().noquote().nospace() << "Settings for MainWindow loaded";
-    qDebug().noquote().nospace() << app_settings_.dump(4).c_str();
+    qDebug().noquote().nospace() << app_settings_.dump(2).c_str();
 
     if (app_settings_["check_for_updates_on_startup"].get<bool>())
     {
@@ -788,7 +788,7 @@ void MainWindow::restore_last_fan_profile()
     on_pushButton_apply_fan_speed_clicked();
 
     qInfo().noquote().nospace() << "Last fan profile restored";
-    qDebug().noquote().nospace() << "Last fan profile: " << last_fan_profile.dump(4).c_str();
+    qDebug().noquote().nospace() << "Last fan profile: " << last_fan_profile.dump(2).c_str();
 }
 
 
@@ -803,7 +803,7 @@ void MainWindow::restore_last_clock_offset_profile()
     on_pushButton_apply_clock_offset_clicked();
 
     qInfo().noquote().nospace() << "Last clock offset profile restored";
-    qDebug().noquote().nospace() << "Last clock offset profile: " << last_clock_offset_profile.dump(4).c_str();
+    qDebug().noquote().nospace() << "Last clock offset profile: " << last_clock_offset_profile.dump(2).c_str();
 }
 
 
