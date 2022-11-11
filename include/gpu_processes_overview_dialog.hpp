@@ -12,7 +12,7 @@ class GpuProcessesOverviewDialog final : public QDialog
     Q_OBJECT
 
     enum { CELL_PROC_PID, CELL_PROC_MEM_USAGE, CELL_PROC_NAME };
-    enum { MAX_ROWS = 32 };
+    enum { MAX_ROWS = 24 };
 
 public:
     explicit GpuProcessesOverviewDialog(QWidget* parent = nullptr);
