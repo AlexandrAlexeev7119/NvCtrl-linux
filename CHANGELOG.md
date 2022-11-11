@@ -1,3 +1,9 @@
+## Version 1.4.15 (release)
+### Changes and fixes
+* Reduced max rows count in GpuProcessesOverviewDialog (32 -> 24)
+### Download
+Download AppImage file [for version 1.4.15](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/tag/v1.4.15)
+
 ## Version 1.4.14 (release)
 ### Changes and fixes
 * Change .dump() func call to decrease file size
