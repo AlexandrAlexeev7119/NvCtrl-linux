@@ -12,7 +12,6 @@ class GpuProcessesOverviewDialog final : public QDialog
     Q_OBJECT
 
     enum { CELL_PROC_PID, CELL_PROC_MEM_USAGE, CELL_PROC_NAME };
-    enum { MAX_ROWS = 24 };
 
 public:
     explicit GpuProcessesOverviewDialog(QWidget* parent = nullptr);
@@ -34,7 +33,5 @@ private:
     void showEvent(QShowEvent* show_event);
     void closeEvent(QCloseEvent* close_event);
 
-    std::string get_process_name_by_pid(pid_t proc_pid) const;
-    void initialize_table();
-    void resize_table(int new_size);
+    QString get_process_name_by_pid(pid_t proc_pid) const;
 };

@@ -65,10 +65,16 @@
      <property name="sizeAdjustPolicy">
       <enum>QAbstractScrollArea::AdjustToContents</enum>
      </property>
+     <property name="autoScroll">
+      <bool>false</bool>
+     </property>
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
      <property name="showDropIndicator" stdset="0">
+      <bool>false</bool>
+     </property>
+     <property name="dragDropOverwriteMode">
       <bool>false</bool>
      </property>
      <property name="alternatingRowColors">
@@ -99,7 +105,7 @@
       <bool>false</bool>
      </property>
      <property name="wordWrap">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="cornerButtonEnabled">
       <bool>true</bool>
@@ -120,7 +126,7 @@
       <number>65</number>
      </attribute>
      <attribute name="horizontalHeaderDefaultSectionSize">
-      <number>100</number>
+      <number>65</number>
      </attribute>
      <attribute name="horizontalHeaderHighlightSections">
       <bool>true</bool>
@@ -132,7 +138,7 @@
       <bool>true</bool>
      </attribute>
      <attribute name="verticalHeaderVisible">
-      <bool>false</bool>
+      <bool>true</bool>
      </attribute>
      <attribute name="verticalHeaderCascadingSectionResizes">
       <bool>false</bool>
