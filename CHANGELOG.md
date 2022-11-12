@@ -1,3 +1,10 @@
+## Version 1.4.16 (release)
+### Changes and fixes
+* Fallback to previous process view impl, fixed segfault
+* Updated NVMLpp: fixed process list size, removed unused code
+### Download
+Download AppImage file [for version 1.4.16](https://codeberg.org/AlexCr4ckPentest/GWEpp/releases/tag/v1.4.16)
+
 ## Version 1.4.15 (release)
 ### Changes and fixes
 * Reduced max rows count in GpuProcessesOverviewDialog (32 -> 24)
