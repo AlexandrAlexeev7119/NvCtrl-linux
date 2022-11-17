@@ -1,11 +1,13 @@
-## Version 1.4.18 (release)
+## Version 1.4.19 (release)
 ### Changes and fixes
 * Rebranding, changed application name and descriprion
 * Changed repository name, changed all URLs
 * Removed unused code
 * Some internal changes and fixes (updated submodules)
+* Updated AppImage build script
+* Renamed .AppDir folder
 ### Download
-Download AppImage file [for version 1.4.18](https://codeberg.org/AlexCr4ckPentest/GWEpp/NvCtrl-linux/tag/v1.4.18)
+Download AppImage file [for version 1.4.19](https://codeberg.org/AlexCr4ckPentest/GWEpp/NvCtrl-linux/tag/v1.4.19)
 
 ## Version 1.4.16 (release)
 ### Changes and fixes

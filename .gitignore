@@ -1,6 +1,5 @@
 build*
 *.user*
-GWEpp.AppDir
+*.AppDir
 *.AppImage
-PKGBUILD
 .cache
