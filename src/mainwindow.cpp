@@ -39,11 +39,12 @@ MainWindow::MainWindow(nlohmann::json&& app_settings, QWidget* parent)
 
     , update_checker_thread_ {new UpdateChecker, [](UpdateChecker* thread) { thread->quit(); }}
 
-    , dbus_message_receiver_ {GWEpp::config::APP_DBUS_SERVICE_NAME, this}
+    , dbus_message_receiver_ {NvCtrl::config::APP_DBUS_SERVICE_NAME, this}
 {
     ui->setupUi(this);
     setMinimumSize(size());
-    setWindowIcon(QIcon{":/icons/gwepp64.png"});
+
+    setWindowIcon(QIcon{":/icons/NvCtrl.png"});
     app_settings_ = std::move(app_settings);
 
     setup_tray_menu();
@@ -280,7 +281,7 @@ void MainWindow::on_GpuFanController_error_occured()
 
 void MainWindow::on_UpdateChecker_error_occured(const QString& message)
 {
-    QMessageBox::critical(this, "GWEpp: check update error", message + "\nCheck the internet connection");
+    QMessageBox::critical(this, "NvCtrl-Linux: check update error", message + "\nCheck the internet connection");
 }
 
 
@@ -288,7 +289,7 @@ void MainWindow::on_UpdateChecker_error_occured(const QString& message)
 void MainWindow::on_UpdateChecker_new_version_released(const QString& version)
 {
     const auto result {
-        QMessageBox::information(this, "GWEpp: updates available", "New version available: v" + version
+        QMessageBox::information(this, "NvCtrl-Linux: updates available", "New version available: v" + version
                                  + "\n(press Ok to view changelog)",
                                  QMessageBox::Button::Ok, QMessageBox::Button::Cancel)
     };
@@ -302,8 +303,8 @@ void MainWindow::on_UpdateChecker_new_version_released(const QString& version)
 
 void MainWindow::on_UpdateChecker_update_not_found()
 {
-    QMessageBox::information(this, "GWEpp: no updates found", QString{"No updates available, you are using latest version (v%1)"}
-                             .arg(GWEpp::config::APP_VERSION_STRING));
+    QMessageBox::information(this, "NvCtrl-Linux: no updates found", QString{"No updates available, you are using latest version (v%1)"}
+                             .arg(NvCtrl::config::APP_VERSION_STRING));
 }
 
 
@@ -718,7 +719,7 @@ void MainWindow::setup_tray_menu()
     tray_menu_.addAction("Quit", this, &MainWindow::on_actionQuit_triggered);
     tray_icon_.setContextMenu(&tray_menu_);
 
-    tray_icon_.setIcon(QIcon{":/icons/gwepp64.png"});
+    tray_icon_.setIcon(QIcon{":/icons/NvCtrl.png"});
 }
 
 

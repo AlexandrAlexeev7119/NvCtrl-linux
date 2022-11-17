@@ -58,13 +58,13 @@ void GpuProcessesOverviewDialog::show_processes_info()
     ui->tableWidget_proc_info->setRowCount(proc_list.size());
 
     int curr_row {0};
-    std::for_each(proc_list.begin(), proc_list.end(), [this, &curr_row](const NVML_native::nvmlProcessInfo_t& process)
+    for (const auto& process : proc_list)
     {
         ui->tableWidget_proc_info->setCellWidget(curr_row, CELL_PROC_PID, new QLabel {QString::number(process.pid), this});
         ui->tableWidget_proc_info->setCellWidget(curr_row, CELL_PROC_MEM_USAGE, new QLabel {QString{"%1 MiB"}.arg(process.usedGpuMemory / 1024 / 1024), this});
         ui->tableWidget_proc_info->setCellWidget(curr_row, CELL_PROC_NAME, new QLabel {get_process_name_by_pid(process.pid), this});
         curr_row++;
-    });
+    }
 }
 
 

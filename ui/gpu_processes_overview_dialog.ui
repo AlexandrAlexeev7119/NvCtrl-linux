@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>GWEpp: GPU processes overview</string>
+   <string>NvCtrl-Linux: GPU processes overview</string>
   </property>
   <property name="sizeGripEnabled">
    <bool>true</bool>

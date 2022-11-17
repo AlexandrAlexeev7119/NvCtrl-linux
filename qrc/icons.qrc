@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>gwepp64.png</file>
+        <file>NvCtrl.png</file>
     </qresource>
 </RCC>

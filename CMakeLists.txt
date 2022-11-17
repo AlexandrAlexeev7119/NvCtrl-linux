@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(gwepp VERSION 1.4.16 LANGUAGES CXX)
+project(NvCtrl-Linux VERSION 1.4.18 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

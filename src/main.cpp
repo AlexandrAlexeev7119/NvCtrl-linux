@@ -44,10 +44,10 @@ int main(int argc, char** argv)
     spdlog::set_level(spdlog::level::info);
 #endif
 
-    SingleInstanceAppGuard single_app_instance {"GWEpp"};
+    SingleInstanceAppGuard single_app_instance {"NvCtrl-Linux"};
     if (!single_app_instance.run())
     {
-        DBusSender sender {GWEpp::config::APP_DBUS_SERVICE_NAME};
+        DBusSender sender {NvCtrl::config::APP_DBUS_SERVICE_NAME};
         if (sender.iface_is_valid())
         {
             sender.send_message();

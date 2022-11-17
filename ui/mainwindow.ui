@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>GWEpp: Nvidia GPU control utility</string>
+   <string>NvCtrl-Linux: Nvidia GPU control utility</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QFormLayout" name="formLayout_2">

@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>500</width>
-    <height>310</height>
+    <height>319</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>GWEpp: Settings</string>
+   <string>NvCtrl-Linux: Settings</string>
   </property>
   <property name="modal">
    <bool>false</bool>
