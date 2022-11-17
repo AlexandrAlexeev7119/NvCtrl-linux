@@ -74,7 +74,7 @@ SettingsManager& SettingsManager::instance()
 
 SettingsManager::SettingsManager()
     : settings_file_ {}
-    , file_name_ {get_home_dir() + "gwepp.json"}
+    , file_name_ {get_home_dir() + "NvCtrl-Linux.json"}
 {
     if (!std::filesystem::exists(get_home_dir()))
     {
@@ -118,6 +118,6 @@ void SettingsManager::close_file()
 
 const std::string& SettingsManager::get_home_dir() const
 {
-    static const std::string home_dir {"/home/" + std::string{std::getenv("USER")} + "/.config/gwepp/"};
+    static const std::string home_dir {"/home/" + std::string{std::getenv("USER")} + "/.config/NvCtrl-Linux/"};
     return home_dir;
 }

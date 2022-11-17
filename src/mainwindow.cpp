@@ -1,6 +1,4 @@
-﻿#include <future>
-
-#include <QCloseEvent>
+﻿#include <QCloseEvent>
 #include <QMessageBox>
 #include <QDebug>
 
