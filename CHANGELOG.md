@@ -1,3 +1,10 @@
+## Version 1.4.21 (release)
+### Changes and fixes
+* Update submodules: update NVMLpp to version 525.60.11
+* Some internal changes
+### Download
+Download AppImage file [for version 1.4.21](https://codeberg.org/AlexCr4ckPentest/GWEpp/NvCtrl-linux/tag/v1.4.21)
+
 ## Version 1.4.19 (release)
 ### Changes and fixes
 * Rebranding, changed application name and descriprion
