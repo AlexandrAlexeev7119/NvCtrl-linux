@@ -36,11 +36,11 @@ void UpdateChecker::run()
 
     if (branch_type_ == MAIN_BRANCH)
     {
-        retrieve_last_ver_process_.start("/usr/bin/curl", {version_file_url_main});
+        retrieve_last_ver_process_.start(QStringLiteral("/usr/bin/curl"), {version_file_url_main});
     }
     else
     {
-        retrieve_last_ver_process_.start("/usr/bin/curl", {version_file_url_develop});
+        retrieve_last_ver_process_.start(QStringLiteral("/usr/bin/curl"), {version_file_url_develop});
     }
 
     retrieve_last_ver_process_.waitForFinished();
@@ -64,16 +64,18 @@ void UpdateChecker::run()
         const int current_minor {current_app_version[MINOR_VER].toInt()};
         const int current_patch {current_app_version[PATCH_VER].toInt()};
 
-        qDebug().noquote().nospace() << "Retrieved ver: v" << last_app_version.join('.')
+        const auto& joined_ver {last_app_version.join('.')};
+
+        qDebug().noquote().nospace() << "Retrieved ver: v" << joined_ver
                                      << ", current: v" << NvCtrl::config::APP_VERSION_STRING;
 
         if (last_patch > current_patch ||
                 last_minor > current_minor ||
                 last_major > current_major)
         {
-            qInfo().noquote().nospace() << "New update: v" << last_app_version.join('.')
+            qInfo().noquote().nospace() << "New update: v" << joined_ver
                                         << " (current: v" << NvCtrl::config::APP_VERSION_STRING << ")";
-            emit new_version_released(last_app_version.join('.'));
+            emit new_version_released(joined_ver);
         }
         else
         {

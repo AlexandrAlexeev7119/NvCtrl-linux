@@ -52,7 +52,7 @@ void EditClockOffsetProfileDialog::on_buttonBox_accepted()
 {
     if (ui->lineEdit_current_profile_name->text().isEmpty())
     {
-        QMessageBox::warning(this, "Warning", "Empty name is not allowed");
+        QMessageBox::warning(this, QStringLiteral("Warning"), QStringLiteral("Empty name is not allowed"));
     }
     else
     {
@@ -125,7 +125,8 @@ void EditClockOffsetProfileDialog::showEvent(QShowEvent* show_event)
 void EditClockOffsetProfileDialog::on_pushButton_remove_current_profile_clicked()
 {
     const auto used_choise {
-        QMessageBox::question(this, "Remove profile", "Are you sure that you want TO DELETE THIS profile?",
+        QMessageBox::question(this, QStringLiteral("Remove profile"),
+                              QStringLiteral("Are you sure that you want TO DELETE THIS profile?"),
                               QMessageBox::Button::Yes, QMessageBox::Button::No)
     };
     if (used_choise == QMessageBox::Button::Yes)
