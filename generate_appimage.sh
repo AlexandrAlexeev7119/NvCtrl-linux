@@ -3,7 +3,7 @@
 CURR_DIR=`pwd`
 APP_VER="v$(cat ./.last_version)"
 APP_DIR="./NvCtrl-Linux.AppDir"
-BIN_DIR="./build-NvCtrl-Linux-GCC-Release"
+BIN_DIR="./build-NvCtrl-Linux-gcc-Release"
 
 cd $BIN_DIR && cmake .. && make clean && make -j$(nproc)
 cd $CURR_DIR
