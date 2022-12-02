@@ -75,14 +75,12 @@ void GpuProcessesOverviewDialog::on_tableWidget_proc_info_cellDoubleClicked(int 
                     ui->tableWidget_proc_info->cellWidget(row, CELL_PROC_PID))
                 ->text().toInt()};
     const auto ans {
-        QMessageBox::question(this, "Confirm action",
-                              QString{"Are you sure what you WANT TO KILL process with PID=%1?"}.arg(pid),
+        QMessageBox::question(this, QStringLiteral("Confirm action"),
+                              QStringLiteral("Do you really WANT TO KILL process with PID=%1?").arg(pid),
                               QMessageBox::Button::Yes, QMessageBox::Button::No)
     };
     if (ans == QMessageBox::Button::Yes)
     {
-        // Is it good? Use Linux API directrly from C++ code
-        // I doesnt`t know other method to kill (terminate) the process without using polkit
         if (::kill(pid, SIGTERM) == 0)
         {
             qInfo().noquote().nospace() << "Process " << pid << " succesfully killed!";
@@ -91,7 +89,7 @@ void GpuProcessesOverviewDialog::on_tableWidget_proc_info_cellDoubleClicked(int 
         {
             const QString err_str {QString{"Trying to kill process %1, got error: %2"}.arg(pid).arg(std::strerror(errno))};
             qCritical().noquote().nospace() << err_str;
-            QMessageBox::critical(this, "Error occured", err_str);
+            QMessageBox::critical(this, QStringLiteral("Error occured"), err_str);
         }
     }
 }

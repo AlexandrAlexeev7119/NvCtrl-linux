@@ -58,7 +58,7 @@ void ClockProfileDialog::on_buttonBox_accepted()
 
     if (new_clock_profile_name.isEmpty())
     {
-        QMessageBox::warning(this, "Warning", "Empty name is not allowed");
+        QMessageBox::warning(this, QStringLiteral("Warning"), QStringLiteral("Empty name is not allowed"));
     }
     else
     {
@@ -94,7 +94,7 @@ void ClockProfileDialog::on_buttonBox_accepted()
         }
         else
         {
-            QMessageBox::warning(this, "Warning", "You should choose at least one pstate");
+            QMessageBox::warning(this, QStringLiteral("Warning"), QStringLiteral("You should choose at least one pstate"));
         }
     }
 }

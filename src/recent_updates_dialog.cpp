@@ -53,14 +53,15 @@ void RecentUpdatesDialog::showEvent(QShowEvent* show_event)
 {
     qInfo().noquote().nospace() << "Getting changelog...";
 
-    retrieve_changelog_process_.start("/usr/bin/curl", {changelog_file_url});
+    retrieve_changelog_process_.start(QStringLiteral("/usr/bin/curl"), {changelog_file_url});
     retrieve_changelog_process_.waitForFinished();
 
     const int err_code {retrieve_changelog_process_.exitCode()};
 
     if (err_code != 0)
     {
-        const QString error_msg {QString{"Failed to get changelog: %1, code: %2"}.arg(retrieve_changelog_process_.errorString()).arg(err_code)};
+        const QString error_msg {QStringLiteral("Failed to get changelog: %1, code: %2")
+                                 .arg(retrieve_changelog_process_.errorString()).arg(err_code)};
         qCritical().noquote().nospace() << error_msg;
         ui->label_changelog_text->setText("### " + error_msg);
     }

@@ -44,7 +44,7 @@ int main(int argc, char** argv)
     spdlog::set_level(spdlog::level::info);
 #endif
 
-    SingleInstanceAppGuard single_app_instance {"NvCtrl-Linux"};
+    SingleInstanceAppGuard single_app_instance {QStringLiteral("NvCtrl-Linux")};
     if (!single_app_instance.run())
     {
         DBusSender sender {NvCtrl::config::APP_DBUS_SERVICE_NAME};
@@ -63,7 +63,7 @@ int main(int argc, char** argv)
 
     if (!settings_manager.file_is_open())
     {
-        QMessageBox::critical(nullptr, "Error", "Failed to open settings file");
+        QMessageBox::critical(nullptr, QStringLiteral("Error"), QStringLiteral("Failed to open settings file"));
         Q_CLEANUP_RESOURCE(icons);
         std::exit(1);
     }

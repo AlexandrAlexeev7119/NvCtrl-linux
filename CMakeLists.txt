@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(NvCtrl-Linux VERSION 1.4.22 LANGUAGES CXX)
+project(NvCtrl-Linux VERSION 1.4.23 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -48,4 +48,3 @@ add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${RESOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets Qt5::DBus NVMLpp spdlog)
 
 write_file(../.last_version "${PROJECT_VERSION}")
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

@@ -41,7 +41,7 @@ void FanProfileDialog::on_pushButton_create_new_profile_clicked()
 
     if (new_fan_profile_name.isEmpty())
     {
-        QMessageBox::warning(this, "Warning", "Empty name is not allowed");
+        QMessageBox::warning(this, QStringLiteral("Warning"), QStringLiteral("Empty name is not allowed"));
     }
     else
     {

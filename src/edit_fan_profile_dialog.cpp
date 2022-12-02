@@ -49,7 +49,7 @@ void EditFanProfileDialog::on_buttonBox_accepted()
 {
     if (ui->lineEdit_current_profile_name->text().isEmpty())
     {
-        QMessageBox::warning(this, "Warning", "Empty name is not allowed");
+        QMessageBox::warning(this, QStringLiteral("Warning"), QStringLiteral("Empty name is not allowed"));
     }
     else
     {

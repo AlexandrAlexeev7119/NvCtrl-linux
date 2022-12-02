@@ -1,3 +1,11 @@
+## Version 1.4.23 (release)
+### Changes and fixes
+* Avoiding QString heap allocations for static literals
+* Updated build and appimage generate scripts
+* Updated submodules
+### Download
+Download AppImage file [for version 1.4.23](https://codeberg.org/AlexCr4ckPentest/GWEpp/NvCtrl-linux/tag/v1.4.23)
+
 ## Version 1.4.22 (release)
 ### Changes and fixes
 * Added build and install shell scripts for native build

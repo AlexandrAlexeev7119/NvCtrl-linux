@@ -6,7 +6,7 @@ DBusReceiver::DBusReceiver(std::string_view service_name, QObject* parent)
     : QObject {parent}
 {
     QDBusConnection::sessionBus().registerService(service_name.data());
-    QDBusConnection::sessionBus().registerObject("/", this, QDBusConnection::ExportAllSlots);
+    QDBusConnection::sessionBus().registerObject(QStringLiteral("/"), this, QDBusConnection::ExportAllSlots);
 }
 
 

@@ -102,7 +102,7 @@ void MainWindow::on_SettingsDialog_settings_applied(const nlohmann::json& app_se
     update_freq_ms_ = app_settings["update_freq_ms"].get<unsigned>();
     dynamic_info_update_timer_.setInterval(update_freq_ms_);
 
-    ui->statusBar->showMessage("New settings applied", 2000);
+    ui->statusBar->showMessage(QStringLiteral("New settings applied"), 2000);
 
     qInfo().noquote().nospace() << "New settings applied";
     qDebug().noquote().nospace() << app_settings.dump(2).c_str();
@@ -266,7 +266,7 @@ void MainWindow::on_GpuClockController_error_occured()
 void MainWindow::on_GpuFanController_error_occured()
 {
     ui->groupBox_fan_control->setEnabled(false);
-    ui->groupBox_fan_control->setToolTip("Unsupported for current GPU");
+    ui->groupBox_fan_control->setToolTip(QStringLiteral("Unsupported for current GPU"));
     qWarning().noquote().nospace() << "Fan control unsupported, groupBox widget disabled";
 
     disconnect(&gpu_fan_controller_, &GpuFanController::error_occured, this, &MainWindow::on_GpuFanController_error_occured);
@@ -279,7 +279,7 @@ void MainWindow::on_GpuFanController_error_occured()
 
 void MainWindow::on_UpdateChecker_error_occured(const QString& message)
 {
-    QMessageBox::critical(this, "NvCtrl-Linux: check update error", message + "\nCheck the internet connection");
+    QMessageBox::critical(this, QStringLiteral("NvCtrl-Linux: check update error"), message + "\nCheck the internet connection");
 }
 
 
@@ -301,7 +301,8 @@ void MainWindow::on_UpdateChecker_new_version_released(const QString& version)
 
 void MainWindow::on_UpdateChecker_update_not_found()
 {
-    QMessageBox::information(this, "NvCtrl-Linux: no updates found", QString{"No updates available, you are using latest version (v%1)"}
+    QMessageBox::information(this, QStringLiteral("NvCtrl-Linux: no updates found"),
+                             QStringLiteral("No updates available, you are using latest version (v%1)")
                              .arg(NvCtrl::config::APP_VERSION_STRING));
 }
 
@@ -359,8 +360,8 @@ void MainWindow::set_static_info()
     ui->lineEdit_GPU_slowdown_temp->setText(QString::number(current_gpu_.get_slowdown_temperature()) + " °C");
     ui->lineEdit_GPU_shutdown_temp->setText(QString::number(current_gpu_.get_shutdown_temperature()) + " °C");
 
-    ui->lineEdit_GPU_uuid->setText("************************");
-    ui->lineEdit_GPU_uuid->setToolTip("Disabled for a privacy reasons (enable: View -> show GPU UUID)");
+    ui->lineEdit_GPU_uuid->setText(QStringLiteral("************************"));
+    ui->lineEdit_GPU_uuid->setToolTip(QStringLiteral("Disabled for a privacy reasons (enable: View -> show GPU UUID)"));
 
     try
     {
@@ -380,7 +381,7 @@ void MainWindow::set_static_info()
     catch (const NVMLpp::errors::error_not_supported&)
     {
         ui->groupBox_power_control->setEnabled(false);
-        ui->groupBox_power_control->setToolTip("Unsupported for current GPU");
+        ui->groupBox_power_control->setToolTip(QStringLiteral("Unsupported for current GPU"));
         qWarning().noquote().nospace() << "Power control not supported, groupBox widget disabled";
     }
 
@@ -391,7 +392,7 @@ void MainWindow::set_static_info()
     catch (const NVMLpp::errors::error_not_supported&)
     {
         ui->groupBox_clock_info->setEnabled(false);
-        ui->groupBox_clock_info->setToolTip("Unsupported for current GPU");
+        ui->groupBox_clock_info->setToolTip(QStringLiteral("Unsupported for current GPU"));
         qWarning().noquote().nospace() << "Clock control not supported, groupBox widget disabled";
     }
 
@@ -649,12 +650,12 @@ void MainWindow::on_actionShow_GPU_UUID_toggled(bool checked)
     if (checked)
     {
         ui->lineEdit_GPU_uuid->setText(QString::fromStdString(current_gpu_.get_uuid()));
-        ui->lineEdit_GPU_uuid->setToolTip("");
+        ui->lineEdit_GPU_uuid->setToolTip(QLatin1String(""));
     }
     else
     {
-        ui->lineEdit_GPU_uuid->setText("************************");
-        ui->lineEdit_GPU_uuid->setToolTip("Disabled for a privacy reasons (enable: View -> show GPU UUID)");
+        ui->lineEdit_GPU_uuid->setText(QStringLiteral("************************"));
+        ui->lineEdit_GPU_uuid->setToolTip(QStringLiteral("Disabled for a privacy reasons (enable: View -> show GPU UUID)"));
     }
 }
 
@@ -712,9 +713,9 @@ void MainWindow::connect_slots_and_signals()
 
 void MainWindow::setup_tray_menu()
 {
-    tray_menu_.addAction("Show/Hide app window", this, &MainWindow::toggle_tray);
+    tray_menu_.addAction(QStringLiteral("Show/Hide app window"), this, &MainWindow::toggle_tray);
     tray_menu_.addSeparator();
-    tray_menu_.addAction("Quit", this, &MainWindow::on_actionQuit_triggered);
+    tray_menu_.addAction(QStringLiteral("Quit"), this, &MainWindow::on_actionQuit_triggered);
     tray_icon_.setContextMenu(&tray_menu_);
 
     tray_icon_.setIcon(QIcon{":/icons/NvCtrl.png"});

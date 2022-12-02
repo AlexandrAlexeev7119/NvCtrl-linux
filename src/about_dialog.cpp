@@ -10,7 +10,7 @@ AboutDialog::AboutDialog(QWidget* parent)
     ui->setupUi(this);
     setMinimumSize(size());
     setMaximumSize(size());
-    ui->label_version->setText(QString{"v%1"}.arg(NvCtrl::config::APP_VERSION_WITH_BUILD_TYPE));
+    ui->label_version->setText(QStringLiteral("v%1").arg(NvCtrl::config::APP_VERSION_WITH_BUILD_TYPE));
 }
 
 AboutDialog::~AboutDialog()
