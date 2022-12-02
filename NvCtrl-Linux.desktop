@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=NvCtrl-linux
+Comment=Utility for control Nvidia GPUs on GNU/Linux
+Exec=/usr/bin/NvCtrl-Linux
+Type=Application
+Categories=Utility;System
