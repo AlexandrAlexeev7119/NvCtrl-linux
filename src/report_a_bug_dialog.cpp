@@ -59,13 +59,15 @@ void ReportABugDialog::showEvent(QShowEvent* show_event)
         const QString lsb_release_info {external_process_.readAll()};
 
         QString sys_info {};
+        sys_info.append("Distro info:\n");
         sys_info.append(lsb_release_info + "\n");
+        sys_info.append("Environment:\n");
         sys_info.append("Kernel ver: " + kernel_ver);
         sys_info.append("Driver ver: " + QString::fromStdString(NVMLpp::Session::instance().get_system_driver_version()) + "\n");
         sys_info.append("Session type: " + session_type + "\n");
         sys_info.append("Desktop env: " + desktop_env);
+
         ui->plainTextEdit_system_info->insertPlainText(sys_info);
     }
-
     show_event->accept();
 }
