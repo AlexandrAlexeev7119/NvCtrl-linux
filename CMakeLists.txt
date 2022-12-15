@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(NvCtrl-Linux VERSION 1.4.23 LANGUAGES CXX)
+project(NvCtrl-Linux VERSION 1.4.24 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -25,7 +25,7 @@ file(GLOB_RECURSE HDR include/*.hpp)
 file(GLOB_RECURSE UI ui/*.ui)
 file(GLOB_RECURSE RESOURCES res/*.qrc)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -flto")
 
 set(PROJECT_SOURCES
     ${SRC}

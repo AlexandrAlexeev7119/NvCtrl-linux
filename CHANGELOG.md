@@ -1,3 +1,10 @@
+## Version 1.4.24 (release)
+### Changes and fixes
+* Updated submodules (spdlog lib)
+* Using LTO (link time optimizations) by default (via cmake_cxx_flags)
+### Download
+Download AppImage file [for version 1.4.24](https://codeberg.org/AlexCr4ckPentest/GWEpp/NvCtrl-linux/tag/v1.4.24)
+
 ## Version 1.4.23 (release)
 ### Changes and fixes
 * Avoiding QString heap allocations for static literals

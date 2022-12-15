@@ -713,12 +713,11 @@ void MainWindow::connect_slots_and_signals()
 
 void MainWindow::setup_tray_menu()
 {
+    tray_icon_.setIcon(QIcon{":/icons/NvCtrl.png"});
     tray_menu_.addAction(QStringLiteral("Show/Hide app window"), this, &MainWindow::toggle_tray);
     tray_menu_.addSeparator();
     tray_menu_.addAction(QStringLiteral("Quit"), this, &MainWindow::on_actionQuit_triggered);
     tray_icon_.setContextMenu(&tray_menu_);
-
-    tray_icon_.setIcon(QIcon{":/icons/NvCtrl.png"});
 }
 
 
