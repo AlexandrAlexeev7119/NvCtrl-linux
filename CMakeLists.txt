@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(NvCtrl-Linux VERSION 1.4.24 LANGUAGES CXX)
+project(NvCtrl-Linux VERSION 1.4.25 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

@@ -5,7 +5,7 @@
 #include "recent_updates_dialog.hpp"
 #include "ui_recent_updates_dialog.h"
 
-constexpr const char* changelog_file_url {"https://codeberg.org/AlexCr4ckPentest/GWEpp/raw/branch/single-gpu/CHANGELOG.md"};
+constexpr const char* changelog_file_url {"https://codeberg.org/AlexCr4ckPentest/NvCtrl-linux/raw/branch/single-gpu/CHANGELOG.md"};
 
 
 
