@@ -1,3 +1,9 @@
+## Version 1.4.25 (release)
+### Changes and fixes
+* Changed changelog URL, fixed "temporarily redirected" error when trying to get changelog
+### Download
+Download AppImage file [for version 1.4.25](https://codeberg.org/AlexCr4ckPentest/GWEpp/NvCtrl-linux/tag/v1.4.25)
+
 ## Version 1.4.24 (release)
 ### Changes and fixes
 * Updated submodules (spdlog lib)
