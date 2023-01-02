@@ -18,15 +18,12 @@ MainWindow::MainWindow(nlohmann::json&& app_settings, QWidget* parent)
     , tray_menu_ {this}
     , tray_icon_ {this}
     , dynamic_info_update_timer_ {}
-
     , nvmlpp_session_ {NVMLpp::Session::instance()}
     , current_gpu_ {NVMLpp::NVML_device::from_index(0)}
-
     , gpu_utilizations_controller_ {this}
     , gpu_power_controller_ {this}
     , gpu_clock_controller_ {this}
     , gpu_fan_controller_ {this}
-
     , settings_dialog_window_ {this}
     , about_dialog_window_ {this}
     , report_a_bug_dialog_window_ {this}
@@ -36,9 +33,7 @@ MainWindow::MainWindow(nlohmann::json&& app_settings, QWidget* parent)
     , edit_clock_offset_profile_dialog_window_ {this}
     , recent_update_dialog_window_ {this}
     , gpu_processes_overview_dialog_window_ {this}
-
     , update_checker_thread_ {new UpdateChecker, [](UpdateChecker* thread) { thread->quit(); }}
-
     , dbus_message_receiver_ {NvCtrl::config::APP_DBUS_SERVICE_NAME, this}
 {
     ui->setupUi(this);
