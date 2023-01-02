@@ -1,3 +1,9 @@
+## Version 1.4.26 (release)
+### Changes and fixes
+* Static linking with libstdc++ and libgcc
+### Download
+Download AppImage file [for version 1.4.26](https://codeberg.org/AlexCr4ckPentest/GWEpp/NvCtrl-linux/tag/v1.4.26)
+
 ## Version 1.4.25 (release)
 ### Changes and fixes
 * Changed changelog URL, fixed "temporarily redirected" error when trying to get changelog
