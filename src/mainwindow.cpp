@@ -2,13 +2,15 @@
 #include <QMessageBox>
 #include <QDebug>
 
+#include "spdlog/spdlog.h"
 #include "app_config.hpp"
-#include "mainwindow.hpp"
-#include "ui_mainwindow.h"
-
 #include "settings_manager.hpp"
+#include "measure_time.hpp"
 #include "nvmlpp/nvmlpp_session.hpp"
 #include "nvmlpp/util/nvmlpp_errors.hpp"
+
+#include "ui_mainwindow.h"
+#include "mainwindow.hpp"
 
 MainWindow::MainWindow(nlohmann::json&& app_settings, QWidget* parent)
     : QMainWindow {parent}
@@ -42,18 +44,24 @@ MainWindow::MainWindow(nlohmann::json&& app_settings, QWidget* parent)
     ui->setupUi(this);
     setMinimumSize(size());
 
-    setWindowIcon(QIcon{":/icons/NvCtrl.png"});
-    app_settings_ = std::move(app_settings);
+    {
+        MeasureTime startup_time {"Starting application...", "Startup complete: {:.3f}ms"};
+        spdlog::info("----------------------------------------");
 
-    setup_tray_menu();
+        setWindowIcon(QIcon{":/icons/NvCtrl.png"});
+        app_settings_ = std::move(app_settings);
 
-    set_static_info();
-    connect_slots_and_signals();
-    set_current_gpu_for_controllers();
-    load_app_settings();
+        setup_tray_menu();
 
-    update_dynamic_info();
-    dynamic_info_update_timer_.start();
+        set_static_info();
+        connect_slots_and_signals();
+        set_current_gpu_for_controllers();
+        load_app_settings();
+
+        update_dynamic_info();
+        dynamic_info_update_timer_.start();
+    }
+    spdlog::info("----------------------------------------");
 }
 
 
