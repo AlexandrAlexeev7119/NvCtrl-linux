@@ -29,7 +29,7 @@ private:
 
 
 
-class SingleInstanceAppGuard
+class SingleInstanceAppGuard final
 {
 public:
     SingleInstanceAppGuard(const QString& key);

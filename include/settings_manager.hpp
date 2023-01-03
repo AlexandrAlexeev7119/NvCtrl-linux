@@ -4,7 +4,7 @@
 
 #include "nlohmann/json.hpp"
 
-class SettingsManager
+class SettingsManager final
 {
 public:
     static const nlohmann::json default_settings;

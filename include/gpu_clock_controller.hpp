@@ -5,7 +5,7 @@
 #include "nvmlpp/nvmlpp_device.hpp"
 #include "nlohmann/json.hpp"
 
-class GpuClockController : public QObject
+class GpuClockController final : public QObject
 {
     Q_OBJECT
 

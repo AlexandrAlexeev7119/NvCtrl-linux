@@ -29,7 +29,7 @@ void GpuClockController::apply_current_clock_profile()
     for (const auto& offset : gpu_offsets)
     {
         const auto [pstate, gpu_clock_offset] {offset.get<std::pair<int, int>>()};
-        args.append("-a");
+        args.append(QStringLiteral("-a"));
         args.append(QString{NVIDIA_SETTINGS_GPU_CLOCK_OFFSET}
                     .arg(current_gpu_->get_index())
                     .arg(pstate)
@@ -38,7 +38,7 @@ void GpuClockController::apply_current_clock_profile()
     for (const auto& offset : mem_offsets)
     {
         const auto [pstate, mem_clock_offset] {offset.get<std::pair<int, int>>()};
-        args.append("-a");
+        args.append(QStringLiteral("-a"));
         args.append(QString{NVIDIA_SETTINGS_MEM_CLOCK_OFFSET}
                     .arg(current_gpu_->get_index())
                     .arg(pstate)
@@ -54,12 +54,12 @@ void GpuClockController::reset_clocks()
     QStringList args {};
     for (unsigned pstate {0}; pstate < 8; pstate++)
     {
-        args.append("-a");
+        args.append(QStringLiteral("-a"));
         args.append(QString{NVIDIA_SETTINGS_GPU_CLOCK_OFFSET}
                     .arg(current_gpu_->get_index())
                     .arg(pstate)
                     .arg(0));
-        args.append("-a");
+        args.append(QStringLiteral("-a"));
         args.append(QString{NVIDIA_SETTINGS_MEM_CLOCK_OFFSET}
                     .arg(current_gpu_->get_index())
                     .arg(pstate)
@@ -92,7 +92,7 @@ void GpuClockController::update_info()
 
 void GpuClockController::run_nvidia_settings(QStringList&& args)
 {
-    auto err_code {QProcess::execute(NVIDIA_SETTINGS_BIN, std::forward<QStringList>(args))};
+    auto err_code {QProcess::execute(NVIDIA_SETTINGS_BIN, std::forward<QStringList&&>(args))};
     if (err_code == 0)
     {
         qInfo().noquote().nospace() << "Options applied: " << args << " " << " for current gpu";

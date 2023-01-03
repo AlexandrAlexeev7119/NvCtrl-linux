@@ -2,13 +2,15 @@
 #include <QMessageBox>
 #include <QDebug>
 
+#include "spdlog/spdlog.h"
 #include "app_config.hpp"
-#include "mainwindow.hpp"
-#include "ui_mainwindow.h"
-
 #include "settings_manager.hpp"
+#include "measure_time.hpp"
 #include "nvmlpp/nvmlpp_session.hpp"
 #include "nvmlpp/util/nvmlpp_errors.hpp"
+
+#include "ui_mainwindow.h"
+#include "mainwindow.hpp"
 
 MainWindow::MainWindow(nlohmann::json&& app_settings, QWidget* parent)
     : QMainWindow {parent}
@@ -16,15 +18,12 @@ MainWindow::MainWindow(nlohmann::json&& app_settings, QWidget* parent)
     , tray_menu_ {this}
     , tray_icon_ {this}
     , dynamic_info_update_timer_ {}
-
     , nvmlpp_session_ {NVMLpp::Session::instance()}
     , current_gpu_ {NVMLpp::NVML_device::from_index(0)}
-
     , gpu_utilizations_controller_ {this}
     , gpu_power_controller_ {this}
     , gpu_clock_controller_ {this}
     , gpu_fan_controller_ {this}
-
     , settings_dialog_window_ {this}
     , about_dialog_window_ {this}
     , report_a_bug_dialog_window_ {this}
@@ -34,26 +33,30 @@ MainWindow::MainWindow(nlohmann::json&& app_settings, QWidget* parent)
     , edit_clock_offset_profile_dialog_window_ {this}
     , recent_update_dialog_window_ {this}
     , gpu_processes_overview_dialog_window_ {this}
-
     , update_checker_thread_ {new UpdateChecker, [](UpdateChecker* thread) { thread->quit(); }}
-
     , dbus_message_receiver_ {NvCtrl::config::APP_DBUS_SERVICE_NAME, this}
 {
     ui->setupUi(this);
     setMinimumSize(size());
 
-    setWindowIcon(QIcon{":/icons/NvCtrl.png"});
-    app_settings_ = std::move(app_settings);
+    {
+        MeasureTime startup_time {"Starting application...", "Startup complete: {:.3f}ms"};
+        spdlog::info("----------------------------------------");
 
-    setup_tray_menu();
+        setWindowIcon(QIcon{":/icons/NvCtrl.png"});
+        app_settings_ = std::move(app_settings);
 
-    set_static_info();
-    connect_slots_and_signals();
-    set_current_gpu_for_controllers();
-    load_app_settings();
+        setup_tray_menu();
 
-    update_dynamic_info();
-    dynamic_info_update_timer_.start();
+        set_static_info();
+        connect_slots_and_signals();
+        set_current_gpu_for_controllers();
+        load_app_settings();
+
+        update_dynamic_info();
+        dynamic_info_update_timer_.start();
+    }
+    spdlog::info("----------------------------------------");
 }
 
 

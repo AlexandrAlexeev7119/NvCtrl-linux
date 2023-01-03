@@ -17,7 +17,7 @@
    <item row="2" column="0" colspan="3">
     <widget class="QLabel" name="label_copyright">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright © 2022 AlexCr4ckPentest&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright © 2022-2023 AlexCr4ckPentest&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>

@@ -4,7 +4,7 @@
 
 #include "nvmlpp/nvmlpp_device.hpp"
 
-class GpuUtilizationsController : public QObject
+class GpuUtilizationsController final : public QObject
 {
     Q_OBJECT
 
