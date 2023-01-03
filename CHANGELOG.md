@@ -1,3 +1,12 @@
+## Version 1.4.30 (release)
+### Changes and fixes
+* Update submodules (spdlog lib)
+* Update copyright years on about dialog window
+* All \*Controllers classes (and other classes) now marked as final
+* Explicit QString creating replased by QStringLiteral to avoid allocations
+### Download
+Download AppImage file [for version 1.4.30](https://codeberg.org/AlexCr4ckPentest/GWEpp/NvCtrl-linux/tag/v1.4.30)
+
 ## Version 1.4.26 (release)
 ### Changes and fixes
 * Static linking with libstdc++ and libgcc
