@@ -3,7 +3,7 @@
 #include <QObject>
 #include "nvmlpp/nvmlpp_device.hpp"
 
-class GpuPowerController : public QObject
+class GpuPowerController final : public QObject
 {
     Q_OBJECT
 public:

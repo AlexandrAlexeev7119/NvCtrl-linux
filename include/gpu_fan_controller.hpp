@@ -3,7 +3,7 @@
 #include <QObject>
 #include "nvmlpp/nvmlpp_device.hpp"
 
-class GpuFanController : public QObject
+class GpuFanController final : public QObject
 {
     Q_OBJECT
 

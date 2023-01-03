@@ -13,6 +13,8 @@ void GpuUtilizationsController::update_info()
         .gpu = current_gpu_->get_gpu_utilization(),
         .mem = current_gpu_->get_memory_utilization(),
         .mem_used = static_cast<unsigned>(current_gpu_->get_used_memory()),
+        .encoder = 0,
+        .decoder = 0,
         .pstate = static_cast<unsigned>(current_gpu_->get_performance_state()),
         .gpu_core_temp = current_gpu_->get_current_temperature()
     };
