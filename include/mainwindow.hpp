@@ -140,4 +140,6 @@ private:
     const std::pair<std::vector<QSpinBox*>, std::vector<QSpinBox*>>& get_clock_offset_widgets() const;
 
     void closeEvent(QCloseEvent* close_event);
+    void hideEvent(QHideEvent* hide_event);
+    void showEvent(QShowEvent* show_event);
 };
