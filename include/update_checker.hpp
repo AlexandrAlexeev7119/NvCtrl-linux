@@ -3,7 +3,7 @@
 #include <QThread>
 #include <QProcess>
 
-class UpdateChecker : public QThread
+class UpdateChecker final : public QThread
 {
     Q_OBJECT
 
