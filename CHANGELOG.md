@@ -1,3 +1,9 @@
+## Version 1.4.31 (release)
+### Changes and fixes
+* Values now doesn\`t update when window is hidden (doesn\`t utilize much more CPU time when hidden)
+### Download
+Download AppImage file [for version 1.4.31](https://codeberg.org/AlexCr4ckPentest/GWEpp/NvCtrl-linux/tag/v1.4.31)
+
 ## Version 1.4.30 (release)
 ### Changes and fixes
 * Update submodules (spdlog lib)
