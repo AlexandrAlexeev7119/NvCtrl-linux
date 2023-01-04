@@ -535,6 +535,22 @@ void MainWindow::closeEvent(QCloseEvent* close_event)
 
 
 
+void MainWindow::hideEvent(QHideEvent* hide_event)
+{
+    disconnect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
+    hide_event->accept();
+}
+
+
+
+void MainWindow::showEvent(QShowEvent* show_event)
+{
+    connect(&dynamic_info_update_timer_, &QTimer::timeout, this, &MainWindow::update_dynamic_info);
+    show_event->accept();
+}
+
+
+
 void MainWindow::on_pushButton_apply_power_limit_clicked()
 {
     const unsigned power_limit_value {static_cast<unsigned>(ui->horizontalSlider_change_power_limit->value())};
