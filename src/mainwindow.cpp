@@ -34,29 +34,29 @@ MainWindow::MainWindow(nlohmann::json&& app_settings, QWidget* parent)
     , recent_update_dialog_window_ {this}
     , gpu_processes_overview_dialog_window_ {this}
     , update_checker_thread_ {new UpdateChecker, [](UpdateChecker* thread) { thread->quit(); }}
-    , dbus_message_receiver_ {NvCtrl::config::APP_DBUS_SERVICE_NAME, this}
+, dbus_message_receiver_ {NvCtrl::config::APP_DBUS_SERVICE_NAME, this}
 {
-    ui->setupUi(this);
-    setMinimumSize(size());
+ui->setupUi(this);
+setMinimumSize(size());
 
-    {
-        MeasureTime startup_time {"Starting application...", "Startup complete: {:.3f}ms"};
-        spdlog::info("----------------------------------------");
+{
+MeasureTime startup_time {"Starting application...", "Startup complete: {:.3f}ms"};
+spdlog::info("----------------------------------------");
 
-        setWindowIcon(QIcon{":/icons/NvCtrl.png"});
-        app_settings_ = std::move(app_settings);
+setWindowIcon(QIcon{":/icons/NvCtrl.png"});
+app_settings_ = std::move(app_settings);
 
-        setup_tray_menu();
+setup_tray_menu();
 
-        set_static_info();
-        connect_slots_and_signals();
-        set_current_gpu_for_controllers();
-        load_app_settings();
+set_static_info();
+connect_slots_and_signals();
+set_current_gpu_for_controllers();
+load_app_settings();
 
-        update_dynamic_info();
-        dynamic_info_update_timer_.start();
-    }
-    spdlog::info("----------------------------------------");
+update_dynamic_info();
+dynamic_info_update_timer_.start();
+}
+spdlog::info("----------------------------------------");
 }
 
 
@@ -468,23 +468,23 @@ const std::pair<std::vector<QSpinBox*>, std::vector<QSpinBox*>>& MainWindow::get
     static const std::pair<std::vector<QSpinBox*>, std::vector<QSpinBox*>> widgets_list {
         {
             ui->spinBox_pstate0_gpu_offset,
-            ui->spinBox_pstate1_gpu_offset,
-            ui->spinBox_pstate2_gpu_offset,
-            ui->spinBox_pstate3_gpu_offset,
-            ui->spinBox_pstate4_gpu_offset,
-            ui->spinBox_pstate5_gpu_offset,
-            ui->spinBox_pstate6_gpu_offset,
-            ui->spinBox_pstate7_gpu_offset
+                    ui->spinBox_pstate1_gpu_offset,
+                    ui->spinBox_pstate2_gpu_offset,
+                    ui->spinBox_pstate3_gpu_offset,
+                    ui->spinBox_pstate4_gpu_offset,
+                    ui->spinBox_pstate5_gpu_offset,
+                    ui->spinBox_pstate6_gpu_offset,
+                    ui->spinBox_pstate7_gpu_offset
         },
         {
             ui->spinBox_pstate0_mem_offset,
-            ui->spinBox_pstate1_mem_offset,
-            ui->spinBox_pstate2_mem_offset,
-            ui->spinBox_pstate3_mem_offset,
-            ui->spinBox_pstate4_mem_offset,
-            ui->spinBox_pstate5_mem_offset,
-            ui->spinBox_pstate6_mem_offset,
-            ui->spinBox_pstate7_mem_offset
+                    ui->spinBox_pstate1_mem_offset,
+                    ui->spinBox_pstate2_mem_offset,
+                    ui->spinBox_pstate3_mem_offset,
+                    ui->spinBox_pstate4_mem_offset,
+                    ui->spinBox_pstate5_mem_offset,
+                    ui->spinBox_pstate6_mem_offset,
+                    ui->spinBox_pstate7_mem_offset
         },
     };
     const auto reset {[](QSpinBox* const spinbox) { spinbox->setValue(0); }};

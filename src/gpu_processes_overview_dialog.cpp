@@ -54,14 +54,13 @@ void GpuProcessesOverviewDialog::on_buttonBox_rejected()
 void GpuProcessesOverviewDialog::show_processes_info()
 {
     const auto proc_list {current_gpu_->get_running_processes()};
-
     ui->tableWidget_proc_info->setRowCount(proc_list.size());
 
     int curr_row {0};
     for (const auto& process : proc_list)
     {
         ui->tableWidget_proc_info->setCellWidget(curr_row, CELL_PROC_PID, new QLabel {QString::number(process.pid), this});
-        ui->tableWidget_proc_info->setCellWidget(curr_row, CELL_PROC_MEM_USAGE, new QLabel {QString{"%1 MiB"}.arg(process.usedGpuMemory / 1024 / 1024), this});
+        ui->tableWidget_proc_info->setCellWidget(curr_row, CELL_PROC_MEM_USAGE, new QLabel {QString{QStringLiteral("%1 MiB")}.arg(process.usedGpuMemory / 1024 / 1024), this});
         ui->tableWidget_proc_info->setCellWidget(curr_row, CELL_PROC_NAME, new QLabel {get_process_name_by_pid(process.pid), this});
         curr_row++;
     }
@@ -69,29 +68,36 @@ void GpuProcessesOverviewDialog::show_processes_info()
 
 
 
-void GpuProcessesOverviewDialog::on_tableWidget_proc_info_cellDoubleClicked(int row, [[maybe_unused]] int column)
+void GpuProcessesOverviewDialog::on_tableWidget_proc_info_cellDoubleClicked([[maybe_unused]] int row, [[maybe_unused]] int column)
 {
-    const int pid {static_cast<QLabel*>(
-                    ui->tableWidget_proc_info->cellWidget(row, CELL_PROC_PID))
-                ->text().toInt()};
-    const auto ans {
-        QMessageBox::question(this, QStringLiteral("Confirm action"),
-                              QStringLiteral("Do you really WANT TO KILL process with PID=%1?").arg(pid),
-                              QMessageBox::Button::Yes, QMessageBox::Button::No)
-    };
-    if (ans == QMessageBox::Button::Yes)
-    {
-        if (::kill(pid, SIGTERM) == 0)
-        {
-            qInfo().noquote().nospace() << "Process " << pid << " succesfully killed!";
-        }
-        else
-        {
-            const QString err_str {QString{"Trying to kill process %1, got error: %2"}.arg(pid).arg(std::strerror(errno))};
-            qCritical().noquote().nospace() << err_str;
-            QMessageBox::critical(this, QStringLiteral("Error occured"), err_str);
-        }
-    }
+#ifdef _WIN32
+  QMessageBox::warning(this,
+                       QStringLiteral("Unsupported operation"),
+                       QStringLiteral("Killing processes is currently unsupported on win32 platform")
+                       );
+#else
+  const int pid {static_cast<QLabel*>(
+                  ui->tableWidget_proc_info->cellWidget(row, CELL_PROC_PID))
+              ->text().toInt()};
+  const auto ans {
+      QMessageBox::question(this, QStringLiteral("Confirm action"),
+                            QStringLiteral("Do you really WANT TO KILL process with PID=%1?").arg(pid),
+                            QMessageBox::Button::Yes, QMessageBox::Button::No)
+  };
+  if (ans == QMessageBox::Button::Yes)
+  {
+      if (::kill(pid, SIGTERM) == 0)
+      {
+          qInfo().noquote().nospace() << "Process " << pid << " succesfully killed!";
+      }
+      else
+      {
+          const QString err_str {QString{"Trying to kill process %1, got error: %2"}.arg(pid).arg(std::strerror(errno))};
+          qCritical().noquote().nospace() << err_str;
+          QMessageBox::critical(this, QStringLiteral("Error occured"), err_str);
+      }
+  }
+#endif
 }
 
 
@@ -125,9 +131,12 @@ void GpuProcessesOverviewDialog::closeEvent(QCloseEvent* close_event)
 
 
 
-QString GpuProcessesOverviewDialog::get_process_name_by_pid(pid_t proc_pid) const
+QString GpuProcessesOverviewDialog::get_process_name_by_pid([[maybe_unused]] pid_t proc_pid) const
 {
-    char file_name[32] {0};
+#ifdef _WIN32
+  qDebug().noquote().nospace() << "Operation not supported: " << __PRETTY_FUNCTION__;
+#else
+  char file_name[32] {0};
     std::sprintf(file_name, "/proc/%d/cmdline", proc_pid);
     std::FILE* file {std::fopen(file_name, "r")};
 
@@ -139,5 +148,6 @@ QString GpuProcessesOverviewDialog::get_process_name_by_pid(pid_t proc_pid) cons
         return buff;
     }
 
+#endif
     return {};
 }
