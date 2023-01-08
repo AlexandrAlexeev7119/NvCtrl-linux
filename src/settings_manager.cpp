@@ -118,6 +118,10 @@ void SettingsManager::close_file()
 
 const std::string& SettingsManager::get_home_dir() const
 {
+#ifdef _WIN32
+    static const std::string home_dir {"C:\\Users\\" + std::string{std::getenv("USERNAME")} + "\\NvCtrl-Linux\\"};
+#else
     static const std::string home_dir {"/home/" + std::string{std::getenv("USER")} + "/.config/NvCtrl-Linux/"};
+#endif
     return home_dir;
 }

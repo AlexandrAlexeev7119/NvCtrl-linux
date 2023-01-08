@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(NvCtrl-Linux VERSION 1.4.31 LANGUAGES CXX)
+project(NvCtrl-Linux VERSION 1.4.33 LANGUAGES CXX)
 
 if(NOT WIN32)
     string(ASCII 27 Esc)
