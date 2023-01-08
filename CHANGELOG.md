@@ -1,3 +1,9 @@
+## Version 1.4.34 (pre-release (UNSTABLE))
+### Changes and fixes
+* Removed all AppImages (refactoring structure)
+### Download
+Download source code [for version 1.4.33](https://codeberg.org/AlexCr4ckPentest/GWEpp/NvCtrl-linux/tag/v1.4.34)
+
 ## Version 1.4.33 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Added win32 platform support via MinGW cross compilation
