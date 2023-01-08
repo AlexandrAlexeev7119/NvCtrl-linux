@@ -22,7 +22,7 @@ int DBusSender::send_message()
 
 
 
-bool DBusSender::iface_is_valid() const
+DBusSender::operator bool() const
 {
     return dbus_iface_.isValid();
 }

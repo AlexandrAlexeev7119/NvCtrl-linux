@@ -10,7 +10,8 @@ class DBusSender final : public QObject
 public:
     DBusSender(std::string_view service_name, QObject* parent = nullptr);
     int send_message();
-    bool iface_is_valid() const;
+
+    operator bool() const;
 
 private:
     QDBusInterface dbus_iface_;

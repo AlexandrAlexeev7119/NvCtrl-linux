@@ -48,7 +48,7 @@ int main(int argc, char** argv)
     if (!single_app_instance.run())
     {
         DBusSender sender {NvCtrl::config::APP_DBUS_SERVICE_NAME};
-        if (sender.iface_is_valid())
+        if (sender)
         {
             sender.send_message();
         }
