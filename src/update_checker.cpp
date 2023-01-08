@@ -3,8 +3,15 @@
 #include "app_config.hpp"
 #include "update_checker.hpp"
 
-constexpr const char* version_file_url_main {"https://codeberg.org/AlexCr4ckPentest/NvCtrl-linux/raw/branch/main/.last_version"};
-constexpr const char* version_file_url_develop {"https://codeberg.org/AlexCr4ckPentest/NvCtrl-linux/raw/branch/single-gpu/.last_version"};
+constexpr const char* VERSION_FILE_URL_MAIN {"https://codeberg.org/AlexCr4ckPentest/NvCtrl-linux/raw/branch/main/.last_version"};
+constexpr const char* VERSION_FILE_URL_DEV {"https://codeberg.org/AlexCr4ckPentest/NvCtrl-linux/raw/branch/single-gpu/.last_version"};
+constexpr const char* CURL_BINARY {
+#ifndef _WIN32
+    "/usr/bin/curl"
+#else
+    "curl.exe"
+#endif
+};
 
 
 
@@ -36,15 +43,14 @@ void UpdateChecker::run()
 
     if (branch_type_ == MAIN_BRANCH)
     {
-        retrieve_last_ver_process_.start(QStringLiteral("/usr/bin/curl"), {version_file_url_main});
+        retrieve_last_ver_process_.start(CURL_BINARY, {VERSION_FILE_URL_MAIN});
     }
     else
     {
-        retrieve_last_ver_process_.start(QStringLiteral("/usr/bin/curl"), {version_file_url_develop});
+        retrieve_last_ver_process_.start(CURL_BINARY, {VERSION_FILE_URL_DEV});
     }
 
     retrieve_last_ver_process_.waitForFinished();
-
     const int err_code {retrieve_last_ver_process_.exitCode()};
 
     if (err_code != 0)
@@ -65,7 +71,6 @@ void UpdateChecker::run()
         const int current_patch {current_app_version[PATCH_VER].toInt()};
 
         const auto& joined_ver {last_app_version.join('.')};
-
         qDebug().noquote().nospace() << "Retrieved ver: v" << joined_ver
                                      << ", current: v" << NvCtrl::config::APP_VERSION_STRING;
 

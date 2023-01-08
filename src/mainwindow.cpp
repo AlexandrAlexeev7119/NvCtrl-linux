@@ -690,8 +690,15 @@ void MainWindow::on_actionCheck_for_updates_triggered()
 
 void MainWindow::on_actionShow_GPU_processes_triggered()
 {
+#ifndef _WIN32
     gpu_processes_overview_dialog_window_.set_current_gpu(&current_gpu_);
     gpu_processes_overview_dialog_window_.show();
+#else
+    QMessageBox::warning(this,
+                         QStringLiteral("Unsupported operation"),
+                         QStringLiteral("Process view is currently unsupported on win32 platform")
+                         );
+#endif
 }
 
 

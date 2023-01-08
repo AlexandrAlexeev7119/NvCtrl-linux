@@ -1,3 +1,12 @@
+## Version 1.4.33 (pre-release (UNSTABLE))
+### Changes and fixes
+* Added win32 platform support via MinGW cross compilation
+* Disabled GPU processes table for win32 platform (unsupported yet)
+* Fixed endless recursion in NVMLpp library
+* Fixed curl binary for win32
+### Download
+Download AppImage file [for version 1.4.33](https://codeberg.org/AlexCr4ckPentest/GWEpp/NvCtrl-linux/tag/v1.4.33)
+
 ## Version 1.4.31 (release)
 ### Changes and fixes
 * Values now doesn\`t update when window is hidden (doesn\`t utilize much more CPU time when hidden)
