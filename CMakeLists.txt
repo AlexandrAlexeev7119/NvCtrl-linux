@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(NvCtrl-Linux VERSION 1.4.34 LANGUAGES CXX)
+project(NvCtrl-Linux VERSION 1.4.35 LANGUAGES CXX)
 
 if(NOT WIN32)
     string(ASCII 27 Esc)
@@ -46,7 +46,7 @@ file(GLOB_RECURSE RESOURCES res/*.qrc)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
 
 if(USE_LTO)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto=auto")
     message("Link time optimizations: ${Green}ON")
 else()
     message("Link time optimizations: ${Red}OFF")

@@ -230,7 +230,7 @@ void MainWindow::on_GpuClockController_info_ready(const GpuClockController::cloc
 
 void MainWindow::on_GpuFanController_info_ready(const GpuFanController::fan_rates& fan_rates)
 {
-    ui->lineEdit_current_fan_speed_level->setText(QString::number(fan_rates.fan_speed_level) + "%");
+    ui->progressBar_current_fan_speed_level->setValue(fan_rates.fan_speed_level);
 }
 
 
@@ -304,7 +304,8 @@ void MainWindow::on_UpdateChecker_new_version_released(const QString& version)
 
 void MainWindow::on_UpdateChecker_update_not_found()
 {
-    QMessageBox::information(this, QStringLiteral("NvCtrl-Linux: no updates found"),
+    QMessageBox::information(this,
+                             QStringLiteral("NvCtrl-Linux: no updates found"),
                              QStringLiteral("No updates available, you are using latest version (v%1)")
                              .arg(NvCtrl::config::APP_VERSION_STRING));
 }

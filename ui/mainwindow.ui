@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>615</width>
-    <height>550</height>
+    <height>547</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,7 +21,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QFormLayout" name="formLayout_2">
-    <item row="0" column="0" colspan="2">
+    <item row="1" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
        <number>0</number>
@@ -51,23 +51,29 @@
            <bool>false</bool>
           </property>
           <layout class="QGridLayout" name="gridLayout">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_GPU_name">
+           <item row="3" column="2">
+            <widget class="QLabel" name="label_GPU_bus_type">
              <property name="text">
-              <string>Name</string>
+              <string>Bus type</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
-           <item row="5" column="0">
-            <widget class="QLabel" name="label_GPU_total_mem">
-             <property name="text">
-              <string>Total memory</string>
+           <item row="1" column="1" colspan="3">
+            <widget class="QLineEdit" name="lineEdit_GPU_uuid">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
              </property>
              <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -81,28 +87,14 @@
              </property>
             </widget>
            </item>
-           <item row="10" column="1">
-            <widget class="QLineEdit" name="lineEdit_GPU_shutdown_temp">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QLabel" name="label_GPU_arch">
-             <property name="text">
-              <string>Arch</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
            <item row="9" column="1">
             <widget class="QLineEdit" name="lineEdit_GPU_slowdown_temp">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -111,18 +103,14 @@
              </property>
             </widget>
            </item>
-           <item row="10" column="0">
-            <widget class="QLabel" name="label_GPU_shutdown_temp">
-             <property name="text">
-              <string>Shutdown temp</string>
+           <item row="3" column="1">
+            <widget class="QLineEdit" name="lineEdit_GPU_subvendor">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
              </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             <property name="frame">
+              <bool>true</bool>
              </property>
-            </widget>
-           </item>
-           <item row="0" column="1" colspan="3">
-            <widget class="QLineEdit" name="lineEdit_GPU_name">
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -131,10 +119,42 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_GPU_vendor">
+           <item row="5" column="1">
+            <widget class="QLineEdit" name="lineEdit_GPU_total_mem">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="3">
+            <widget class="QLineEdit" name="lineEdit_GPU_VBIOS_ver">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_GPU_name">
              <property name="text">
-              <string>Vendor</string>
+              <string>Name</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -151,26 +171,6 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
-            <widget class="QLineEdit" name="lineEdit_GPU_vendor">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="3">
-            <widget class="QLineEdit" name="lineEdit_GPU_bus_id">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
            <item row="9" column="2">
             <widget class="QLabel" name="label_GPU_VBIOS_ver">
              <property name="text">
@@ -181,18 +181,14 @@
              </property>
             </widget>
            </item>
-           <item row="9" column="0">
-            <widget class="QLabel" name="label_GPU_slowdown_temp">
-             <property name="text">
-              <string>Slowdown temp</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
            <item row="3" column="3">
             <widget class="QLineEdit" name="lineEdit_GPU_bus_type">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -201,18 +197,30 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="2">
-            <widget class="QLabel" name="label_GPU_bus_type">
-             <property name="text">
-              <string>Bus type</string>
+           <item row="0" column="1" colspan="3">
+            <widget class="QLineEdit" name="lineEdit_GPU_name">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
              </property>
              <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
            <item row="10" column="3">
             <widget class="QLineEdit" name="lineEdit_GPU_driver_ver">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -221,8 +229,14 @@
              </property>
             </widget>
            </item>
-           <item row="5" column="1">
-            <widget class="QLineEdit" name="lineEdit_GPU_total_mem">
+           <item row="2" column="1">
+            <widget class="QLineEdit" name="lineEdit_GPU_vendor">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -231,28 +245,40 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
-            <widget class="QLineEdit" name="lineEdit_GPU_subvendor">
+           <item row="10" column="2">
+            <widget class="QLabel" name="label_GPU_driver_ver">
+             <property name="text">
+              <string>Driver</string>
+             </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1" colspan="3">
-            <widget class="QLineEdit" name="lineEdit_GPU_uuid">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
            <item row="2" column="3">
             <widget class="QLineEdit" name="lineEdit_GPU_arch">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="3">
+            <widget class="QLineEdit" name="lineEdit_GPU_bus_id">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -271,18 +297,64 @@
              </property>
             </widget>
            </item>
-           <item row="10" column="2">
-            <widget class="QLabel" name="label_GPU_driver_ver">
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_GPU_vendor">
              <property name="text">
-              <string>Driver</string>
+              <string>Vendor</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
-           <item row="9" column="3">
-            <widget class="QLineEdit" name="lineEdit_GPU_VBIOS_ver">
+           <item row="2" column="2">
+            <widget class="QLabel" name="label_GPU_arch">
+             <property name="text">
+              <string>Arch</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="0">
+            <widget class="QLabel" name="label_GPU_shutdown_temp">
+             <property name="text">
+              <string>Shutdown temp</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_GPU_total_mem">
+             <property name="text">
+              <string>Total memory</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0">
+            <widget class="QLabel" name="label_GPU_slowdown_temp">
+             <property name="text">
+              <string>Slowdown temp</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="1">
+            <widget class="QLineEdit" name="lineEdit_GPU_shutdown_temp">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -314,17 +386,13 @@
            <bool>false</bool>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
-           <item row="4" column="2">
-            <widget class="QProgressBar" name="progressBar_GPU_decoder_usage">
-             <property name="value">
-              <number>0</number>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_GPU_usage">
+             <property name="text">
+              <string>GPU</string>
              </property>
-            </widget>
-           </item>
-           <item row="3" column="2" colspan="3">
-            <widget class="QProgressBar" name="progressBar_GPU_mem_usage">
-             <property name="value">
-              <number>0</number>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -335,13 +403,87 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_GPU_usage">
+           <item row="4" column="2">
+            <widget class="QProgressBar" name="progressBar_GPU_decoder_usage">
+             <property name="value">
+              <number>0</number>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_GPU_mem_usage">
              <property name="text">
-              <string>GPU</string>
+              <string>Memory</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2">
+            <widget class="QLineEdit" name="lineEdit_current_gpu_core_temp">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="5">
+            <widget class="QLineEdit" name="lineEdit_GPU_mem_usage">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="3">
+            <widget class="QLabel" name="label_current_fan_speed_level">
+             <property name="font">
+              <font>
+               <pointsize>10</pointsize>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Fan speed</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="5">
+            <widget class="QLineEdit" name="lineEdit_current_pstate">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -355,13 +497,19 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="5">
-            <widget class="QLineEdit" name="lineEdit_GPU_mem_usage">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_current_gpu_core_temp">
+             <property name="font">
+              <font>
+               <pointsize>10</pointsize>
+               <bold>false</bold>
+              </font>
              </property>
-             <property name="readOnly">
-              <bool>true</bool>
+             <property name="text">
+              <string>GPU temp</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -382,23 +530,17 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="5">
-            <widget class="QLineEdit" name="lineEdit_current_pstate">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
+           <item row="3" column="2" colspan="3">
+            <widget class="QProgressBar" name="progressBar_GPU_mem_usage">
+             <property name="value">
+              <number>0</number>
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_GPU_mem_usage">
-             <property name="text">
-              <string>Memory</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <item row="5" column="5">
+            <widget class="QProgressBar" name="progressBar_current_fan_speed_level">
+             <property name="value">
+              <number>0</number>
              </property>
             </widget>
            </item>
@@ -421,10 +563,52 @@
            <set>Qt::AlignCenter</set>
           </property>
           <layout class="QGridLayout" name="gridLayout_3">
-           <item row="1" column="5">
-            <widget class="QLabel" name="label_enforced_power_limit">
+           <item row="0" column="3">
+            <widget class="QLabel" name="label_current_power_limit">
              <property name="text">
-              <string>Enforced</string>
+              <string>Current limit</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="4">
+            <widget class="QLineEdit" name="lineEdit_max_power_limit">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="6">
+            <widget class="QLineEdit" name="lineEdit_enforced_power_limit">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QLabel" name="label_max_power_limit">
+             <property name="text">
+              <string>Max limit</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -433,6 +617,9 @@
            </item>
            <item row="0" column="4">
             <widget class="QLineEdit" name="lineEdit_current_power_limit">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
              <property name="frame">
               <bool>true</bool>
              </property>
@@ -446,6 +633,9 @@
            </item>
            <item row="2" column="2" colspan="4">
             <widget class="QSlider" name="horizontalSlider_change_power_limit">
+             <property name="focusPolicy">
+              <enum>Qt::TabFocus</enum>
+             </property>
              <property name="pageStep">
               <number>5</number>
              </property>
@@ -462,6 +652,9 @@
            </item>
            <item row="0" column="2">
             <widget class="QLineEdit" name="lineEdit_current_power_usage">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
              <property name="frame">
               <bool>true</bool>
              </property>
@@ -470,13 +663,6 @@
              </property>
              <property name="readOnly">
               <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="6">
-            <widget class="QPushButton" name="pushButton_apply_power_limit">
-             <property name="text">
-              <string>Apply</string>
              </property>
             </widget>
            </item>
@@ -490,59 +676,20 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="6">
-            <widget class="QLineEdit" name="lineEdit_default_power_limit">
-             <property name="frame">
-              <bool>true</bool>
+           <item row="2" column="6">
+            <widget class="QPushButton" name="pushButton_apply_power_limit">
+             <property name="focusPolicy">
+              <enum>Qt::TabFocus</enum>
              </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="6">
-            <widget class="QLineEdit" name="lineEdit_enforced_power_limit">
-             <property name="frame">
-              <bool>true</bool>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QLineEdit" name="lineEdit_min_power_limit">
-             <property name="frame">
-              <bool>true</bool>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_power_limit_slider_indicator">
              <property name="text">
-              <string>0</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              <string>Apply</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="3">
-            <widget class="QLabel" name="label_max_power_limit">
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_min_power_limit">
              <property name="text">
-              <string>Max limit</string>
+              <string>Min limit</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -559,18 +706,11 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="3">
-            <widget class="QLabel" name="label_current_power_limit">
-             <property name="text">
-              <string>Current limit</string>
+           <item row="1" column="2">
+            <widget class="QLineEdit" name="lineEdit_min_power_limit">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
              </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="4">
-            <widget class="QLineEdit" name="lineEdit_max_power_limit">
              <property name="frame">
               <bool>true</bool>
              </property>
@@ -582,13 +722,39 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_min_power_limit">
+           <item row="1" column="5">
+            <widget class="QLabel" name="label_enforced_power_limit">
              <property name="text">
-              <string>Min limit</string>
+              <string>Enforced</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_power_limit_slider_indicator">
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="6">
+            <widget class="QLineEdit" name="lineEdit_default_power_limit">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -604,16 +770,6 @@
            <set>Qt::AlignCenter</set>
           </property>
           <layout class="QGridLayout" name="gridLayout_6">
-           <item row="1" column="6">
-            <widget class="QPushButton" name="pushButton_edit_current_fan_profile">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Edit current</string>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_select_fan_profile">
              <property name="sizePolicy">
@@ -630,93 +786,44 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="1" colspan="5">
+           <item row="1" column="1" colspan="6">
             <widget class="QComboBox" name="comboBox_select_fan_profile"/>
            </item>
-           <item row="6" column="6">
-            <widget class="QPushButton" name="pushButton_apply_fan_speed">
+           <item row="3" column="0">
+            <widget class="QPushButton" name="pushButton_edit_current_fan_profile">
              <property name="enabled">
-              <bool>true</bool>
+              <bool>false</bool>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::TabFocus</enum>
              </property>
              <property name="text">
-              <string>Apply</string>
+              <string>Edit current</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="6">
+           <item row="4" column="0">
             <widget class="QPushButton" name="pushButton_add_new_fan_profile">
+             <property name="focusPolicy">
+              <enum>Qt::TabFocus</enum>
+             </property>
              <property name="text">
               <string>Add new</string>
              </property>
             </widget>
            </item>
-           <item row="3" column="2">
-            <layout class="QGridLayout" name="gridLayout_12">
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="lineEdit_current_gpu_core_temp">
-               <property name="text">
-                <string>0</string>
-               </property>
-               <property name="frame">
-                <bool>true</bool>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="readOnly">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_current_gpu_core_temp">
-               <property name="font">
-                <font>
-                 <pointsize>10</pointsize>
-                 <bold>false</bold>
-                </font>
-               </property>
-               <property name="text">
-                <string>Current GPU temp:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_current_fan_speed_level">
-               <property name="font">
-                <font>
-                 <pointsize>10</pointsize>
-                 <bold>false</bold>
-                </font>
-               </property>
-               <property name="text">
-                <string>Current fan speed:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLineEdit" name="lineEdit_current_fan_speed_level">
-               <property name="text">
-                <string>0%</string>
-               </property>
-               <property name="frame">
-                <bool>true</bool>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="readOnly">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
+           <item row="4" column="6">
+            <widget class="QPushButton" name="pushButton_apply_fan_speed">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::TabFocus</enum>
+             </property>
+             <property name="text">
+              <string>Apply</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -736,6 +843,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
           <property name="title">
            <string>Clock offset</string>
           </property>
@@ -750,6 +860,9 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::TabFocus</enum>
              </property>
              <property name="text">
               <string>Add new</string>
@@ -766,6 +879,9 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::TabFocus</enum>
              </property>
              <property name="text">
               <string>Edit current</string>
@@ -833,6 +949,9 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="frame">
                 <bool>false</bool>
                </property>
@@ -877,6 +996,9 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="frame">
                 <bool>false</bool>
                </property>
@@ -904,6 +1026,9 @@
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
                </property>
                <property name="frame">
                 <bool>false</bool>
@@ -949,6 +1074,9 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="frame">
                 <bool>false</bool>
                </property>
@@ -976,6 +1104,9 @@
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
                </property>
                <property name="frame">
                 <bool>false</bool>
@@ -1005,6 +1136,9 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="frame">
                 <bool>false</bool>
                </property>
@@ -1033,6 +1167,9 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="frame">
                 <bool>false</bool>
                </property>
@@ -1060,6 +1197,9 @@
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
                </property>
                <property name="frame">
                 <bool>false</bool>
@@ -1201,6 +1341,9 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="frame">
                 <bool>false</bool>
                </property>
@@ -1228,6 +1371,9 @@
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
                </property>
                <property name="frame">
                 <bool>false</bool>
@@ -1257,6 +1403,9 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="frame">
                 <bool>false</bool>
                </property>
@@ -1284,6 +1433,9 @@
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
                </property>
                <property name="frame">
                 <bool>false</bool>
@@ -1313,6 +1465,9 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="frame">
                 <bool>false</bool>
                </property>
@@ -1340,6 +1495,9 @@
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
                </property>
                <property name="frame">
                 <bool>false</bool>
@@ -1369,6 +1527,9 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="frame">
                 <bool>false</bool>
                </property>
@@ -1396,6 +1557,9 @@
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
                </property>
                <property name="frame">
                 <bool>false</bool>
@@ -1430,6 +1594,9 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="focusPolicy">
+              <enum>Qt::TabFocus</enum>
+             </property>
              <property name="text">
               <string>Apply</string>
              </property>
@@ -1449,6 +1616,9 @@
           <layout class="QGridLayout" name="gridLayout_5">
            <item row="0" column="1">
             <widget class="QLineEdit" name="lineEdit_graphics_clock_current">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
              <property name="frame">
               <bool>true</bool>
              </property>
@@ -1482,6 +1652,9 @@
            </item>
            <item row="2" column="1">
             <widget class="QLineEdit" name="lineEdit_sm_clock_current">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
              <property name="frame">
               <bool>true</bool>
              </property>
@@ -1495,6 +1668,9 @@
            </item>
            <item row="0" column="2">
             <widget class="QLineEdit" name="lineEdit_graphics_clock_max">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
              <property name="frame">
               <bool>true</bool>
              </property>
@@ -1518,6 +1694,9 @@
            </item>
            <item row="1" column="1">
             <widget class="QLineEdit" name="lineEdit_video_clock_current">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
              <property name="frame">
               <bool>true</bool>
              </property>
@@ -1541,6 +1720,9 @@
            </item>
            <item row="2" column="2">
             <widget class="QLineEdit" name="lineEdit_sm_clock_max">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
              <property name="frame">
               <bool>true</bool>
              </property>
@@ -1554,6 +1736,9 @@
            </item>
            <item row="3" column="1">
             <widget class="QLineEdit" name="lineEdit_memory_clock_current">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
              <property name="frame">
               <bool>true</bool>
              </property>
@@ -1567,6 +1752,9 @@
            </item>
            <item row="1" column="2">
             <widget class="QLineEdit" name="lineEdit_video_clock_max">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
              <property name="frame">
               <bool>true</bool>
              </property>
@@ -1580,6 +1768,9 @@
            </item>
            <item row="3" column="2">
             <widget class="QLineEdit" name="lineEdit_memory_clock_max">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
              <property name="frame">
               <bool>true</bool>
              </property>
