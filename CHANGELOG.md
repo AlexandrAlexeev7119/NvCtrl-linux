@@ -1,8 +1,16 @@
+## Version 1.4.35 (pre-release (UNSTABLE))
+### Changes and fixes
+* UI changes: moved fan speed and GPU temperature widgets to main (info) tab
+* Updated submodules (spdlog)
+* Fixed warning with LTO
+### Download
+Download source code [for version 1.4.35](https://codeberg.org/AlexCr4ckPentest/GWEpp/NvCtrl-linux/tag/v1.4.35)
+
 ## Version 1.4.34 (pre-release (UNSTABLE))
 ### Changes and fixes
 * Removed all AppImages (refactoring structure)
 ### Download
-Download source code [for version 1.4.33](https://codeberg.org/AlexCr4ckPentest/GWEpp/NvCtrl-linux/tag/v1.4.34)
+Download source code [for version 1.4.34](https://codeberg.org/AlexCr4ckPentest/GWEpp/NvCtrl-linux/tag/v1.4.34)
 
 ## Version 1.4.33 (pre-release (UNSTABLE))
 ### Changes and fixes
